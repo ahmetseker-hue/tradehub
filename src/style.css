@@ -1,0 +1,494 @@
+/* ============================================================
+   TAILWIND v4 — MASTER THEME CONFIG
+   Project: TR TradeHub / General Design System
+   Prefix: (Removed for Flowbite compatibility)
+   Dark Mode: class-based
+   UI Kit: Flowbite Pro
+   ============================================================ */
+
+/* ============================================================
+   GOOGLE FONTS — Roboto Variable
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import "tailwindcss";
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+/* --- Dark Mode: class-based --- */
+@variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   @theme — DESIGN TOKENS
+   ============================================================ */
+@theme {
+
+    /* ==========================================================
+     1. COLOR SYSTEM
+     ========================================================== */
+
+    /* --- Primary: Altın / Amber (#cc9900) --- */
+    --color-primary-50: #fef9e7;
+    --color-primary-100: #fdf0c3;
+    --color-primary-200: #fbe08a;
+    --color-primary-300: #f6c94d;
+    --color-primary-400: #e6b212;
+    --color-primary-500: #cc9900;
+    --color-primary-600: #b38600;
+    --color-primary-700: #8a6800;
+    --color-primary-800: #6b5100;
+    --color-primary-900: #4d3a00;
+    --color-primary-950: #2e2200;
+
+    /* --- Secondary: Near-Black --- */
+    --color-secondary-50: #f5f5f5;
+    --color-secondary-100: #e5e5e5;
+    --color-secondary-200: #cccccc;
+    --color-secondary-300: #a3a3a3;
+    --color-secondary-400: #737373;
+    --color-secondary-500: #525252;
+    --color-secondary-600: #333333;
+    --color-secondary-700: #1f1f1f;
+    --color-secondary-800: #141414;
+    --color-secondary-900: #0a0a0a;
+    --color-secondary-950: #050505;
+
+    /* --- Accent: Turkuaz / Cyan --- */
+    --color-accent-50: #ecfeff;
+    --color-accent-100: #cffafe;
+    --color-accent-200: #a5f3fc;
+    --color-accent-300: #67e8f9;
+    --color-accent-400: #22d3ee;
+    --color-accent-500: #06b6d4;
+    --color-accent-600: #0891b2;
+    --color-accent-700: #0e7490;
+    --color-accent-800: #155e75;
+    --color-accent-900: #164e63;
+    --color-accent-950: #083344;
+
+    /* --- Semantic Colors (Tailwind defaults) --- */
+    --color-success-50: #f0fdf4;
+    --color-success-500: #22c55e;
+    --color-success-700: #15803d;
+
+    --color-warning-50: #fffbeb;
+    --color-warning-500: #f59e0b;
+    --color-warning-700: #b45309;
+
+    --color-error-50: #fef2f2;
+    --color-error-500: #ef4444;
+    --color-error-700: #b91c1c;
+
+    --color-info-50: #eff6ff;
+    --color-info-500: #3b82f6;
+    --color-info-700: #1d4ed8;
+
+    /* --- Surface Colors (Light / Dark) --- */
+    --color-surface: #ffffff;
+    --color-surface-muted: #fafafa;
+    --color-surface-raised: #f5f5f5;
+    --color-surface-overlay: rgba(0, 0, 0, 0.5);
+    --color-surface-inverse: #0a0a0a;
+
+    /* --- Text Colors --- */
+    --color-text-primary: #0a0a0a;
+    --color-text-secondary: #525252;
+    --color-text-tertiary: #a3a3a3;
+    --color-text-disabled: #d4d4d4;
+    --color-text-inverse: #fafafa;
+    --color-text-link: #cc9900;
+    --color-text-link-hover: #b38600;
+
+    /* --- Border Colors --- */
+    --color-border-default: #e5e5e5;
+    --color-border-strong: #a3a3a3;
+    --color-border-focus: #cc9900;
+    --color-border-error: #ef4444;
+
+
+    /* ==========================================================
+     2. TYPOGRAPHY
+     WCAG AA+ — Çocuk & yaşlı erişilebilirliği
+     ========================================================== */
+
+    /* --- Font Family --- */
+    --font-sans: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', monospace;
+
+    /* --- Font Size Scale --- */
+    --font-size-xs: 0.75rem;
+    /* 12px — yalnızca caption/label */
+    --font-size-sm: 0.875rem;
+    /* 14px — yardımcı metin */
+    --font-size-base: 1.125rem;
+    /* 18px — body default */
+    --font-size-lg: 1.25rem;
+    /* 20px */
+    --font-size-xl: 1.5rem;
+    /* 24px */
+    --font-size-2xl: 1.875rem;
+    /* 30px */
+    --font-size-3xl: 2.25rem;
+    /* 36px */
+    --font-size-4xl: 3rem;
+    /* 48px */
+    --font-size-5xl: 3.75rem;
+    /* 60px */
+
+    /* --- Line Height --- */
+    --line-height-none: 1;
+    --line-height-tight: 1.25;
+    /* headings (h1-h3) */
+    --line-height-snug: 1.375;
+    /* h4-h6, subtitle */
+    --line-height-normal: 1.625;
+    /* body — cömert */
+    --line-height-relaxed: 1.75;
+    /* büyük metin blokları */
+    --line-height-loose: 2;
+    /* çocuk/yaşlı okuma modu */
+
+    /* --- Letter Spacing --- */
+    --letter-spacing-tighter: -0.03em;
+    /* büyük headingler */
+    --letter-spacing-tight: -0.015em;
+    /* h3-h4 */
+    --letter-spacing-normal: 0em;
+    /* body */
+    --letter-spacing-wide: 0.025em;
+    /* uppercase label */
+    --letter-spacing-wider: 0.05em;
+    /* overline, caps */
+
+    /* --- Font Weight --- */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-black: 900;
+
+
+    /* ==========================================================
+     3. SPACING & SIZING
+     Base unit: 8px
+     ========================================================== */
+
+    --spacing-0: 0px;
+    --spacing-0_5: 2px;
+    /* micro: border offset */
+    --spacing-1: 4px;
+    /* mini: icon-text gap */
+    --spacing-2: 8px;
+    /* base unit */
+    --spacing-3: 12px;
+    /* gutter (xs/sm) */
+    --spacing-4: 16px;
+    /* component padding */
+    --spacing-5: 20px;
+    --spacing-6: 24px;
+    /* gutter (lg), card padding */
+    --spacing-8: 32px;
+    /* section inner */
+    --spacing-10: 40px;
+    --spacing-12: 48px;
+    /* section gap small */
+    --spacing-16: 64px;
+    /* section gap medium */
+    --spacing-20: 80px;
+    /* section gap large */
+    --spacing-24: 96px;
+    /* page section */
+    --spacing-32: 128px;
+    /* hero spacing */
+    --spacing-40: 160px;
+    --spacing-48: 192px;
+    --spacing-64: 256px;
+
+    /* --- Semantic Spacing Tokens --- */
+    --spacing-card-padding: var(--spacing-6);
+    /* 24px */
+    --spacing-card-gap: var(--spacing-4);
+    /* 16px */
+    --spacing-section-y: var(--spacing-16);
+    /* 64px */
+    --spacing-section-y-lg: var(--spacing-24);
+    /* 96px */
+    --spacing-page-x: var(--spacing-4);
+    /* 16px — mobile */
+    --spacing-page-x-lg: var(--spacing-8);
+    /* 32px — desktop */
+    --spacing-stack-sm: var(--spacing-2);
+    /* 8px */
+    --spacing-stack-md: var(--spacing-4);
+    /* 16px */
+    --spacing-stack-lg: var(--spacing-8);
+    /* 32px */
+    --spacing-inline-sm: var(--spacing-2);
+    /* 8px */
+    --spacing-inline-md: var(--spacing-3);
+    /* 12px */
+    --spacing-inline-lg: var(--spacing-6);
+    /* 24px */
+    --spacing-input-x: var(--spacing-3);
+    /* 12px */
+    --spacing-input-y: var(--spacing-2);
+    /* 8px */
+    --spacing-button-x: var(--spacing-6);
+    /* 24px */
+    --spacing-button-y: var(--spacing-3);
+    /* 12px */
+
+    /* --- Container / Max-Width --- */
+    --container-xs: 320px;
+    /* iPhone 4 uyumu */
+    --container-sm: 568px;
+    /* Tablet */
+    --container-md: 960px;
+    /* Laptop */
+    --container-lg: 1200px;
+    /* Desktop — boxed */
+    --container-xl: 1536px;
+    /* Wide */
+    --container-full: 100%;
+
+
+    /* ==========================================================
+     4. BREAKPOINTS
+     ========================================================== */
+
+    --breakpoint-xs: 320px;
+    --breakpoint-sm: 568px;
+    --breakpoint-md: 960px;
+    --breakpoint-lg: 1200px;
+    --breakpoint-xl: 1536px;
+
+
+    /* ==========================================================
+     5. BORDER & RADIUS
+     ========================================================== */
+
+    --radius-none: 0px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+    --radius-xl: 32px;
+    --radius-full: 9999px;
+
+    /* --- Semantic Radius --- */
+    --radius-button: var(--radius-md);
+    /* 8px */
+    --radius-card: var(--radius-lg);
+    /* 16px */
+    --radius-input: var(--radius-md);
+    /* 8px */
+    --radius-badge: var(--radius-full);
+    /* pill */
+    --radius-modal: var(--radius-xl);
+    /* 32px */
+    --radius-tooltip: var(--radius-sm);
+    /* 4px */
+
+
+    /* ==========================================================
+     6. SHADOW & ELEVATION
+     ========================================================== */
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04),
+        0 1px 3px 0 rgba(0, 0, 0, 0.06);
+
+    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.04),
+        0 4px 8px -1px rgba(0, 0, 0, 0.08);
+
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.06),
+        0 12px 24px -4px rgba(0, 0, 0, 0.10);
+
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.06),
+        0 24px 48px -8px rgba(0, 0, 0, 0.12);
+
+    /* --- Semantic Shadow --- */
+    --shadow-card: var(--shadow-sm);
+    --shadow-dropdown: var(--shadow-md);
+    --shadow-modal: var(--shadow-xl);
+    --shadow-toast: var(--shadow-lg);
+
+
+    /* ==========================================================
+     7. MOTION & TRANSITIONS
+     ========================================================== */
+
+    --duration-fast: 100ms;
+    --duration-default: 200ms;
+    --duration-slow: 300ms;
+    --duration-slower: 500ms;
+
+    --ease-default: ease-in-out;
+    --ease-in: ease-in;
+    --ease-out: ease-out;
+
+    --animate-fade-in: fade-in var(--duration-default) var(--ease-default);
+    --animate-fade-out: fade-out var(--duration-default) var(--ease-default);
+
+
+    /* ==========================================================
+     8. Z-INDEX
+     ========================================================== */
+
+    --z-behind: -1;
+    --z-base: 0;
+    --z-raised: 1;
+    --z-dropdown: 10;
+    --z-sticky: 20;
+    --z-header: 30;
+    --z-sidebar: 35;
+    --z-backdrop: 40;
+    --z-modal: 50;
+    --z-popover: 60;
+    --z-toast: 70;
+    --z-tooltip: 80;
+    --z-spotlight: 90;
+    --z-max: 100;
+
+}
+
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+
+/* ============================================================
+   DARK MODE OVERRIDES
+   ============================================================ */
+
+.dark {
+    --color-surface: #0a0a0a;
+    --color-surface-muted: #141414;
+    --color-surface-raised: #1f1f1f;
+    --color-surface-overlay: rgba(0, 0, 0, 0.7);
+    --color-surface-inverse: #fafafa;
+
+    --color-text-primary: #fafafa;
+    --color-text-secondary: #a3a3a3;
+    --color-text-tertiary: #737373;
+    --color-text-disabled: #525252;
+    --color-text-inverse: #0a0a0a;
+
+    --color-border-default: #333333;
+    --color-border-strong: #737373;
+
+    --color-primary-500: #e6b212;
+    --color-accent-500: #22d3ee;
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.20),
+        0 1px 3px 0 rgba(0, 0, 0, 0.24);
+
+    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.24),
+        0 4px 8px -1px rgba(0, 0, 0, 0.28);
+
+    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.28),
+        0 12px 24px -4px rgba(0, 0, 0, 0.32);
+
+    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.28),
+        0 24px 48px -8px rgba(0, 0, 0, 0.36);
+}
+
+
+/* ============================================================
+   UTILITY LAYERS
+   ============================================================ */
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+        font-size: var(--font-size-base);
+        /* 18px */
+        line-height: var(--line-height-normal);
+        /* 1.625 */
+        font-weight: var(--font-weight-normal);
+        /* 400 */
+        letter-spacing: var(--letter-spacing-normal);
+        color: var(--color-text-primary);
+        background-color: var(--color-surface);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    /* --- Focus Visible — WCAG erişilebilirlik --- */
+    :focus-visible {
+        outline: 2px solid var(--color-primary-500);
+        outline-offset: 2px;
+    }
+
+    /* --- Reduced Motion Desteği --- */
+    @media (prefers-reduced-motion: reduce) {
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* --- Minimum Touch Target — WCAG 2.5.8 --- */
+    button,
+    a,
+    input,
+    select,
+    textarea,
+    [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+
+/* ============================================================
+   GRID SYSTEM
+   ============================================================ */
+
+@layer utilities {
+    .container-boxed {
+        max-width: var(--container-lg);
+        /* 1200px */
+        margin-inline: auto;
+        padding-inline: var(--spacing-page-x);
+    }
+
+    .container-wide {
+        max-width: var(--container-xl);
+        /* 1536px */
+        margin-inline: auto;
+        padding-inline: var(--spacing-page-x);
+    }
+
+    @media (width >=1200px) {
+
+        .container-boxed,
+        .container-wide {
+            padding-inline: var(--spacing-page-x-lg);
+        }
+    }
+}
