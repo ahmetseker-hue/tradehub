@@ -10,6 +10,9 @@ import { FooterLinks, FooterGroup, FooterPolicy, FooterSocial, FooterCopyright }
 // Floating components
 import { FloatingPanel, initFloatingPanel } from './components/floating'
 
+// Utilities
+import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
+
 // Main content (existing)
 import { Hero } from './components/Hero'
 
@@ -48,3 +51,4 @@ initFlowbite();
 initSearchArea();
 initMegaMenu();
 initFloatingPanel();
+initAnimatedPlaceholder('#search-input');
