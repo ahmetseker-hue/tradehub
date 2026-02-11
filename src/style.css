@@ -451,17 +451,6 @@
             transition-duration: 0.01ms !important;
         }
     }
-
-    /* --- Minimum Touch Target — WCAG 2.5.8 --- */
-    button,
-    a,
-    input,
-    select,
-    textarea,
-    [role="button"] {
-        min-height: 44px;
-        min-width: 44px;
-    }
 }
 
 
