@@ -2,7 +2,7 @@
  * FooterLinks Component
  * 5-column grid with categorized links for the footer
  * Columns: Support, Payments, Sourcing, Selling, About
- * Responsive: Grid on desktop, accordion on mobile
+ * Responsive: 5-column grid on desktop, 2-column grid on mobile
  */
 
 import type { FooterColumn, NavLink } from '../../types/navigation';
@@ -99,34 +99,18 @@ function renderDesktopColumn(column: FooterColumn): string {
 }
 
 /**
- * Renders a chevron icon for the accordion
+ * Renders a single column for mobile view (simple stacked layout, no accordion)
  */
-function renderChevronIcon(): string {
+function renderMobileColumn(column: FooterColumn): string {
   return `
-    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform duration-200 group-open:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-    </svg>
-  `;
-}
-
-/**
- * Renders a single column as an accordion for mobile view
- */
-function renderMobileAccordion(column: FooterColumn, index: number): string {
-  const isOpen = index === 0 ? 'open' : '';
-
-  return `
-    <details class="group border-b border-gray-200 dark:border-gray-700" ${isOpen}>
-      <summary class="flex items-center justify-between w-full py-4 cursor-pointer list-none">
-        <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">
-          ${column.title}
-        </h3>
-        ${renderChevronIcon()}
-      </summary>
-      <ul class="pb-4 space-y-3 text-sm">
+    <div class="footer-column mb-6">
+      <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-3">
+        ${column.title}
+      </h3>
+      <ul class="space-y-2 text-sm">
         ${column.links.map(link => renderLink(link)).join('')}
       </ul>
-    </details>
+    </div>
   `;
 }
 
@@ -142,12 +126,12 @@ function renderDesktopGrid(): string {
 }
 
 /**
- * Renders the mobile accordion layout
+ * Renders the mobile layout (simple 2-column grid, no accordion)
  */
-function renderMobileAccordions(): string {
+function renderMobileLayout(): string {
   return `
-    <div class="md:hidden">
-      ${footerColumns.map((column, index) => renderMobileAccordion(column, index)).join('')}
+    <div class="md:hidden grid grid-cols-2 gap-x-4 gap-y-2">
+      ${footerColumns.map(column => renderMobileColumn(column)).join('')}
     </div>
   `;
 }
@@ -163,7 +147,7 @@ function renderMobileAccordions(): string {
  *
  * Features:
  * - 5-column grid layout on desktop (md+)
- * - Accordion collapse on mobile
+ * - 2-column grid layout on mobile
  * - Dark mode support
  * - Hover effects on links
  * - Semantic HTML with proper heading hierarchy
@@ -175,8 +159,8 @@ export function FooterLinks(): string {
         <!-- Desktop Grid Layout -->
         ${renderDesktopGrid()}
 
-        <!-- Mobile Accordion Layout -->
-        ${renderMobileAccordions()}
+        <!-- Mobile Layout (Simple Grid) -->
+        ${renderMobileLayout()}
       </div>
     </section>
   `;
