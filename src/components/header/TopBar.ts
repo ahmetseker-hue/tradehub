@@ -207,16 +207,16 @@ function renderLogo(): string {
  */
 export function TopBar(): string {
   return `
-    <div class="bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700" style="height: 72px;">
+    <div class="bg-white border-b border-gray-200 dark:bg-gray-900 dark:border-gray-700" style="height: 64px;">
       <div class="container-boxed h-full">
         <div class="flex items-center justify-between h-full">
           <!-- Logo -->
-          <div class="flex items-center">
+          <div class="flex-shrink-0">
             ${renderLogo()}
           </div>
 
           <!-- Right Side: Selectors + Cart + Auth -->
-          <div class="flex items-center gap-2 md:gap-4">
+          <div class="flex items-center gap-3 md:gap-5">
             <!-- Country Selector (hidden on mobile) -->
             <div class="hidden md:block">
               ${renderCountrySelector()}

@@ -14,7 +14,6 @@ import { FloatingPanel, initFloatingPanel } from './components/floating'
 import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
 
 // Main content (existing)
-import { Hero } from './components/Hero'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <!-- Header Section -->
@@ -28,7 +27,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
   <!-- Main Content -->
   <main>
-    ${Hero()}
+   
   </main>
 
   <!-- Footer Section -->

@@ -263,13 +263,13 @@ export function SubHeader(): string {
       <div class="container-boxed">
         <div class="flex items-center justify-between py-2">
           <!-- Left Side: Categories Trigger + Navigation Links -->
-          <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2 lg:gap-4">
             ${renderCategoriesTrigger()}
             ${renderNavigationLinks()}
           </div>
 
           <!-- Right Side: Buyer Center, Help, Mobile App, Become Supplier -->
-          <div class="flex items-center gap-1">
+          <div class="flex items-center gap-0.5 lg:gap-1">
             ${renderBuyerCenterDropdown()}
             ${renderHelpDropdown()}
             ${renderMobileAppPopover()}

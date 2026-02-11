@@ -69,7 +69,7 @@ function renderSearchInput(): string {
         type="text"
         id="search-input"
         name="search"
-        class="w-full h-12 px-4 pr-12 text-base text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+        class="w-full h-12 px-4 pr-12 text-base text-gray-900 bg-white border-0 focus:ring-0 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white"
         placeholder="Search for products, suppliers, or categories..."
         autocomplete="off"
         aria-label="Search products, suppliers, or categories"
@@ -86,7 +86,7 @@ function renderDeepSearchButton(): string {
     <button
       type="button"
       id="deep-search-button"
-      class="flex items-center gap-1.5 h-12 px-4 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 border-y border-gray-300 dark:border-gray-600 transition-all"
+      class="flex items-center gap-1.5 h-12 px-4 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all"
       aria-label="Deep Search - AI-powered search"
       data-tooltip-target="deep-search-tooltip"
       data-tooltip-placement="bottom"
@@ -115,7 +115,7 @@ function renderCameraButton(): string {
     <button
       type="button"
       id="camera-search-button"
-      class="flex items-center justify-center h-12 w-12 text-gray-500 hover:text-primary-600 bg-white border-y border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
+      class="flex items-center justify-center h-12 w-12 text-gray-500 hover:text-primary-600 bg-white dark:bg-gray-700 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
       aria-label="Search by image"
       data-tooltip-target="camera-search-tooltip"
       data-tooltip-placement="bottom"
@@ -144,7 +144,7 @@ function renderSearchButton(): string {
     <button
       type="submit"
       id="search-submit-button"
-      class="flex items-center justify-center gap-2 h-12 px-6 text-base font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-r-lg transition-colors"
+      class="flex items-center justify-center gap-2 h-12 px-8 text-base font-medium text-white bg-primary-500 hover:bg-primary-600 transition-colors"
       aria-label="Search"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -194,7 +194,7 @@ function renderDesktopSearchBar(): string {
   return `
     <div class="hidden md:block">
       <form id="search-form" action="/search" method="GET" role="search">
-        <div class="flex">
+        <div class="flex rounded-lg border-2 border-primary-500 overflow-hidden">
           ${renderSearchInput()}
           ${renderDeepSearchButton()}
           ${renderCameraButton()}
@@ -244,7 +244,7 @@ function renderSearchSuggestions(): string {
  */
 export function SearchArea(): string {
   return `
-    <section class="bg-white dark:bg-gray-900 py-6" aria-label="Search area">
+    <section class="bg-white dark:bg-gray-900 py-5" aria-label="Search area">
       <div class="container-boxed">
         <!-- Search Tabs -->
         ${renderSearchTabs()}
