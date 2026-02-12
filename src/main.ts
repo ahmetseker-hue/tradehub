@@ -4,6 +4,9 @@ import { initFlowbite } from 'flowbite'
 // Header components
 import { TopBar, SubHeader, SearchArea, initSearchArea, MegaMenu, initMegaMenu } from './components/header'
 
+// Hero components
+import { CategoryBrowse, initCategoryBrowse, RecommendationSlider, initRecommendationSlider } from './components/hero'
+
 // Footer components
 import { FooterLinks } from './components/footer'
 
@@ -29,6 +32,15 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
   <!-- Main Content -->
   <main>
+    <!-- Hero: Categories + Recommendation Slider -->
+    <section class="py-6" aria-label="Browse categories and recommendations">
+      <div class="container-boxed flex gap-4 items-stretch">
+        ${CategoryBrowse()}
+        <div class="flex-1 min-w-0">
+          ${RecommendationSlider()}
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- Footer Section -->
@@ -48,6 +60,8 @@ initFlowbite();
 
 // Initialize remaining custom behaviors
 initSearchArea();
+initCategoryBrowse();
+initRecommendationSlider();
 initFloatingPanel();
 initAnimatedPlaceholder('#search-input');
 

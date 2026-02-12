@@ -16,4 +16,5 @@ export { SearchArea, initSearchArea } from './SearchArea';
 export { WelcomeBar } from './WelcomeBar';
 
 // MegaMenu component - full-width category dropdown
-export { MegaMenu, initMegaMenu } from './MegaMenu';
+export { MegaMenu, initMegaMenu, megaCategories, getCategoryIcon } from './MegaMenu';
+export type { MegaMenuCategory } from './MegaMenu';
