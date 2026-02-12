@@ -1,0 +1,1 @@
+export { FeaturedSelections } from './FeaturedSelections';

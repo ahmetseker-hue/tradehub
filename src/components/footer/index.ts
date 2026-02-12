@@ -1,19 +1,20 @@
 /**
  * Footer Components Barrel Export
- * Re-exports all footer components for easier importing
+ * FooterLinks is the main consolidated footer component.
+ * Other components are kept for backwards compatibility but return empty strings.
  */
 
-// FooterLinks component - 5-column grid with categorized links
+// FooterLinks - consolidated footer (logo, social, columns, payment badges, policy bar)
 export { FooterLinks, getFooterColumnsData } from './FooterLinks';
 
-// FooterGroup component - partner/sister company logos and links
-export { FooterGroup, getGroupCompaniesData } from './FooterGroup';
+// FooterGroup - payment badges (called internally by FooterLinks)
+export { FooterGroup } from './FooterGroup';
 
-// FooterPolicy component - legal/policy links row
+// FooterPolicy - bottom bar with policy links + copyright (called internally by FooterLinks)
 export { FooterPolicy, getPolicyLinksData } from './FooterPolicy';
 
-// FooterSocial component - social media icons and app download badges
+// FooterSocial - deprecated, returns empty string (migrated to FooterLinks)
 export { FooterSocial, getSocialLinksData, getAppStoreBadgesData } from './FooterSocial';
 
-// FooterCopyright component - copyright text
+// FooterCopyright - deprecated, returns empty string (migrated to FooterPolicy)
 export { FooterCopyright, getCopyrightConfig } from './FooterCopyright';

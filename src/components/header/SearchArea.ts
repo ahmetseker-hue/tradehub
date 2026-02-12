@@ -1,7 +1,7 @@
 /**
  * SearchArea Component
- * Search interface with tabs, animated placeholder input, Deep Search and camera buttons
- * This is a critical component for the TR TradeHub search functionality
+ * Search interface with tabs, two-row search box (input + image search),
+ * Deep Search link, AI suggestion chips, and welcome row
  */
 
 import type { SearchTab } from '../../types/navigation';
@@ -11,44 +11,12 @@ const searchTabs: SearchTab[] = [
   { id: 'ai-mode', label: 'AI Mode', isActive: false },
   { id: 'products', label: 'Products', isActive: true },
   { id: 'manufacturers', label: 'Manufacturers', isActive: false },
-  { id: 'by-country', label: 'By Country', isActive: false },
+  { id: 'worldwide', label: 'Worldwide', isActive: false },
 ];
 
-/**
- * Generates the search tabs HTML
- * Uses Flowbite tabs pattern with custom styling
- */
-function renderSearchTabs(): string {
-  return `
-    <div class="flex items-center border-b border-gray-200 dark:border-gray-700 mb-4">
-      <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" role="tablist">
-        ${searchTabs.map(tab => `
-          <li class="me-1" role="presentation">
-            <button
-              id="search-tab-${tab.id}"
-              data-tabs-target="#search-panel-${tab.id}"
-              type="button"
-              role="tab"
-              aria-controls="search-panel-${tab.id}"
-              aria-selected="${tab.isActive ? 'true' : 'false'}"
-              class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-t-lg border-b-2 ${
-                tab.isActive
-                  ? 'text-primary-600 border-primary-500 dark:text-primary-400 dark:border-primary-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-600 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-              } transition-colors"
-            >
-              ${tab.id === 'ai-mode' ? renderAIIcon() : ''}
-              <span>${tab.label}</span>
-            </button>
-          </li>
-        `).join('')}
-      </ul>
-    </div>
-  `;
-}
 
 /**
- * Renders the AI sparkle icon for AI Mode tab
+ * Renders the AI sparkle icon
  */
 function renderAIIcon(): string {
   return `
@@ -59,104 +27,118 @@ function renderAIIcon(): string {
 }
 
 /**
- * Generates the search input with container for animated placeholder
- * The animated placeholder is initialized via initAnimatedPlaceholder() from main.ts
+ * Generates the search tabs
  */
-function renderSearchInput(): string {
+function renderSearchTabs(): string {
   return `
-    <div class="relative flex-1">
-      <input
-        type="text"
-        id="search-input"
-        name="search"
-        class="w-full h-12 px-4 pr-12 text-base text-gray-900 bg-white border-0 focus:ring-0 focus:outline-none dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white"
-        placeholder="Search for products, suppliers, or categories..."
-        autocomplete="off"
-        aria-label="Search products, suppliers, or categories"
-      />
+    <div class="flex justify-center items-center mb-6">
+      <ul class="flex items-center gap-0" role="tablist">
+        ${searchTabs.map((tab, index) => `
+          ${index > 0 ? '<li class="text-gray-300 dark:text-gray-600 text-lg select-none px-1" aria-hidden="true">|</li>' : ''}
+          <li role="presentation">
+            <button
+              id="search-tab-${tab.id}"
+              data-tabs-target="#search-panel-${tab.id}"
+              type="button"
+              role="tab"
+              aria-controls="search-panel-${tab.id}"
+              aria-selected="${tab.isActive ? 'true' : 'false'}"
+              class="inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${
+                tab.isActive
+                  ? 'text-primary-600 border-primary-500 dark:text-primary-400 dark:border-primary-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }"
+            >
+              ${tab.id === 'ai-mode' ? `${renderAIIcon()}<span>${tab.label}</span><span class="text-red-500 text-xs -mt-2 -ml-0.5">*</span>` : `<span>${tab.label}</span>`}
+            </button>
+          </li>
+        `).join('')}
+      </ul>
     </div>
   `;
 }
 
 /**
- * Generates the Deep Search button with gradient styling
+ * Generates the desktop search box with two-row layout:
+ * Row 1: text input
+ * Row 2: camera "Image Search" link (left) + Search button (right)
  */
-function renderDeepSearchButton(): string {
+function renderDesktopSearchBar(): string {
   return `
-    <button
-      type="button"
-      id="deep-search-button"
-      class="flex items-center gap-1.5 h-12 px-4 text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 transition-all"
-      aria-label="Deep Search - AI-powered search"
-      data-tooltip-target="deep-search-tooltip"
-      data-tooltip-placement="bottom"
-    >
-      <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/>
-      </svg>
-      <span class="hidden sm:inline">Deep Search</span>
-    </button>
-    <div
-      id="deep-search-tooltip"
-      role="tooltip"
-      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-    >
-      AI-powered search for detailed results
-      <div class="tooltip-arrow" data-popper-arrow></div>
+    <div class="hidden md:block max-w-3xl mx-auto" id="search-wrapper">
+      <form id="search-form" action="/search" method="GET" role="search">
+        <div class="relative">
+          <!-- Search Box -->
+          <div id="search-box" class="flex flex-col rounded-2xl border-2 border-primary-400 dark:border-primary-500 bg-white dark:bg-gray-800 px-4 py-3">
+            <!-- Row 1: Text Input -->
+            <input
+              type="text"
+              id="search-input"
+              name="search"
+              class="w-full py-3 px-2 text-base text-gray-900 bg-transparent border-0 focus:ring-0 focus:outline-none dark:placeholder-gray-400 dark:text-white"
+              placeholder="Tekstil ve Konfeksiyon"
+              autocomplete="off"
+              aria-label="Search products, suppliers, or categories"
+            />
+
+            <!-- Row 2: Image Search + Search Button -->
+            <div class="flex items-center justify-between px-2 pb-1">
+              <a href="/image-search" class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"/>
+                </svg>
+                <span>Image Search</span>
+              </a>
+
+              <!-- Search Button -->
+              <button
+                type="submit"
+                id="search-submit-button"
+                class="flex items-center justify-center gap-2 px-7 py-2.5 text-sm font-semibold text-white rounded-full transition-all hover:shadow-lg"
+                style="background: linear-gradient(135deg, #f5a623 0%, #e8740c 100%);"
+                aria-label="Search"
+              >
+                ${renderAIIcon()}
+                <span>Search</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search Dropdown (shown on input focus) -->
+          <div id="search-dropdown" class="hidden absolute left-0 right-0 z-10 bg-white dark:bg-gray-800 border border-primary-300 dark:border-primary-600 rounded-2xl px-5 py-3 shadow-lg mt-2">
+            <!-- Deep Search Row -->
+            <div class="flex items-center justify-between mb-2.5">
+              <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                <span class="w-2 h-2 rounded-full bg-amber-400 inline-block flex-shrink-0"></span>
+                <span>Navigate complex requirements with Deep Search</span>
+              </div>
+              <a href="/terms" class="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 whitespace-nowrap ml-4">Terms of use</a>
+            </div>
+            <!-- Suggestion Chips -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <span class="text-amber-400 text-xs">&#10022;</span>
+                <span>Wholesale Electronics Supplier</span>
+              </button>
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <span class="text-amber-400 text-xs">&#10022;</span>
+                <span>Custom Textile Manufacturing</span>
+              </button>
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <span class="text-amber-400 text-xs">&#10022;</span>
+                <span>Industrial Machinery Parts</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   `;
 }
 
 /**
- * Generates the camera button for visual/image search
- */
-function renderCameraButton(): string {
-  return `
-    <button
-      type="button"
-      id="camera-search-button"
-      class="flex items-center justify-center h-12 w-12 text-gray-500 hover:text-primary-600 bg-white dark:bg-gray-700 dark:text-gray-400 dark:hover:text-primary-400 transition-colors"
-      aria-label="Search by image"
-      data-tooltip-target="camera-search-tooltip"
-      data-tooltip-placement="bottom"
-    >
-      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"/>
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"/>
-      </svg>
-    </button>
-    <div
-      id="camera-search-tooltip"
-      role="tooltip"
-      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
-    >
-      Search by image
-      <div class="tooltip-arrow" data-popper-arrow></div>
-    </div>
-  `;
-}
-
-/**
- * Generates the main search button
- */
-function renderSearchButton(): string {
-  return `
-    <button
-      type="submit"
-      id="search-submit-button"
-      class="flex items-center justify-center gap-2 h-12 px-8 text-base font-medium text-white bg-primary-500 hover:bg-primary-600 transition-colors"
-      aria-label="Search"
-    >
-      <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-      </svg>
-      <span class="hidden sm:inline">Search</span>
-    </button>
-  `;
-}
-
-/**
- * Generates the mobile search input (simplified for small screens)
+ * Generates the mobile search input
  */
 function renderMobileSearchInput(): string {
   return `
@@ -187,64 +169,72 @@ function renderMobileSearchInput(): string {
   `;
 }
 
+
 /**
- * Generates the desktop search bar with all features
+ * Renders the Alibaba-style welcome row with action links
  */
-function renderDesktopSearchBar(): string {
+function renderWelcomeRow(): string {
   return `
-    <div class="hidden md:block">
-      <form id="search-form" action="/search" method="GET" role="search">
-        <div class="flex rounded-lg border-2 border-primary-500 overflow-hidden">
-          ${renderSearchInput()}
-          ${renderDeepSearchButton()}
-          ${renderCameraButton()}
-          ${renderSearchButton()}
+    <div class="hidden sm:flex items-center justify-between mb-7 dark:bg-gray-800" style="background-color:#f8f8f8; border-bottom:1.5px solid #f8f8f8; min-height:70px;">
+      <div class="container-boxed flex items-center justify-between w-full">
+        <!-- Welcome Text -->
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap">
+          iSTOC'a Hoş Geldiniz
+        </h2>
+
+        <!-- Action Links -->
+        <div class="flex items-center gap-4">
+          <!-- Request for Quotation -->
+          <a href="/rfq/create" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-emerald-50 dark:bg-emerald-900/40">
+              <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+              </svg>
+            </span>
+            <span class="text-sm font-medium">Request for Quotation</span>
+          </a>
+
+          <!-- Separator -->
+          <span class="text-gray-200 text-lg" aria-hidden="true">|</span>
+
+          <!-- Top Ranking -->
+          <a href="/products/top-ranking" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-amber-50 dark:bg-amber-900/40">
+              <svg class="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0 1 16.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.023 6.023 0 0 1-2.52.556m0 0a6.023 6.023 0 0 1-2.52-.556" />
+              </svg>
+            </span>
+            <span class="text-sm font-medium">Top Ranking</span>
+          </a>
+
+          <!-- Separator -->
+          <span class="text-gray-200 text-lg" aria-hidden="true">|</span>
+
+          <!-- Fast Customization -->
+          <a href="/customize" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-violet-50 dark:bg-violet-900/40">
+              <svg class="w-4 h-4 text-violet-600 dark:text-violet-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
+              </svg>
+            </span>
+            <span class="text-sm font-medium">Fast Customization</span>
+          </a>
         </div>
-      </form>
-    </div>
-  `;
-}
-
-/**
- * Generates popular search suggestions
- */
-function renderSearchSuggestions(): string {
-  const popularSearches = [
-    'Electronics',
-    'Machinery',
-    'Textiles',
-    'Auto Parts',
-    'Building Materials',
-  ];
-
-  return `
-    <div class="hidden md:flex items-center gap-2 mt-3 text-sm text-gray-500 dark:text-gray-400">
-      <span class="font-medium">Popular:</span>
-      ${popularSearches.map(term => `
-        <a
-          href="/search?q=${encodeURIComponent(term)}"
-          class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
-        >
-          ${term}
-        </a>
-      `).join('<span class="text-gray-300 dark:text-gray-600">|</span>')}
+      </div>
     </div>
   `;
 }
 
 /**
  * SearchArea Component
- * Renders the main search area containing:
- * - Search mode tabs (AI Mode, Products, Manufacturers, By Country)
- * - Large search input with animated placeholder (initialized separately)
- * - Deep Search button for AI-powered search
- * - Camera button for visual/image search
- * - Primary Search button
- * - Popular search suggestions
+ * Renders the search area with:
+ * - Search mode tabs (AI Mode, Products, Manufacturers, Worldwide)
+ * - Two-row search box (text input + Image Search link + Search button)
+ * - Welcome row with action links
  */
 export function SearchArea(): string {
   return `
-    <section class="bg-white dark:bg-gray-900 py-5" aria-label="Search area">
+    <section class="relative py-5 dark:bg-gray-900" aria-label="Search area">
       <div class="container-boxed">
         <!-- Search Tabs -->
         ${renderSearchTabs()}
@@ -254,70 +244,100 @@ export function SearchArea(): string {
 
         <!-- Mobile Search Bar -->
         ${renderMobileSearchInput()}
-
-        <!-- Popular Searches -->
-        ${renderSearchSuggestions()}
       </div>
     </section>
+
+    <!-- Welcome Row (outside search section for independent background) -->
+    ${renderWelcomeRow()}
   `;
 }
 
 /**
  * Initializes search area interactivity
- * Should be called after DOM is ready
- * Note: Animated placeholder should be initialized via initAnimatedPlaceholder('#search-input')
  */
 export function initSearchArea(): void {
-  // Tab switching functionality
   if (typeof document !== 'undefined') {
-    const initTabs = (): void => {
+    const init = (): void => {
+      // Tab switching
       const tabButtons = document.querySelectorAll('[role="tab"][id^="search-tab-"]');
-
       tabButtons.forEach(button => {
         button.addEventListener('click', () => {
-          // Remove active state from all tabs
           tabButtons.forEach(btn => {
             btn.setAttribute('aria-selected', 'false');
-            btn.classList.remove(
-              'text-primary-600',
-              'border-primary-500',
-              'dark:text-primary-400',
-              'dark:border-primary-400'
-            );
-            btn.classList.add(
-              'border-transparent',
-              'text-gray-500',
-              'hover:text-gray-600',
-              'hover:border-gray-300',
-              'dark:text-gray-400',
-              'dark:hover:text-gray-300'
-            );
+            btn.classList.remove('text-primary-600', 'border-primary-500', 'dark:text-primary-400', 'dark:border-primary-400');
+            btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-600', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
           });
-
-          // Set active state on clicked tab
           button.setAttribute('aria-selected', 'true');
-          button.classList.remove(
-            'border-transparent',
-            'text-gray-500',
-            'hover:text-gray-600',
-            'hover:border-gray-300',
-            'dark:text-gray-400',
-            'dark:hover:text-gray-300'
-          );
-          button.classList.add(
-            'text-primary-600',
-            'border-primary-500',
-            'dark:text-primary-400',
-            'dark:border-primary-400'
-          );
+          button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-600', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
+          button.classList.add('text-primary-600', 'border-primary-500', 'dark:text-primary-400', 'dark:border-primary-400');
         });
       });
+
+      // Search dropdown show/hide
+      const searchInput = document.getElementById('search-input');
+      const searchBox = document.getElementById('search-box');
+      const searchDropdown = document.getElementById('search-dropdown');
+      const searchWrapper = document.getElementById('search-wrapper');
+
+      if (searchInput && searchBox && searchDropdown && searchWrapper) {
+        let isDropdownOpen = false;
+
+        const showDropdown = (): void => {
+          if (isDropdownOpen) return;
+          isDropdownOpen = true;
+          searchDropdown.classList.remove('hidden');
+        };
+
+        const hideDropdown = (): void => {
+          if (!isDropdownOpen) return;
+          isDropdownOpen = false;
+          searchDropdown.classList.add('hidden');
+        };
+
+        // Open dropdown when clicking anywhere on search box
+        searchBox.addEventListener('click', (e: MouseEvent) => {
+          e.stopPropagation();
+          showDropdown();
+          (searchInput as HTMLInputElement).focus();
+        });
+
+        // Keep dropdown open when clicking inside it
+        searchDropdown.addEventListener('click', (e: MouseEvent) => {
+          e.stopPropagation();
+        });
+
+        // Also open on input focus (keyboard tab)
+        searchInput.addEventListener('focus', showDropdown);
+
+        // Close when clicking outside (mousedown fires before stopPropagation in popovers)
+        document.addEventListener('mousedown', (e: MouseEvent) => {
+          const target = e.target as Node;
+          if (!searchBox.contains(target) && !searchDropdown.contains(target)) {
+            hideDropdown();
+          }
+        });
+
+        // Close on scroll
+        window.addEventListener('scroll', () => {
+          hideDropdown();
+        }, { passive: true });
+
+        // Click on suggestion chip fills search input
+        const chips = searchDropdown.querySelectorAll('.search-chip');
+        chips.forEach(chip => {
+          chip.addEventListener('click', () => {
+            const text = chip.querySelector('span:last-child')?.textContent || '';
+            (searchInput as HTMLInputElement).value = text;
+            hideDropdown();
+          });
+        });
+      }
     };
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initTabs);
+      document.addEventListener('DOMContentLoaded', init);
     } else {
-      initTabs();
+      init();
     }
   }
 }

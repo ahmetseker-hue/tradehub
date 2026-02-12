@@ -355,6 +355,14 @@
    KEYFRAMES
    ============================================================ */
 
+@keyframes searchGradientShift {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 50% 100%; }
+    50% { background-position: 100% 50%; }
+    75% { background-position: 50% 0%; }
+    100% { background-position: 0% 50%; }
+}
+
 @keyframes fade-in {
     from {
         opacity: 0;
@@ -479,5 +487,27 @@
         .container-wide {
             padding-inline: var(--spacing-page-x-lg);
         }
+    }
+
+    /* --- SubHeader: center-outward underline animation --- */
+    .subheader-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: var(--color-primary-500);
+        transition: width 0.25s ease, left 0.25s ease;
+    }
+
+    .subheader-link:hover::after {
+        width: 100%;
+        left: 0;
+    }
+
+    .subheader-link--active::after {
+        width: 100%;
+        left: 0;
     }
 }

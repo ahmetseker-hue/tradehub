@@ -1,692 +1,814 @@
 /**
- * MegaMenu Component
- * Full-width category dropdown with 39 categories in multi-column grid layout
- * Triggered by the "All Categories" button in SubHeader
+ * MegaMenu Component — Dynamic multi-view Alibaba-style
+ * Each SubHeader nav item triggers a different mega menu view:
+ * - "All Categories" → category sidebar + product panels
+ * - "Featured Selections" → featured cards + quick links
+ * - "Order Protections" → trade assurance info
+ *
+ * Uses opacity/pointer-events for show/hide (no display:none)
+ * Fixed position overlay below SubHeader nav
  */
 
-import type { Category } from '../../types/navigation';
+/* ════════════════════════════════════════════════════
+   DATA
+   ════════════════════════════════════════════════════ */
 
-/**
- * 39 categories for the B2B marketplace mega menu
- * Organized by industry/product type with optional subcategories
- */
-const categories: Category[] = [
+interface MegaMenuCategory {
+  id: string;
+  name: string;
+  icon: string;
+  products: { name: string; href: string; badge?: boolean }[];
+}
+
+const megaCategories: MegaMenuCategory[] = [
   {
-    id: 'machinery',
-    name: 'Machinery',
-    icon: 'cog',
-    subcategories: [
-      { id: 'cnc-machines', name: 'CNC Machines' },
-      { id: 'packaging-machines', name: 'Packaging Machines' },
-      { id: 'food-machines', name: 'Food Machines' },
-    ],
-  },
-  {
-    id: 'electronics',
-    name: 'Electronics',
-    icon: 'chip',
-    subcategories: [
-      { id: 'consumer-electronics', name: 'Consumer Electronics' },
-      { id: 'electronic-components', name: 'Electronic Components' },
-      { id: 'smart-devices', name: 'Smart Devices' },
+    id: 'for-you',
+    name: 'Categories for you',
+    icon: 'star',
+    products: [
+      { name: 'Patio Swings', href: '/search?q=patio+swings' },
+      { name: 'Bridesmaid Dresses', href: '/search?q=bridesmaid+dresses' },
+      { name: 'Garden Sets', href: '/search?q=garden+sets' },
+      { name: 'Sun Loungers', href: '/search?q=sun+loungers' },
+      { name: 'Patio Furniture', href: '/search?q=patio+furniture' },
+      { name: 'Hiking Shoes', href: '/search?q=hiking+shoes' },
+      { name: 'Carnival Costume', href: '/search?q=carnival+costume' },
+      { name: 'Wedding Dresses', href: '/search?q=wedding+dresses', badge: true },
+      { name: 'Electric Cars', href: '/search?q=electric+cars', badge: true },
+      { name: 'Electric Scooters', href: '/search?q=electric+scooters', badge: true },
+      { name: 'Vending Machines', href: '/search?q=vending+machines', badge: true },
+      { name: 'Running Shoes', href: '/search?q=running+shoes' },
+      { name: 'Telescopic Ladder', href: '/search?q=telescopic+ladder' },
+      { name: 'Handbags', href: '/search?q=handbags' },
     ],
   },
   {
     id: 'apparel',
-    name: 'Apparel & Textiles',
+    name: 'Apparel & Accessories',
     icon: 'shirt',
-    subcategories: [
-      { id: 'mens-clothing', name: "Men's Clothing" },
-      { id: 'womens-clothing', name: "Women's Clothing" },
-      { id: 'fabrics', name: 'Fabrics & Textiles' },
+    products: [
+      { name: 'Bridesmaid Dresses', href: '/search?q=bridesmaid+dresses' },
+      { name: 'Carnival Costume', href: '/search?q=carnival+costume' },
+      { name: 'Rhinestones', href: '/search?q=rhinestones' },
+      { name: 'Camouflage', href: '/search?q=camouflage' },
+      { name: 'Polyester Ties', href: '/search?q=polyester+ties' },
+      { name: 'Ice Hockey', href: '/search?q=ice+hockey' },
+      { name: 'Mittens', href: '/search?q=mittens' },
     ],
   },
   {
-    id: 'home-garden',
-    name: 'Home & Garden',
-    icon: 'home',
-    subcategories: [
-      { id: 'furniture', name: 'Furniture' },
-      { id: 'home-decor', name: 'Home Decor' },
-      { id: 'garden-supplies', name: 'Garden Supplies' },
-    ],
-  },
-  {
-    id: 'construction',
-    name: 'Construction & Real Estate',
-    icon: 'building',
-    subcategories: [
-      { id: 'building-materials', name: 'Building Materials' },
-      { id: 'construction-equipment', name: 'Construction Equipment' },
-      { id: 'plumbing', name: 'Plumbing' },
-    ],
-  },
-  {
-    id: 'auto-parts',
-    name: 'Auto Parts & Accessories',
-    icon: 'car',
-    subcategories: [
-      { id: 'engine-parts', name: 'Engine Parts' },
-      { id: 'car-electronics', name: 'Car Electronics' },
-      { id: 'tires-wheels', name: 'Tires & Wheels' },
-    ],
-  },
-  {
-    id: 'beauty',
-    name: 'Beauty & Personal Care',
-    icon: 'sparkles',
-    subcategories: [
-      { id: 'skincare', name: 'Skincare' },
-      { id: 'haircare', name: 'Haircare' },
-      { id: 'cosmetics', name: 'Cosmetics' },
-    ],
-  },
-  {
-    id: 'lights-lighting',
-    name: 'Lights & Lighting',
-    icon: 'lightbulb',
-    subcategories: [
-      { id: 'led-lights', name: 'LED Lights' },
-      { id: 'outdoor-lighting', name: 'Outdoor Lighting' },
-      { id: 'commercial-lighting', name: 'Commercial Lighting' },
+    id: 'consumer-electronics',
+    name: 'Consumer Electronics',
+    icon: 'chip',
+    products: [
+      { name: 'Smart Watches', href: '/search?q=smart+watches' },
+      { name: 'Wireless Earbuds', href: '/search?q=wireless+earbuds' },
+      { name: 'Bluetooth Speakers', href: '/search?q=bluetooth+speakers' },
+      { name: 'Action Cameras', href: '/search?q=action+cameras' },
+      { name: 'LED Monitors', href: '/search?q=led+monitors' },
+      { name: 'Drone', href: '/search?q=drone' },
+      { name: 'VR Headset', href: '/search?q=vr+headset' },
     ],
   },
   {
     id: 'sports',
     name: 'Sports & Entertainment',
     icon: 'trophy',
-    subcategories: [
-      { id: 'fitness-equipment', name: 'Fitness Equipment' },
-      { id: 'outdoor-sports', name: 'Outdoor Sports' },
-      { id: 'team-sports', name: 'Team Sports' },
+    products: [
+      { name: 'Fitness Equipment', href: '/search?q=fitness+equipment' },
+      { name: 'Yoga Mats', href: '/search?q=yoga+mats' },
+      { name: 'Boxing Gloves', href: '/search?q=boxing+gloves' },
+      { name: 'Camping Tents', href: '/search?q=camping+tents' },
+      { name: 'Fishing Rods', href: '/search?q=fishing+rods' },
+      { name: 'Skateboard', href: '/search?q=skateboard' },
+      { name: 'Golf Clubs', href: '/search?q=golf+clubs' },
+    ],
+  },
+  {
+    id: 'sportswear',
+    name: 'Sportswear & Outdoor Apparel',
+    icon: 'running',
+    products: [
+      { name: 'Running Shoes', href: '/search?q=running+shoes' },
+      { name: 'Track Suits', href: '/search?q=track+suits' },
+      { name: 'Hiking Boots', href: '/search?q=hiking+boots' },
+      { name: 'Windbreakers', href: '/search?q=windbreakers' },
+      { name: 'Ski Jackets', href: '/search?q=ski+jackets' },
+      { name: 'Cycling Wear', href: '/search?q=cycling+wear' },
+      { name: 'Sports Bras', href: '/search?q=sports+bras' },
+    ],
+  },
+  {
+    id: 'shoes',
+    name: 'Shoes & Accessories',
+    icon: 'shoe',
+    products: [
+      { name: 'Sneakers', href: '/search?q=sneakers' },
+      { name: 'Leather Boots', href: '/search?q=leather+boots' },
+      { name: 'Sandals', href: '/search?q=sandals' },
+      { name: 'High Heels', href: '/search?q=high+heels' },
+      { name: 'Belts', href: '/search?q=belts' },
+      { name: 'Sunglasses', href: '/search?q=sunglasses' },
+      { name: 'Wallets', href: '/search?q=wallets' },
+    ],
+  },
+  {
+    id: 'home-garden',
+    name: 'Home & Garden',
+    icon: 'home',
+    products: [
+      { name: 'Garden Furniture', href: '/search?q=garden+furniture' },
+      { name: 'Kitchen Appliances', href: '/search?q=kitchen+appliances' },
+      { name: 'Bed Sheets', href: '/search?q=bed+sheets' },
+      { name: 'LED Lights', href: '/search?q=led+lights' },
+      { name: 'Curtains', href: '/search?q=curtains' },
+      { name: 'Storage Boxes', href: '/search?q=storage+boxes' },
+      { name: 'Wall Decor', href: '/search?q=wall+decor' },
+    ],
+  },
+  {
+    id: 'beauty',
+    name: 'Beauty',
+    icon: 'sparkles',
+    products: [
+      { name: 'Skincare Set', href: '/search?q=skincare+set' },
+      { name: 'Hair Extensions', href: '/search?q=hair+extensions' },
+      { name: 'Makeup Brushes', href: '/search?q=makeup+brushes' },
+      { name: 'Perfume', href: '/search?q=perfume' },
+      { name: 'Nail Art', href: '/search?q=nail+art' },
+      { name: 'Face Masks', href: '/search?q=face+masks' },
+      { name: 'Hair Dryers', href: '/search?q=hair+dryers' },
+    ],
+  },
+  {
+    id: 'jewelry',
+    name: 'Jewelry, Eyewear & Watches',
+    icon: 'diamond',
+    products: [
+      { name: 'Fashion Rings', href: '/search?q=fashion+rings' },
+      { name: 'Necklaces', href: '/search?q=necklaces' },
+      { name: 'Wrist Watches', href: '/search?q=wrist+watches' },
+      { name: 'Earrings', href: '/search?q=earrings' },
+      { name: 'Bracelets', href: '/search?q=bracelets' },
+      { name: 'Reading Glasses', href: '/search?q=reading+glasses' },
+      { name: 'Pendants', href: '/search?q=pendants' },
+    ],
+  },
+  {
+    id: 'luggage',
+    name: 'Luggage, Bags & Cases',
+    icon: 'bag',
+    products: [
+      { name: 'Travel Suitcase', href: '/search?q=travel+suitcase' },
+      { name: 'Backpacks', href: '/search?q=backpacks' },
+      { name: 'Laptop Bags', href: '/search?q=laptop+bags' },
+      { name: 'Cosmetic Bags', href: '/search?q=cosmetic+bags' },
+      { name: 'Messenger Bags', href: '/search?q=messenger+bags' },
+      { name: 'Phone Cases', href: '/search?q=phone+cases' },
+      { name: 'Wallets', href: '/search?q=wallets' },
     ],
   },
   {
     id: 'packaging',
     name: 'Packaging & Printing',
     icon: 'box',
-    subcategories: [
-      { id: 'paper-packaging', name: 'Paper Packaging' },
-      { id: 'plastic-packaging', name: 'Plastic Packaging' },
-      { id: 'printing-services', name: 'Printing Services' },
+    products: [
+      { name: 'Gift Boxes', href: '/search?q=gift+boxes' },
+      { name: 'Paper Bags', href: '/search?q=paper+bags' },
+      { name: 'Labels', href: '/search?q=labels' },
+      { name: 'Bubble Wrap', href: '/search?q=bubble+wrap' },
+      { name: 'Stickers', href: '/search?q=stickers' },
+      { name: 'Tape', href: '/search?q=packaging+tape' },
+      { name: 'Tissue Paper', href: '/search?q=tissue+paper' },
     ],
   },
   {
-    id: 'electrical',
-    name: 'Electrical Equipment',
-    icon: 'bolt',
-    subcategories: [
-      { id: 'cables-wires', name: 'Cables & Wires' },
-      { id: 'switches-sockets', name: 'Switches & Sockets' },
-      { id: 'generators', name: 'Generators' },
-    ],
-  },
-  {
-    id: 'chemicals',
-    name: 'Chemicals',
-    icon: 'beaker',
-    subcategories: [
-      { id: 'industrial-chemicals', name: 'Industrial Chemicals' },
-      { id: 'pharmaceutical-chemicals', name: 'Pharmaceutical Chemicals' },
-      { id: 'agricultural-chemicals', name: 'Agricultural Chemicals' },
-    ],
-  },
-  {
-    id: 'food-beverage',
-    name: 'Food & Beverage',
-    icon: 'utensils',
-    subcategories: [
-      { id: 'snacks', name: 'Snacks & Confectionery' },
-      { id: 'beverages', name: 'Beverages' },
-      { id: 'frozen-food', name: 'Frozen Food' },
-    ],
-  },
-  {
-    id: 'rubber-plastics',
-    name: 'Rubber & Plastics',
-    icon: 'cube',
-    subcategories: [
-      { id: 'plastic-raw-materials', name: 'Plastic Raw Materials' },
-      { id: 'rubber-products', name: 'Rubber Products' },
-      { id: 'plastic-products', name: 'Plastic Products' },
-    ],
-  },
-  {
-    id: 'security',
-    name: 'Security & Protection',
-    icon: 'shield',
-    subcategories: [
-      { id: 'cctv-cameras', name: 'CCTV Cameras' },
-      { id: 'access-control', name: 'Access Control' },
-      { id: 'fire-safety', name: 'Fire Safety' },
-    ],
-  },
-  {
-    id: 'hardware',
-    name: 'Hardware',
-    icon: 'wrench',
-    subcategories: [
-      { id: 'hand-tools', name: 'Hand Tools' },
-      { id: 'power-tools', name: 'Power Tools' },
-      { id: 'fasteners', name: 'Fasteners' },
-    ],
-  },
-  {
-    id: 'office-supplies',
-    name: 'Office & School Supplies',
-    icon: 'clipboard',
-    subcategories: [
-      { id: 'office-furniture', name: 'Office Furniture' },
-      { id: 'stationery', name: 'Stationery' },
-      { id: 'office-electronics', name: 'Office Electronics' },
-    ],
-  },
-  {
-    id: 'bags-shoes',
-    name: 'Bags, Shoes & Accessories',
-    icon: 'bag',
-    subcategories: [
-      { id: 'handbags', name: 'Handbags' },
-      { id: 'footwear', name: 'Footwear' },
-      { id: 'fashion-accessories', name: 'Fashion Accessories' },
-    ],
-  },
-  {
-    id: 'health-medical',
-    name: 'Health & Medical',
-    icon: 'heart',
-    subcategories: [
-      { id: 'medical-equipment', name: 'Medical Equipment' },
-      { id: 'health-products', name: 'Health Products' },
-      { id: 'pharmaceuticals', name: 'Pharmaceuticals' },
-    ],
-  },
-  {
-    id: 'toys-hobbies',
-    name: 'Toys & Hobbies',
-    icon: 'puzzle',
-    subcategories: [
-      { id: 'educational-toys', name: 'Educational Toys' },
-      { id: 'outdoor-toys', name: 'Outdoor Toys' },
-      { id: 'hobby-supplies', name: 'Hobby Supplies' },
-    ],
-  },
-  {
-    id: 'agriculture',
-    name: 'Agriculture',
-    icon: 'leaf',
-    subcategories: [
-      { id: 'farm-machinery', name: 'Farm Machinery' },
-      { id: 'seeds-plants', name: 'Seeds & Plants' },
-      { id: 'fertilizers', name: 'Fertilizers' },
-    ],
-  },
-  {
-    id: 'minerals-metals',
-    name: 'Minerals & Metals',
-    icon: 'gem',
-    subcategories: [
-      { id: 'steel', name: 'Steel' },
-      { id: 'aluminum', name: 'Aluminum' },
-      { id: 'copper', name: 'Copper' },
-    ],
-  },
-  {
-    id: 'telecommunications',
-    name: 'Telecommunications',
-    icon: 'signal',
-    subcategories: [
-      { id: 'mobile-phones', name: 'Mobile Phones' },
-      { id: 'network-equipment', name: 'Network Equipment' },
-      { id: 'communication-devices', name: 'Communication Devices' },
-    ],
-  },
-  {
-    id: 'energy',
-    name: 'Energy',
-    icon: 'sun',
-    subcategories: [
-      { id: 'solar-products', name: 'Solar Products' },
-      { id: 'batteries', name: 'Batteries' },
-      { id: 'power-supplies', name: 'Power Supplies' },
-    ],
-  },
-  {
-    id: 'environment',
-    name: 'Environment',
-    icon: 'recycle',
-    subcategories: [
-      { id: 'waste-management', name: 'Waste Management' },
-      { id: 'water-treatment', name: 'Water Treatment' },
-      { id: 'air-purification', name: 'Air Purification' },
-    ],
-  },
-  {
-    id: 'gifts-crafts',
-    name: 'Gifts & Crafts',
-    icon: 'gift',
-    subcategories: [
-      { id: 'promotional-gifts', name: 'Promotional Gifts' },
-      { id: 'handicrafts', name: 'Handicrafts' },
-      { id: 'seasonal-items', name: 'Seasonal Items' },
-    ],
-  },
-  {
-    id: 'jewelry-watches',
-    name: 'Jewelry & Watches',
-    icon: 'diamond',
-    subcategories: [
-      { id: 'fashion-jewelry', name: 'Fashion Jewelry' },
-      { id: 'watches', name: 'Watches' },
-      { id: 'fine-jewelry', name: 'Fine Jewelry' },
-    ],
-  },
-  {
-    id: 'transportation',
-    name: 'Transportation',
-    icon: 'truck',
-    subcategories: [
-      { id: 'vehicles', name: 'Vehicles' },
-      { id: 'logistics', name: 'Logistics' },
-      { id: 'marine-equipment', name: 'Marine Equipment' },
-    ],
-  },
-  {
-    id: 'measurement',
-    name: 'Measurement & Analysis',
-    icon: 'gauge',
-    subcategories: [
-      { id: 'testing-equipment', name: 'Testing Equipment' },
-      { id: 'measuring-instruments', name: 'Measuring Instruments' },
-      { id: 'lab-supplies', name: 'Lab Supplies' },
-    ],
-  },
-  {
-    id: 'furniture',
-    name: 'Furniture',
-    icon: 'couch',
-    subcategories: [
-      { id: 'home-furniture', name: 'Home Furniture' },
-      { id: 'commercial-furniture', name: 'Commercial Furniture' },
-      { id: 'outdoor-furniture', name: 'Outdoor Furniture' },
-    ],
-  },
-  {
-    id: 'tools',
-    name: 'Tools & Equipment',
-    icon: 'hammer',
-    subcategories: [
-      { id: 'industrial-tools', name: 'Industrial Tools' },
-      { id: 'measuring-tools', name: 'Measuring Tools' },
-      { id: 'welding-equipment', name: 'Welding Equipment' },
-    ],
-  },
-  {
-    id: 'textile-leather',
-    name: 'Textile & Leather Products',
-    icon: 'fabric',
-    subcategories: [
-      { id: 'leather-goods', name: 'Leather Goods' },
-      { id: 'textile-products', name: 'Textile Products' },
-      { id: 'yarn-thread', name: 'Yarn & Thread' },
-    ],
-  },
-  {
-    id: 'timepieces',
-    name: 'Timepieces, Eyewear',
-    icon: 'clock',
-    subcategories: [
-      { id: 'clocks', name: 'Clocks' },
-      { id: 'sunglasses', name: 'Sunglasses' },
-      { id: 'eyeglasses', name: 'Eyeglasses' },
-    ],
-  },
-  {
-    id: 'computer-products',
-    name: 'Computer Products',
-    icon: 'desktop',
-    subcategories: [
-      { id: 'computers', name: 'Computers' },
-      { id: 'computer-peripherals', name: 'Computer Peripherals' },
-      { id: 'storage-devices', name: 'Storage Devices' },
-    ],
-  },
-  {
-    id: 'consumer-electronics',
-    name: 'Consumer Electronics',
-    icon: 'tv',
-    subcategories: [
-      { id: 'audio-video', name: 'Audio & Video' },
-      { id: 'home-appliances', name: 'Home Appliances' },
-      { id: 'smart-home', name: 'Smart Home' },
-    ],
-  },
-  {
-    id: 'fabrication',
-    name: 'Fabrication Services',
-    icon: 'factory',
-    subcategories: [
-      { id: 'metal-fabrication', name: 'Metal Fabrication' },
-      { id: 'plastic-molding', name: 'Plastic Molding' },
-      { id: 'cnc-machining', name: 'CNC Machining' },
-    ],
-  },
-  {
-    id: 'pet-supplies',
-    name: 'Pet Supplies',
-    icon: 'paw',
-    subcategories: [
-      { id: 'pet-food', name: 'Pet Food' },
-      { id: 'pet-accessories', name: 'Pet Accessories' },
-      { id: 'pet-grooming', name: 'Pet Grooming' },
-    ],
-  },
-  {
-    id: 'baby-products',
-    name: 'Baby Products',
+    id: 'kids',
+    name: 'Parents, Kids & Toys',
     icon: 'baby',
-    subcategories: [
-      { id: 'baby-clothing', name: 'Baby Clothing' },
-      { id: 'baby-care', name: 'Baby Care' },
-      { id: 'baby-toys', name: 'Baby Toys' },
-    ],
-  },
-  {
-    id: 'renewable-energy',
-    name: 'Renewable Energy',
-    icon: 'wind',
-    subcategories: [
-      { id: 'solar-panels', name: 'Solar Panels' },
-      { id: 'wind-turbines', name: 'Wind Turbines' },
-      { id: 'energy-storage', name: 'Energy Storage' },
+    products: [
+      { name: 'Building Blocks', href: '/search?q=building+blocks' },
+      { name: 'Strollers', href: '/search?q=strollers' },
+      { name: 'Plush Toys', href: '/search?q=plush+toys' },
+      { name: 'Diapers', href: '/search?q=diapers' },
+      { name: 'Baby Clothes', href: '/search?q=baby+clothes' },
+      { name: 'RC Cars', href: '/search?q=rc+cars' },
+      { name: 'Puzzles', href: '/search?q=puzzles' },
     ],
   },
 ];
 
-/**
- * Renders an icon SVG based on the icon name
- */
-function renderIcon(iconName: string): string {
+/* ──── Featured Selections data ──── */
+
+const featureCards = [
+  {
+    title: 'Top ranking',
+    href: '/top-ranking',
+    icon: `<svg class="w-10 h-10" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="#222" stroke-width="1.5"/><circle cx="20" cy="20" r="7" stroke="#222" stroke-width="1.5"/><circle cx="20" cy="20" r="2" fill="#222"/><line x1="20" y1="2" x2="20" y2="8" stroke="#222" stroke-width="1.5"/><line x1="20" y1="32" x2="20" y2="38" stroke="#222" stroke-width="1.5"/><line x1="2" y1="20" x2="8" y2="20" stroke="#222" stroke-width="1.5"/><line x1="32" y1="20" x2="38" y2="20" stroke="#222" stroke-width="1.5"/></svg>`,
+  },
+  {
+    title: 'New arrivals',
+    href: '/new-arrivals',
+    icon: `<svg class="w-10 h-10" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="3" stroke="#222" stroke-width="1.5"/><rect x="8" y="13" width="24" height="14" rx="1.5" stroke="#222" stroke-width="1"/><text x="20" y="24" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="sans-serif">NEW</text></svg>`,
+  },
+  {
+    title: 'Top deals',
+    href: '/top-deals',
+    icon: `<svg class="w-10 h-10" viewBox="0 0 40 40" fill="none"><path d="M17 5h-7a4 4 0 0 0-4 4v7.17a4 4 0 0 0 1.17 2.83l13.66 13.66a4 4 0 0 0 5.66 0l7.17-7.17a4 4 0 0 0 0-5.66L19.83 6.17A4 4 0 0 0 17 5Z" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.5" cy="12.5" r="2" fill="#222"/></svg>`,
+  },
+];
+
+const quickLinks = [
+  { label: 'Dropshipping center', href: '/dropshipping', icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>` },
+  { label: 'Sample center', href: '/samples', icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/></svg>` },
+  { label: 'Fast customization', href: '/customization', icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09Z"/></svg>` },
+  { label: 'Online Trade Show', href: '/trade-show', icon: `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A8.966 8.966 0 0 1 3 12c0-1.264.26-2.466.73-3.558"/></svg>` },
+];
+
+/* ──── Order Protections data ──── */
+
+const protectionCards = [
+  {
+    title: 'Safe & easy payments',
+    href: '/order-protections/payments',
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>`,
+  },
+  {
+    title: 'Money-back policy',
+    href: '/order-protections/refund',
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>`,
+  },
+  {
+    title: 'Shipping & logistics services',
+    href: '/order-protections/shipping',
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>`,
+  },
+  {
+    title: 'After-sales protections',
+    href: '/order-protections/after-sales',
+    icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"/></svg>`,
+  },
+];
+
+/* ════════════════════════════════════════════════════
+   ICON MAP
+   ════════════════════════════════════════════════════ */
+
+function getCategoryIcon(iconName: string): string {
   const icons: Record<string, string> = {
-    cog: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>`,
-    chip: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>`,
-    shirt: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zm9 4l-3-4h-3m-6 0H6l-3 4m0 0v8h18v-8m-18 0h18"/></svg>`,
-    home: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>`,
-    building: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`,
-    car: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 17h.01M16 17h.01M6 11l1.5-4.5A2 2 0 019.4 5h5.2a2 2 0 011.9 1.5L18 11M6 11h12m-12 0a2 2 0 00-2 2v4a1 1 0 001 1h1m12-7a2 2 0 012 2v4a1 1 0 01-1 1h-1m-8 0h4"/></svg>`,
-    sparkles: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>`,
-    lightbulb: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>`,
-    trophy: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3h14M5 3v3a7 7 0 007 7m-7-10H3m16 0h2M5 6H3m2 0a7 7 0 007 7m7-7h2M19 6a7 7 0 01-7 7m0 0v4m0 0H9m3 0h3m-3 0v3"/></svg>`,
-    box: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>`,
-    bolt: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
-    beaker: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>`,
-    utensils: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0-6v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>`,
-    cube: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
-    shield: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>`,
-    wrench: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>`,
-    clipboard: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>`,
-    bag: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>`,
-    heart: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>`,
-    puzzle: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1H3a2 2 0 110-4h1a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1V4z"/></svg>`,
-    leaf: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>`,
-    gem: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3L2 9l10 13 10-13-10-6z"/></svg>`,
-    signal: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.142 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>`,
-    sun: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
-    recycle: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`,
-    gift: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>`,
-    diamond: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3L2 9l10 13 10-13-10-6zm0 0v6m-8 0h16"/></svg>`,
-    truck: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>`,
-    gauge: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>`,
-    couch: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>`,
-    hammer: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>`,
-    fabric: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>`,
-    clock: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-    desktop: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
-    tv: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`,
-    factory: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>`,
-    paw: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10h.01M10 10h.01M12 14c-2 0-3 1-3 2s1 2 3 2 3-1 3-2-1-2-3-2zm5-6a2 2 0 100-4 2 2 0 000 4zM7 8a2 2 0 100-4 2 2 0 000 4zm12 4a2 2 0 100-4 2 2 0 000 4zM5 12a2 2 0 100-4 2 2 0 000 4z"/></svg>`,
-    baby: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-    wind: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1014 16H2m15.73-8.27A2.5 2.5 0 1119.5 12H2"/></svg>`,
+    star: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"/></svg>`,
+    shirt: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>`,
+    chip: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/></svg>`,
+    trophy: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M18.75 4.236c.982.143 1.954.317 2.916.52A6.003 6.003 0 0 1 16.27 9.728M18.75 4.236V4.5c0 2.108-.966 3.99-2.48 5.228m0 0a6.003 6.003 0 0 1-3.815 1.274m0 0a6.003 6.003 0 0 1-3.815-1.274"/></svg>`,
+    running: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/></svg>`,
+    shoe: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9Z"/></svg>`,
+    home: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/></svg>`,
+    sparkles: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/></svg>`,
+    diamond: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3L2 9l10 13 10-13-10-6z"/></svg>`,
+    bag: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/></svg>`,
+    box: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z"/></svg>`,
+    baby: `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z"/></svg>`,
   };
-
-  return icons[iconName] || icons['box'];
+  return icons[iconName] || icons['star'];
 }
 
-/**
- * Renders a single category item with optional subcategories on hover
- */
-function renderCategoryItem(category: Category): string {
-  const hasSubcategories = category.subcategories && category.subcategories.length > 0;
+/* ════════════════════════════════════════════════════
+   RENDER HELPERS
+   ════════════════════════════════════════════════════ */
 
+function renderProductItem(product: { name: string; href: string; badge?: boolean }): string {
   return `
-    <div class="group/item relative">
-      <a
-        href="/category/${category.id}"
-        class="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-primary-400 rounded-lg transition-colors"
-      >
-        <span class="flex-shrink-0 text-gray-400 group-hover/item:text-primary-500 dark:text-gray-500 dark:group-hover/item:text-primary-400 transition-colors">
-          ${renderIcon(category.icon || 'box')}
-        </span>
-        <span class="flex-1 truncate">${category.name}</span>
-        ${hasSubcategories ? `
-          <svg class="w-4 h-4 text-gray-400 group-hover/item:text-primary-500 dark:text-gray-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7"/>
-          </svg>
-        ` : ''}
-      </a>
-      ${hasSubcategories ? `
-        <div class="absolute left-full top-0 ml-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover/item:opacity-100 group-hover/item:visible transition-all duration-200 z-50">
-          <div class="py-2">
-            ${category.subcategories?.map(sub => `
-              <a
-                href="/category/${category.id}/${sub.id}"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-primary-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-primary-400 transition-colors"
-              >
-                ${sub.name}
-              </a>
+    <a href="${product.href}" class="flex flex-col items-center gap-2 group/product">
+      <div class="relative w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden group-hover/product:ring-2 group-hover/product:ring-primary-300 transition-all">
+        <svg class="w-8 h-8 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
+        </svg>
+        ${product.badge ? `<span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>` : ''}
+      </div>
+      <span class="text-xs text-gray-600 dark:text-gray-400 text-center leading-tight group-hover/product:text-primary-600 dark:group-hover/product:text-primary-400 transition-colors max-w-20">${product.name}</span>
+    </a>
+  `;
+}
+
+/* ════════════════════════════════════════════════════
+   VIEW: Categories (sidebar + panels)
+   ════════════════════════════════════════════════════ */
+
+function renderCategoriesView(): string {
+  return `
+    <div data-mega-view="categories" class="hidden">
+      <div class="flex" style="min-height: 480px;">
+        <!-- Sidebar -->
+        <div class="w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-900" style="max-height: 520px;" id="mega-sidebar">
+          <ul class="py-1">
+            ${megaCategories.map((cat, index) => `
+              <li>
+                <a
+                  href="/category/${cat.id}"
+                  class="mega-cat-btn flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left transition-colors ${index === 0 ? 'text-gray-900 bg-white border-l-2 border-primary-500 font-medium dark:text-white dark:bg-gray-800' : 'text-gray-600 hover:bg-white hover:text-gray-900 border-l-2 border-transparent dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white'}"
+                  data-category="${cat.id}"
+                >
+                  <span class="flex-shrink-0 text-gray-400">${getCategoryIcon(cat.icon)}</span>
+                  <span class="flex-1 truncate">${cat.name}</span>
+                  <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
+                </a>
+              </li>
             `).join('')}
-          </div>
+          </ul>
         </div>
-      ` : ''}
-    </div>
-  `;
-}
-
-/**
- * Renders a column of categories for the grid layout
- */
-function renderCategoryColumn(columnCategories: Category[], columnIndex: number): string {
-  return `
-    <div class="space-y-1" data-column="${columnIndex}">
-      ${columnCategories.map(cat => renderCategoryItem(cat)).join('')}
-    </div>
-  `;
-}
-
-/**
- * Splits categories into columns for the grid layout
- * Creates a balanced distribution across the specified number of columns
- */
-function splitIntoColumns(items: Category[], numColumns: number): Category[][] {
-  const columns: Category[][] = [];
-  for (let i = 0; i < numColumns; i++) {
-    columns.push([]);
-  }
-
-  const itemsPerColumn = Math.ceil(items.length / numColumns);
-
-  items.forEach((item, index) => {
-    const columnIndex = Math.floor(index / itemsPerColumn);
-    if (columnIndex < numColumns) {
-      columns[columnIndex].push(item);
-    } else {
-      columns[numColumns - 1].push(item);
-    }
-  });
-
-  return columns;
-}
-
-/**
- * Renders the mobile version of the mega menu
- */
-function renderMobileMegaMenu(): string {
-  return `
-    <div class="lg:hidden py-4 max-h-96 overflow-y-auto">
-      <div class="space-y-1">
-        ${categories.map(category => `
-          <details class="group">
-            <summary class="flex items-center justify-between px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-700 rounded-lg cursor-pointer list-none">
-              <div class="flex items-center gap-3">
-                <span class="text-gray-400 dark:text-gray-500">
-                  ${renderIcon(category.icon || 'box')}
-                </span>
-                <span>${category.name}</span>
+        <!-- Content: all categories visible, scrollable -->
+        <div class="flex-1 overflow-y-auto px-6 py-4" style="max-height: 520px;" id="mega-content">
+          ${megaCategories.map(cat => `
+            <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white">${cat.name}</h3>
+                <a href="/category/${cat.id}" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 hover:underline">
+                  Browse all &rarr;
+                </a>
               </div>
-              ${category.subcategories && category.subcategories.length > 0 ? `
-                <svg class="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
-                </svg>
-              ` : ''}
-            </summary>
-            ${category.subcategories && category.subcategories.length > 0 ? `
-              <div class="pl-12 pr-4 pb-2 space-y-1">
-                ${category.subcategories.map(sub => `
-                  <a
-                    href="/category/${category.id}/${sub.id}"
-                    class="block py-2 text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
-                  >
-                    ${sub.name}
+              <div class="grid grid-cols-7 gap-y-5 gap-x-4">
+                ${cat.products.map(product => renderProductItem(product)).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ════════════════════════════════════════════════════
+   VIEW: Featured Selections
+   ════════════════════════════════════════════════════ */
+
+function renderFeaturedView(): string {
+  return `
+    <div data-mega-view="featured" class="hidden py-6">
+      <div class="grid grid-cols-4 gap-4">
+        <!-- Left: 3 Feature cards -->
+        ${featureCards.map(card => `
+          <a href="${card.href}" class="flex flex-col items-center justify-center gap-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-8 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-500 transition-all group">
+            <span class="text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+              ${card.icon}
+            </span>
+            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">${card.title}</span>
+          </a>
+        `).join('')}
+        <!-- Right: Quick links -->
+        <div class="flex flex-col justify-center">
+          <ul class="space-y-4">
+            ${quickLinks.map(link => `
+              <li>
+                <a href="${link.href}" class="flex items-center gap-2.5 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
+                  <span class="text-gray-400 dark:text-gray-500">${link.icon}</span>
+                  ${link.label}
+                </a>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ════════════════════════════════════════════════════
+   VIEW: Order Protections
+   ════════════════════════════════════════════════════ */
+
+function renderProtectionsView(): string {
+  return `
+    <div data-mega-view="protections" class="hidden py-8">
+      <div class="flex gap-10 items-center">
+        <!-- Left: Trade Assurance branding -->
+        <div class="w-2/5 flex-shrink-0">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/40">
+              <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            </span>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Trade Assurance</h3>
+          </div>
+          <p class="text-xl font-semibold text-gray-800 dark:text-gray-200 leading-snug mb-6">Enjoy protection from payment to delivery</p>
+          <a href="/order-protections" class="inline-block px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-full transition-colors">
+            Learn more
+          </a>
+        </div>
+        <!-- Right: 2x2 protection cards -->
+        <div class="flex-1 grid grid-cols-2 gap-4">
+          ${protectionCards.map(card => `
+            <a href="${card.href}" class="flex items-center gap-4 px-5 py-5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:shadow-md hover:border-primary-300 dark:hover:border-primary-500 transition-all group">
+              <span class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/40">
+                <span class="text-primary-600 dark:text-primary-400">${card.icon}</span>
+              </span>
+              <span class="flex-1 text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">${card.title}</span>
+              <svg class="w-5 h-5 text-gray-400 group-hover:text-primary-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+            </a>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ════════════════════════════════════════════════════
+   VIEW: Buyer Central
+   ════════════════════════════════════════════════════ */
+
+interface BuyerCentralColumn {
+  title: string;
+  links: { label: string; href: string }[];
+}
+
+const buyerCentralColumns: BuyerCentralColumn[] = [
+  {
+    title: 'Get started',
+    links: [
+      { label: 'What is iSTOC', href: '/about' },
+    ],
+  },
+  {
+    title: 'Why iSTOC',
+    links: [
+      { label: 'How sourcing works', href: '/how-sourcing-works' },
+      { label: 'Membership program', href: '/membership' },
+    ],
+  },
+  {
+    title: 'Trade services',
+    links: [
+      { label: 'Order protections', href: '/order-protections' },
+      { label: 'Letter of Credit', href: '/letter-of-credit' },
+      { label: 'Production monitoring & inspection services', href: '/inspection' },
+      { label: 'Tax Compliance Program', href: '/tax-compliance' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Success stories', href: '/success-stories' },
+      { label: 'Blogs', href: '/blogs' },
+      { label: 'Industry reports', href: '/reports' },
+      { label: 'Help Center', href: '/help' },
+    ],
+  },
+  {
+    title: 'Webinars',
+    links: [
+      { label: 'Overview', href: '/webinars' },
+      { label: 'Meet the peers', href: '/webinars/peers' },
+      { label: 'Ecommerce Academy', href: '/ecommerce-academy' },
+      { label: 'How to source on iSTOC', href: '/how-to-source' },
+    ],
+  },
+];
+
+function renderBuyerCentralView(): string {
+  return `
+    <div data-mega-view="buyer-central" class="hidden py-8 px-4">
+      <div class="grid grid-cols-5 gap-8">
+        ${buyerCentralColumns.map(col => `
+          <div>
+            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-4">${col.title}</h4>
+            <ul class="space-y-3">
+              ${col.links.map(link => `
+                <li>
+                  <a href="${link.href}" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                    ${link.label}
                   </a>
-                `).join('')}
-              </div>
-            ` : ''}
-          </details>
+                </li>
+              `).join('')}
+            </ul>
+          </div>
         `).join('')}
       </div>
     </div>
   `;
 }
 
-/**
- * Renders the desktop version of the mega menu with multi-column grid
- */
-function renderDesktopMegaMenu(): string {
-  // Split categories into 5 columns for desktop view
-  const columns = splitIntoColumns(categories, 5);
+/* ════════════════════════════════════════════════════
+   VIEW: Help Center
+   ════════════════════════════════════════════════════ */
 
+function renderHelpCenterView(): string {
   return `
-    <div class="hidden lg:block py-6">
-      <div class="grid grid-cols-5 gap-6">
-        ${columns.map((col, index) => renderCategoryColumn(col, index)).join('')}
+    <div data-mega-view="help-center" class="hidden py-8 px-4">
+      <div class="flex gap-8">
+        <!-- Left: Two cards -->
+        <div class="flex gap-6 flex-1">
+          <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-400 hover:bg-primary-50/30 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-all group">
+            <span class="flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 transition-colors">
+              <svg class="w-7 h-7 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
+              </svg>
+            </span>
+            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">For buyers</span>
+          </a>
+          <a href="/help/suppliers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-400 hover:bg-primary-50/30 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-all group">
+            <span class="flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 transition-colors">
+              <svg class="w-7 h-7 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/>
+              </svg>
+            </span>
+            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">For suppliers</span>
+          </a>
+        </div>
+        <!-- Right: Links -->
+        <div class="w-56 flex flex-col justify-center">
+          <ul class="space-y-4">
+            <li>
+              <a href="/help/dispute" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
+                Open a dispute
+              </a>
+            </li>
+            <li>
+              <a href="/help/ipr" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
+                Report IPR infringement
+              </a>
+            </li>
+            <li>
+              <a href="/help/abuse" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
+                Report abuse
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   `;
 }
 
-/**
- * Renders the quick links section at the bottom of the mega menu
- */
-function renderQuickLinks(): string {
+/* ════════════════════════════════════════════════════
+   VIEW: App & Extension
+   ════════════════════════════════════════════════════ */
+
+function renderAppExtensionView(): string {
   return `
-    <div class="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex flex-wrap items-center gap-4 text-sm">
-          <a href="/categories" class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 font-medium">
-            View All Categories →
-          </a>
-          <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
-          <a href="/trending" class="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
-            Trending Products
-          </a>
-          <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
-          <a href="/new-arrivals" class="text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400">
-            New Arrivals
-          </a>
+    <div data-mega-view="app-extension" class="hidden py-8 px-4">
+      <div class="flex divide-x divide-gray-200 dark:divide-gray-700">
+        <!-- Left: Get the app -->
+        <div class="flex-1 pr-10">
+          <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Get the iSTOC app</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-sm">Find products, communicate with suppliers, and manage and pay for your orders with the iSTOC app anytime, anywhere.</p>
+          <div class="flex items-center gap-5">
+            <!-- App badges -->
+            <div class="flex flex-col gap-2.5">
+              <a href="/app/ios" class="inline-flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-800 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11Z"/></svg>
+                <div class="flex flex-col">
+                  <span class="text-[10px] leading-none opacity-80">Download on the</span>
+                  <span class="text-sm font-semibold leading-tight">App Store</span>
+                </div>
+              </a>
+              <a href="/app/android" class="inline-flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-800 transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="m3.18 23.96.02.02c.04-.06.06-.12.09-.19l4.58-9.81a.3.3 0 0 0-.13-.39L.56 9.42a.3.3 0 0 0-.41.13L.02 9.8A11.94 11.94 0 0 0 0 12.09c0 4.5 2.04 7.6 3.18 11.87Z"/><path d="m8.44 12.96-.37.79-4.58 9.81c-.02.05-.04.11-.07.16l.02.02c3.71-2.2 13.08-7.74 22.54-13.25a.1.1 0 0 0 .02-.17l-4.09-3.55a.3.3 0 0 0-.33-.04l-13.14 6.23Z"/><path d="M8.07 11.03 21.21 4.8a.3.3 0 0 0 .05-.51L17.54 1.3a.3.3 0 0 0-.27-.05L3.4.01A.3.3 0 0 0 3.12.2l-.1.2a.3.3 0 0 0 .05.31l4.66 4.69.12.13.21.24 4.59 4.87a.3.3 0 0 1-.58.39Z"/></svg>
+                <div class="flex flex-col">
+                  <span class="text-[10px] leading-none opacity-80">GET IT ON</span>
+                  <span class="text-sm font-semibold leading-tight">Google Play</span>
+                </div>
+              </a>
+            </div>
+            <!-- QR Code placeholder -->
+            <div class="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center justify-center">
+              <svg class="w-10 h-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z"/>
+              </svg>
+            </div>
+          </div>
         </div>
-        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <span>39 Categories Available</span>
+        <!-- Right: Discover Lens -->
+        <div class="flex-1 pl-10">
+          <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Discover iSTOC Lens</h4>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-md">Use this image search extension to find and compare similar products with wholesale prices and customization options anywhere online.</p>
+          <div class="flex flex-col items-start gap-3">
+            <a href="/lens" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 underline underline-offset-2 transition-colors">
+              Learn more
+            </a>
+            <a href="/lens/chrome" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-full px-6 py-2.5 transition-colors">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A8.966 8.966 0 0 1 3 12c0-1.264.26-2.466.73-3.558"/></svg>
+              Add to Chrome
+            </a>
+          </div>
         </div>
       </div>
     </div>
   `;
 }
 
-/**
- * MegaMenu Component
- * Renders a full-width dropdown menu with 39 categories in a multi-column grid layout
- * - Desktop: 5-column grid with hover subcategories
- * - Mobile: Accordion-style expandable categories
- * - Opens on hover via Flowbite dropdown
- */
+/* ════════════════════════════════════════════════════
+   MAIN COMPONENT
+   ════════════════════════════════════════════════════ */
+
 export function MegaMenu(): string {
   return `
-    <div
-      id="mega-menu-dropdown"
-      class="fixed left-0 right-0 z-50 hidden bg-white border-b border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700"
-      style="top: auto;"
+    <div id="istoc-mega-overlay"
+      style="position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
+    ></div>
+    <div id="istoc-mega-panel"
+      style="position:fixed;left:0;width:100%;z-index:41;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;"
+      class="bg-white border-b border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="container-boxed">
-        <!-- Header with title and close hint -->
-        <div class="flex items-center justify-between py-4 border-b border-gray-100 dark:border-gray-700">
-          <h2 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-            <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-            All Categories
-          </h2>
-          <span class="text-xs text-gray-400 dark:text-gray-500 hidden sm:block">
-            Hover over categories to explore
-          </span>
-        </div>
-
-        <!-- Desktop Multi-Column Grid -->
-        ${renderDesktopMegaMenu()}
-
-        <!-- Mobile Accordion View -->
-        ${renderMobileMegaMenu()}
-
-        <!-- Quick Links Footer -->
-        ${renderQuickLinks()}
+        ${renderCategoriesView()}
+        ${renderFeaturedView()}
+        ${renderProtectionsView()}
+        ${renderBuyerCentralView()}
+        ${renderHelpCenterView()}
+        ${renderAppExtensionView()}
       </div>
     </div>
   `;
 }
 
-/**
- * Initializes the mega menu with custom behavior
- * Call this after DOM is ready and Flowbite is initialized
- */
+/* ════════════════════════════════════════════════════
+   INIT — Hover & sidebar interaction
+   ════════════════════════════════════════════════════ */
+
 export function initMegaMenu(): void {
-  // Get the mega menu and trigger elements
-  const megaMenu = document.getElementById('mega-menu-dropdown');
-  const trigger = document.getElementById('mega-menu-trigger');
+  const megaMenu = document.getElementById('istoc-mega-panel');
+  const overlay = document.getElementById('istoc-mega-overlay');
+  const triggers = document.querySelectorAll<HTMLElement>('.mega-trigger');
+  const views = megaMenu?.querySelectorAll<HTMLElement>('[data-mega-view]');
 
-  if (!megaMenu || !trigger) return;
+  if (!megaMenu || triggers.length === 0 || !views) {
+    console.warn('[MegaMenu] Elements not found');
+    return;
+  }
 
-  // Add keyboard navigation support
-  megaMenu.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      // Close menu on Escape key
-      megaMenu.classList.add('hidden');
-      trigger.setAttribute('aria-expanded', 'false');
-      trigger.focus();
+  let isOpen = false;
+  let closeTimer: number | null = null;
+  let activeView: string | null = null;
+  let activeTrigger: HTMLElement | null = null;
+
+  function positionMenu(): void {
+    // Position below the SubHeader nav
+    const nav = triggers[0]?.closest('nav');
+    if (!nav) return;
+    const bottom = nav.getBoundingClientRect().bottom;
+    megaMenu!.style.top = bottom + 'px';
+    if (overlay) overlay.style.top = bottom + 'px';
+  }
+
+  function showView(viewName: string): void {
+    views!.forEach((v) => {
+      v.classList.toggle('hidden', v.getAttribute('data-mega-view') !== viewName);
+    });
+    activeView = viewName;
+  }
+
+  function open(trigger: HTMLElement): void {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+
+    const viewName = trigger.getAttribute('data-mega-target');
+    if (!viewName) return;
+
+    // Highlight active trigger
+    if (activeTrigger && activeTrigger !== trigger) {
+      activeTrigger.classList.remove('subheader-link--active');
+    }
+    trigger.classList.add('subheader-link--active');
+    activeTrigger = trigger;
+
+    positionMenu();
+    showView(viewName);
+
+    if (!isOpen) {
+      isOpen = true;
+      megaMenu!.style.opacity = '1';
+      megaMenu!.style.pointerEvents = 'auto';
+      megaMenu!.style.transform = 'translateY(0)';
+      if (overlay) {
+        overlay.style.opacity = '1';
+        overlay.style.pointerEvents = 'auto';
+      }
+      // White header while mega menu is open
+      const sh = document.getElementById('sticky-header');
+      if (sh) { sh.style.backgroundColor = '#fff'; sh.style.borderBottom = '1px solid #ddd'; }
+    }
+
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+
+  function close(): void {
+    isOpen = false;
+    activeView = null;
+    closeTimer = null;
+
+    megaMenu!.style.opacity = '0';
+    megaMenu!.style.pointerEvents = 'none';
+    megaMenu!.style.transform = 'translateY(-8px)';
+    if (overlay) {
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+    }
+    // Restore header bg based on scroll position
+    const sh = document.getElementById('sticky-header');
+    if (sh) {
+      if (window.scrollY <= 10) { sh.style.backgroundColor = ''; sh.style.borderBottom = ''; }
+    }
+
+    // Reset trigger states
+    triggers.forEach((t) => {
+      t.setAttribute('aria-expanded', 'false');
+      t.classList.remove('subheader-link--active');
+    });
+    if (activeTrigger) {
+      activeTrigger.classList.remove('subheader-link--active');
+      activeTrigger = null;
+    }
+  }
+
+  function scheduleClose(): void {
+    if (closeTimer) clearTimeout(closeTimer);
+    closeTimer = window.setTimeout(close, 300);
+  }
+
+  function cancelClose(): void {
+    if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+  }
+
+  // ──── Attach events to ALL triggers ────
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('mouseenter', () => open(trigger));
+    trigger.addEventListener('mouseleave', scheduleClose);
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const viewName = trigger.getAttribute('data-mega-target');
+      if (isOpen && activeView === viewName) {
+        cancelClose(); close();
+      } else {
+        open(trigger);
+      }
+    });
+  });
+
+  // Keep open when hovering mega menu
+  megaMenu.addEventListener('mouseenter', cancelClose);
+  megaMenu.addEventListener('mouseleave', scheduleClose);
+
+  // Overlay click closes
+  if (overlay) overlay.addEventListener('click', () => { cancelClose(); close(); });
+
+  // Escape key closes
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      cancelClose(); close();
     }
   });
 
-  // Ensure proper positioning below the trigger
-  const positionMenu = (): void => {
-    const triggerRect = trigger.getBoundingClientRect();
-    megaMenu.style.top = `${triggerRect.bottom}px`;
-  };
+  // ──── Categories view: sidebar click → scroll to section ────
+  const catButtons = megaMenu.querySelectorAll<HTMLElement>('.mega-cat-btn');
+  const contentContainer = document.getElementById('mega-content');
 
-  // Position on scroll and resize
-  window.addEventListener('scroll', positionMenu, { passive: true });
-  window.addEventListener('resize', positionMenu, { passive: true });
+  const ACT = ['text-gray-900', 'bg-white', 'border-primary-500', 'font-medium', 'dark:text-white', 'dark:bg-gray-800'];
+  const INACT = ['text-gray-600', 'hover:bg-white', 'hover:text-gray-900', 'border-transparent', 'dark:text-gray-400', 'dark:hover:bg-gray-800', 'dark:hover:text-white'];
 
-  // Initial positioning
-  positionMenu();
+  let isScrollingFromClick = false;
+
+  function highlightSidebarBtn(categoryId: string): void {
+    catButtons.forEach((b) => { b.classList.remove(...ACT); b.classList.add(...INACT); });
+    const target = megaMenu!.querySelector<HTMLElement>(`.mega-cat-btn[data-category="${categoryId}"]`);
+    if (target) {
+      target.classList.remove(...INACT);
+      target.classList.add(...ACT);
+    }
+  }
+
+  // Click on sidebar → scroll right panel to that section (prevent link navigation)
+  catButtons.forEach((btn) => {
+    btn.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      const id = btn.getAttribute('data-category');
+      if (!id || !contentContainer) return;
+
+      highlightSidebarBtn(id);
+
+      const section = document.getElementById(`mega-section-${id}`);
+      if (section) {
+        isScrollingFromClick = true;
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => { isScrollingFromClick = false; }, 500);
+      }
+    });
+  });
+
+  // Scroll spy: highlight visible category in sidebar on scroll
+  if (contentContainer) {
+    const sections = contentContainer.querySelectorAll<HTMLElement>('.mega-cat-section');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isScrollingFromClick) return;
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const sectionId = entry.target.id.replace('mega-section-', '');
+            highlightSidebarBtn(sectionId);
+            break;
+          }
+        }
+      },
+      { root: contentContainer, threshold: 0.3 }
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
 }
