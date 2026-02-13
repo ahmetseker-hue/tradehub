@@ -2,10 +2,17 @@ import './style.css'
 import { initFlowbite } from 'flowbite'
 
 // Header components
-import { TopBar, SubHeader, SearchArea, initSearchArea, MegaMenu, initMegaMenu } from './components/header'
+import { TopBar, SubHeader, SearchArea, initSearchArea, initStickyHeaderSearch, MegaMenu, initMegaMenu } from './components/header'
 
 // Hero components
-import { CategoryBrowse, initCategoryBrowse, RecommendationSlider, initRecommendationSlider } from './components/hero'
+import {
+  CategoryBrowse,
+  initCategoryBrowse,
+  RecommendationSlider,
+  initRecommendationSlider,
+  HeroSideBannerSlider,
+  initHeroSideBannerSlider,
+} from './components/hero'
 
 // Footer components
 import { FooterLinks } from './components/footer'
@@ -17,13 +24,14 @@ import { FloatingPanel, initFloatingPanel } from './components/floating'
 import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <!-- Header Section -->
+  <!-- Sticky Header (global, stays sticky across full page) -->
+  <div id="sticky-header" class="sticky top-0 z-[var(--z-header)] transition-[background-color,border-color,box-shadow] duration-300">
+    ${TopBar()}
+    ${SubHeader()}
+  </div>
+
+  <!-- Hero Search Section -->
   <header style="background: linear-gradient(135deg, #fff7ed 0%, #f6f4e8 25%, #fff1f2 50%, #fbfaf0 75%, #fff7ed 100%); background-size: 300% 300%; animation: searchGradientShift 12s ease infinite;">
-    <!-- Sticky Nav (white bg + border on scroll) -->
-    <div id="sticky-header" class="sticky top-0 z-40 transition-[background-color,border-color,box-shadow] duration-300">
-      ${TopBar()}
-      ${SubHeader()}
-    </div>
     ${SearchArea()}
   </header>
 
@@ -32,12 +40,17 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
   <!-- Main Content -->
   <main>
-    <!-- Hero: Categories + Recommendation Slider -->
+    <!-- Hero: Categories + Recommendation Slider + Right Banner Slider -->
     <section class="py-6" aria-label="Browse categories and recommendations">
-      <div class="container-boxed flex gap-4 items-stretch">
-        ${CategoryBrowse()}
-        <div class="flex-1 min-w-0">
-          ${RecommendationSlider()}
+      <div class="container-wide overflow-x-auto">
+        <div class="flex gap-4 items-stretch lg:min-w-[1328px] xl:min-w-[1448px]">
+          ${CategoryBrowse()}
+          <div class="h-[300px] min-w-0 flex-1 lg:w-[616px] lg:flex-none xl:w-[736px]">
+            ${RecommendationSlider()}
+          </div>
+          <div class="hidden h-[300px] lg:block lg:w-[380px] lg:flex-none">
+            ${HeroSideBannerSlider()}
+          </div>
         </div>
       </div>
     </section>
@@ -60,8 +73,10 @@ initFlowbite();
 
 // Initialize remaining custom behaviors
 initSearchArea();
+initStickyHeaderSearch();
 initCategoryBrowse();
 initRecommendationSlider();
+initHeroSideBannerSlider();
 initFloatingPanel();
 initAnimatedPlaceholder('#search-input');
 

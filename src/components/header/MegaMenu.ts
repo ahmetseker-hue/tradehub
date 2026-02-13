@@ -602,10 +602,10 @@ function renderAppExtensionView(): string {
 export function MegaMenu(): string {
   return `
     <div id="istoc-mega-overlay"
-      style="position:fixed;left:0;right:0;bottom:0;z-index:40;background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
+      style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
     ></div>
     <div id="istoc-mega-panel"
-      style="position:fixed;left:0;width:100%;z-index:41;opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;"
+      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;"
       class="bg-white border-b border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="container-boxed">

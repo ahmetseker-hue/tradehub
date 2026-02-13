@@ -1,142 +1,282 @@
 /**
  * RecommendationSlider Component
- * Alibaba-style "Browsing history" / "Keep looking for" cards in a Swiper slider.
- * Shows 3 cards at a time with navigation arrows.
+ * Single-image recommendation cards in a Swiper carousel.
  */
 
 import Swiper from 'swiper';
 import { Navigation } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 
-/* ──── Card data ──── */
+type RecommendationImageKind =
+  | 'vending-machine'
+  | 'wedding-dress'
+  | 'electric-car'
+  | 'portable-ac'
+  | 'office-chair'
+  | 'set-top-box'
+  | 'jewelry-components'
+  | 'cargo-service'
+  | 'sports-shoes';
 
 interface RecommendationCard {
   title: string;
   subtitle?: string;
-  products: { name: string; price: string; href: string }[];
+  href: string;
+  imageKind: RecommendationImageKind;
+  imageAlt: string;
+}
+
+interface RecommendationVisual {
+  background: string;
+  accent: string;
+  stroke: string;
+  icon: string;
 }
 
 const recommendationCards: RecommendationCard[] = [
   {
-    title: 'Browsing history',
-    products: [
-      { name: 'Telescopic Ladder', price: '$500', href: '/search?q=telescopic+ladder' },
-      { name: 'LED Monitor', price: '$89.99', href: '/search?q=led+monitor' },
-      { name: 'Wireless Earbuds', price: '$12.46', href: '/search?q=wireless+earbuds' },
-      { name: 'Smart Watch', price: '$22.50', href: '/search?q=smart+watch' },
-    ],
+    title: 'Frequently searched',
+    subtitle: 'Vending Machines',
+    href: '/search?q=vending+machines',
+    imageKind: 'vending-machine',
+    imageAlt: 'Vending machine product card',
   },
   {
-    title: 'Keep looking for',
+    title: 'Frequently searched',
+    subtitle: 'Wedding Dresses',
+    href: '/search?q=wedding+dresses',
+    imageKind: 'wedding-dress',
+    imageAlt: 'Wedding dress product card',
+  },
+  {
+    title: 'Frequently searched',
+    subtitle: 'Electric Cars',
+    href: '/search?q=electric+cars',
+    imageKind: 'electric-car',
+    imageAlt: 'Electric car product card',
+  },
+  {
+    title: 'Frequently searched',
     subtitle: 'Portable Air Conditioners',
-    products: [
-      { name: 'Mini AC Unit', price: '$22.45', href: '/search?q=mini+ac' },
-      { name: 'Portable Cooler', price: '$74.87', href: '/search?q=portable+cooler' },
-      { name: 'Desk Fan AC', price: '$99.99', href: '/search?q=desk+fan+ac' },
-      { name: 'Evaporative Cooler', price: '$120', href: '/search?q=evaporative+cooler' },
-    ],
+    href: '/search?q=portable+air+conditioners',
+    imageKind: 'portable-ac',
+    imageAlt: 'Portable air conditioner product card',
   },
   {
-    title: 'Keep looking for',
-    subtitle: 'Jewelry Findings & Components',
-    products: [
-      { name: 'Thread Spools', price: '$0.78', href: '/search?q=thread+spools' },
-      { name: 'Beading Kit', price: '$4', href: '/search?q=beading+kit' },
-      { name: 'Gold Chains', price: '$856.20', href: '/search?q=gold+chains' },
-      { name: 'Clasp Set', price: '$0.35', href: '/search?q=clasp+set' },
-    ],
-  },
-  {
-    title: 'Keep looking for',
-    subtitle: 'Set-top Box',
-    products: [
-      { name: 'Android TV Box', price: '$22.50', href: '/search?q=android+tv+box' },
-      { name: 'Smart 8K Box', price: '$38', href: '/search?q=smart+8k+box' },
-      { name: 'Google TV', price: '$48', href: '/search?q=google+tv' },
-      { name: 'Streaming Box', price: '$23.99', href: '/search?q=streaming+box' },
-    ],
-  },
-  {
-    title: 'Keep looking for',
+    title: 'Frequently searched',
     subtitle: 'Office Chairs',
-    products: [
-      { name: 'Ergonomic Chair', price: '$355', href: '/search?q=ergonomic+chair' },
-      { name: 'Executive Chair', price: '$29', href: '/search?q=executive+chair' },
-      { name: 'Gaming Chair', price: '$28', href: '/search?q=gaming+chair' },
-      { name: 'Mesh Office Chair', price: '$91.99', href: '/search?q=mesh+office+chair' },
-    ],
+    href: '/search?q=office+chairs',
+    imageKind: 'office-chair',
+    imageAlt: 'Office chair product card',
   },
   {
-    title: 'Keep looking for',
-    subtitle: 'LCL+Express',
-    products: [
-      { name: 'Cargo Service', price: '$2', href: '/search?q=cargo+service' },
-      { name: 'Shipping Agent', price: '$2', href: '/search?q=shipping+agent' },
-      { name: 'Express Logistics', price: '$1.25', href: '/search?q=express+logistics' },
-      { name: 'Air Freight', price: '$0.80', href: '/search?q=air+freight' },
-    ],
+    title: 'Frequently searched',
+    subtitle: 'Set-top Boxes',
+    href: '/search?q=set-top+box',
+    imageKind: 'set-top-box',
+    imageAlt: 'Set-top box product card',
+  },
+  {
+    title: 'Frequently searched',
+    subtitle: 'Jewelry Components',
+    href: '/search?q=jewelry+components',
+    imageKind: 'jewelry-components',
+    imageAlt: 'Jewelry components product card',
+  },
+  {
+    title: 'Frequently searched',
+    subtitle: 'Cargo Services',
+    href: '/search?q=cargo+services',
+    imageKind: 'cargo-service',
+    imageAlt: 'Cargo service product card',
+  },
+  {
+    title: 'Frequently searched',
+    subtitle: 'Sports Shoes',
+    href: '/search?q=sports+shoes',
+    imageKind: 'sports-shoes',
+    imageAlt: 'Sports shoes product card',
   },
 ];
 
-/* ──── Render a single card ──── */
+const recommendationVisuals: Record<RecommendationImageKind, RecommendationVisual> = {
+  'vending-machine': {
+    background: 'linear-gradient(180deg, #f6f8ff 0%, #edf2ff 100%)',
+    accent: 'rgba(157, 172, 255, 0.45)',
+    stroke: '#49578d',
+    icon: `
+      <rect x="6.25" y="2.75" width="11.5" height="18.5" rx="1.5" />
+      <rect x="8.25" y="5.25" width="6.2" height="5.8" rx="0.7" />
+      <path d="M15.3 5.8v11.8M9 13.8h4.1M9 15.9h4.1" />
+      <rect x="8.6" y="17.9" width="3.4" height="1.9" rx="0.45" />
+    `,
+  },
+  'wedding-dress': {
+    background: 'linear-gradient(180deg, #fbfbfe 0%, #f2f3fa 100%)',
+    accent: 'rgba(212, 219, 255, 0.45)',
+    stroke: '#707dac',
+    icon: `
+      <circle cx="12" cy="5.2" r="1.8" />
+      <path d="M10 8h4l1.6 3.4-2 1.6v7H10.4v-7l-2-1.6L10 8Z" />
+      <path d="M8.9 13.7h6.2" />
+    `,
+  },
+  'electric-car': {
+    background: 'linear-gradient(180deg, #f4f9ff 0%, #eaf3ff 100%)',
+    accent: 'rgba(168, 211, 255, 0.5)',
+    stroke: '#3f6f9b',
+    icon: `
+      <path d="M4.2 14.4h15.6l-1.2-3.9a1.9 1.9 0 0 0-1.84-1.35H7.18a1.9 1.9 0 0 0-1.84 1.35l-1.14 3.9Z" />
+      <circle cx="7.6" cy="17.1" r="1.55" />
+      <circle cx="16.4" cy="17.1" r="1.55" />
+      <path d="M9.6 11.5h4.8" />
+    `,
+  },
+  'portable-ac': {
+    background: 'linear-gradient(180deg, #f3fcff 0%, #eaf7fb 100%)',
+    accent: 'rgba(148, 223, 240, 0.5)',
+    stroke: '#3a7b8a',
+    icon: `
+      <rect x="5.3" y="3.4" width="13.4" height="17.2" rx="2" />
+      <path d="M8.2 7.1h7.6M8.2 10.1h7.6M8.2 13.1h7.6M10.5 17.1h3" />
+    `,
+  },
+  'office-chair': {
+    background: 'linear-gradient(180deg, #fcf8f2 0%, #f6efe5 100%)',
+    accent: 'rgba(239, 202, 152, 0.45)',
+    stroke: '#876443',
+    icon: `
+      <path d="M9.1 4.6h5.8v5.2H9.1z" />
+      <path d="M7.8 10.8h8.4l1.4 2.8H6.4l1.4-2.8Z" />
+      <path d="M12 13.6v4.1m-4.1 0h8.2m-6 0-1.6 2m5.8-2 1.6 2" />
+    `,
+  },
+  'set-top-box': {
+    background: 'linear-gradient(180deg, #f5f6ff 0%, #ecefff 100%)',
+    accent: 'rgba(168, 173, 255, 0.45)',
+    stroke: '#525c9f',
+    icon: `
+      <rect x="4.6" y="8.7" width="14.8" height="6.8" rx="1.5" />
+      <path d="M7.3 11.8h7.9M6.8 18.2h10.4" />
+      <circle cx="17.1" cy="11.8" r="0.8" />
+    `,
+  },
+  'jewelry-components': {
+    background: 'linear-gradient(180deg, #fffaf1 0%, #fff3df 100%)',
+    accent: 'rgba(255, 207, 128, 0.45)',
+    stroke: '#9d7440',
+    icon: `
+      <path d="M6.4 9.7 12 3.4l5.6 6.3L12 20.6 6.4 9.7Z" />
+      <path d="M6.4 9.7h11.2M9.1 9.7 12 3.4l2.9 6.3" />
+    `,
+  },
+  'cargo-service': {
+    background: 'linear-gradient(180deg, #f5fbf4 0%, #edf7ec 100%)',
+    accent: 'rgba(165, 223, 164, 0.5)',
+    stroke: '#4f7e53',
+    icon: `
+      <rect x="3.7" y="7.4" width="10.7" height="8.8" rx="1.1" />
+      <path d="M14.4 10.1h3.2l2 2.1v4h-5.2z" />
+      <circle cx="8" cy="17.2" r="1.2" />
+      <circle cx="16.9" cy="17.2" r="1.2" />
+    `,
+  },
+  'sports-shoes': {
+    background: 'linear-gradient(180deg, #f8f8f8 0%, #efefef 100%)',
+    accent: 'rgba(197, 197, 197, 0.5)',
+    stroke: '#666666',
+    icon: `
+      <path d="M4.1 14.5c2.3.3 3.8-.2 5.4-1.5l2.2 1.5H20v3.1H4.1v-3.1Z" />
+      <path d="M9 14.5V12M11 14.5v-1.8M13 14.5v-1.3M6.2 17.6h11.7" />
+    `,
+  },
+};
 
-function renderCard(card: RecommendationCard): string {
+function renderPlaceholderVisual(kind: RecommendationImageKind): string {
+  const visual = recommendationVisuals[kind];
+
   return `
-    <div class="swiper-slide">
-      <div class="bg-[#f8f8f8] dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 mx-auto" style="max-width: 242px; height: 304px;">
-        <!-- Card Header -->
-        <div class="mb-3">
-          <h3 class="text-xs font-bold text-gray-900 dark:text-white leading-tight">${card.title}</h3>
-          ${card.subtitle ? `<p class="text-[11px] text-gray-500 dark:text-gray-400 truncate mt-0.5">${card.subtitle}</p>` : ''}
-        </div>
-        <!-- Product Grid 2x2 -->
-        <div class="grid grid-cols-2 gap-2">
-          ${card.products.map(product => `
-            <a href="${product.href}" class="group/item relative block">
-              <div class="relative w-full aspect-square rounded-md bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 flex items-center justify-center group-hover/item:border-primary-300 transition-colors overflow-hidden">
-                <svg class="w-7 h-7 text-gray-200 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
-                </svg>
-                <!-- Price overlay -->
-                <span class="absolute bottom-1 left-1 text-[10px] font-bold text-gray-900 dark:text-white">${product.price}</span>
-              </div>
-            </a>
-          `).join('')}
-        </div>
+    <div class="relative h-full w-full overflow-hidden rounded-xl" style="background: ${visual.background};" aria-hidden="true">
+      <div class="absolute -right-8 -top-8 h-20 w-20 rounded-full opacity-60" style="background: ${visual.accent};"></div>
+      <div class="absolute -left-5 bottom-0 h-16 w-16 rounded-full opacity-55" style="background: ${visual.accent};"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <svg
+          class="h-24 w-24 transition-transform duration-300 group-hover/card:scale-105 group-focus-visible/card:scale-105"
+          fill="none"
+          stroke-width="1.45"
+          viewBox="0 0 24 24"
+          style="stroke: ${visual.stroke};"
+        >
+          ${visual.icon}
+        </svg>
       </div>
     </div>
   `;
 }
 
-/* ──── Main component ──── */
+function renderCard(card: RecommendationCard): string {
+  const cardAriaLabel = card.subtitle ? `${card.title} - ${card.subtitle}` : card.title;
+
+  return `
+    <div class="swiper-slide recommendation-slide h-full">
+      <a
+        href="${card.href}"
+        aria-label="${cardAriaLabel}"
+        title="${card.imageAlt}"
+        class="group/card mx-auto flex h-full w-full flex-col rounded-2xl border border-[#e9e9e9] bg-[#f3f3f3] p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
+      >
+        <div class="mb-2">
+          <h3 class="text-[16px] font-bold leading-tight text-gray-900 dark:text-white">${card.title}</h3>
+          ${card.subtitle ? `<p class="mt-0.5 truncate text-[12px] font-semibold leading-tight text-gray-700 dark:text-gray-300">${card.subtitle}</p>` : ''}
+        </div>
+        <div class="min-h-0 flex-1">
+          ${renderPlaceholderVisual(card.imageKind)}
+        </div>
+      </a>
+    </div>
+  `;
+}
 
 export function RecommendationSlider(): string {
   return `
-    <div class="relative recommendation-slider-wrapper">
-      <div class="swiper recommendation-swiper">
-        <div class="swiper-wrapper">
+    <div class="group/recommendation relative recommendation-slider-wrapper h-[300px] px-7 lg:px-0">
+      <div class="swiper recommendation-swiper h-full" aria-label="Frequently searched product slider">
+        <div class="swiper-wrapper h-full">
           ${recommendationCards.map(card => renderCard(card)).join('')}
         </div>
       </div>
-      <!-- Navigation Arrows -->
-      <button class="rec-swiper-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 shadow-md border border-gray-200 dark:border-gray-600 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors disabled:opacity-30 disabled:cursor-default">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+
+      <button
+        aria-label="Previous recommendations"
+        class="rec-swiper-prev absolute left-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none lg:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
       </button>
-      <button class="rec-swiper-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white dark:bg-gray-700 shadow-md border border-gray-200 dark:border-gray-600 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors disabled:opacity-30 disabled:cursor-default">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+
+      <button
+        aria-label="Next recommendations"
+        class="rec-swiper-next absolute right-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none lg:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+      >
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
       </button>
     </div>
   `;
 }
 
-/* ──── Init Swiper ──── */
-
 export function initRecommendationSlider(): void {
-  new Swiper('.recommendation-swiper', {
+  const sliderElement = document.querySelector<HTMLElement>('.recommendation-swiper');
+  if (!sliderElement) return;
+
+  new Swiper(sliderElement, {
     modules: [Navigation],
-    slidesPerView: 3,
-    slidesPerGroup: 3,
-    spaceBetween: 12,
+    loop: true,
+    slidesPerView: 1,
+    slidesPerGroup: 1,
+    spaceBetween: 8,
     navigation: {
       nextEl: '.rec-swiper-next',
       prevEl: '.rec-swiper-prev',
@@ -150,9 +290,15 @@ export function initRecommendationSlider(): void {
         slidesPerView: 2,
         slidesPerGroup: 2,
       },
-      1024: {
+      1280: {
+        slidesPerView: 'auto',
+        slidesPerGroup: 1,
+        spaceBetween: 8,
+      },
+      1536: {
         slidesPerView: 3,
         slidesPerGroup: 3,
+        spaceBetween: 8,
       },
     },
   });

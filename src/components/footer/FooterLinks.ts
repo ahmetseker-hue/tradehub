@@ -9,6 +9,7 @@
 
 import type { FooterColumn, NavLink, SocialLink } from '../../types/navigation';
 import { FooterGroup } from './FooterGroup';
+import { FooterPolicy } from './FooterPolicy';
 
 
 /**
@@ -187,6 +188,7 @@ export function FooterLinks(): string {
     </section>
 
     ${FooterGroup()}
+    ${FooterPolicy()}
   `;
 }
 

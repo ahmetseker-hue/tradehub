@@ -31,10 +31,10 @@ function renderCategoryPopup(): string {
 
   return `
     <!-- Category Popup Overlay -->
-    <div id="cat-popup-overlay" class="fixed inset-0 z-50 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
+    <div id="cat-popup-overlay" class="fixed inset-0 z-[var(--z-backdrop)] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
 
     <!-- Category Popup Panel -->
-    <div id="cat-popup-panel" class="fixed inset-0 z-50 flex items-start justify-center pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div id="cat-popup-panel" class="fixed inset-0 z-[var(--z-modal)] flex items-start justify-center pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-5xl max-h-[80vh] flex flex-col overflow-hidden">
 
         <!-- Header -->
@@ -100,9 +100,9 @@ function renderCategoryPopup(): string {
 
 export function CategoryBrowse(): string {
   return `
-        <div class="relative flex-shrink-0 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden group/panel" style="width: 280px;">
+        <div class="relative h-[300px] w-full flex-shrink-0 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden group/panel lg:w-[300px]">
           <!-- Category List -->
-          <ul class="overflow-y-auto" style="max-height: 420px;">
+          <ul class="h-full overflow-y-auto pb-12">
             ${megaCategories.map(cat => `
               <li>
                 <button
@@ -122,15 +122,16 @@ export function CategoryBrowse(): string {
             `).join('')}
           </ul>
           <!-- View All: floating over categories, visible on hover -->
-          <a
-            href="/categories"
-            class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-600 opacity-0 group-hover/panel:opacity-100 transition-opacity hover:text-gray-900 dark:hover:text-white"
+          <button
+            type="button"
+            id="category-browse-view-all"
+            class="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-full shadow-md border border-gray-200 dark:border-gray-600 opacity-0 group-hover/panel:opacity-100 transition-opacity hover:text-gray-900 dark:hover:text-white cursor-pointer"
           >
             <span>View all</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
             </svg>
-          </a>
+          </button>
         </div>
 
     <!-- Category Popup Modal -->
@@ -148,8 +149,15 @@ export function initCategoryBrowse(): void {
   const sidebarBtns = document.querySelectorAll<HTMLButtonElement>('.cat-popup-btn');
   const sections = document.querySelectorAll<HTMLElement>('.cat-popup-section');
   const browseItems = document.querySelectorAll<HTMLButtonElement>('.category-browse-item');
+  const viewAllBtn = document.getElementById('category-browse-view-all');
 
   if (!overlay || !panel || !closeBtn || !title) return;
+
+  if (viewAllBtn) {
+    viewAllBtn.addEventListener('click', () => {
+      openPopup('for-you');
+    });
+  }
 
   const ACT = ['text-gray-900', 'bg-white', 'border-primary-500', 'font-medium', 'dark:text-white', 'dark:bg-gray-800'];
   const INACT = ['text-gray-600', 'hover:bg-white', 'hover:text-gray-900', 'border-transparent', 'dark:text-gray-400', 'dark:hover:bg-gray-800', 'dark:hover:text-white'];

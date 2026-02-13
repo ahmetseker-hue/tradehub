@@ -42,6 +42,115 @@ function renderLogo(): string {
 }
 
 /**
+ * Compact sticky search shown after hero search area is scrolled out.
+ */
+function renderCompactStickySearch(): string {
+  return `
+    <div id="topbar-compact-search-shell" class="hidden relative min-w-0 flex-1 self-center h-[46px] md:mx-4">
+      <form
+        id="topbar-compact-search"
+        action="/search"
+        method="GET"
+        role="search"
+        aria-label="Sticky header search"
+        aria-hidden="true"
+        aria-expanded="false"
+        aria-controls="topbar-compact-dropdown"
+        class="absolute left-0 right-0 top-0 z-[var(--z-popover)] w-full rounded-full border border-gray-300 bg-white shadow-sm transition-all duration-200 dark:border-gray-600 dark:bg-gray-800"
+      >
+        <div id="topbar-compact-primary-row" class="flex items-center gap-2 px-3 py-1.5">
+          <input
+            id="topbar-compact-search-input"
+            name="search"
+            type="text"
+            tabindex="-1"
+            placeholder="Search products"
+            autocomplete="off"
+            aria-label="Search products from sticky header"
+            aria-expanded="false"
+            aria-controls="topbar-compact-dropdown"
+            class="min-w-0 flex-1 border-0 bg-transparent px-2 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 dark:text-white dark:placeholder:text-gray-400"
+          />
+
+          <a
+            id="topbar-compact-image-search"
+            href="/image-search"
+            tabindex="-1"
+            aria-label="Image search"
+            class="inline-flex h-8 w-8 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-primary-600 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-primary-400"
+          >
+            <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z" />
+            </svg>
+            <span id="topbar-compact-image-search-label" class="hidden">Image Search</span>
+          </a>
+
+          <button
+            id="topbar-compact-search-submit"
+            type="submit"
+            tabindex="-1"
+            class="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary-500 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
+          >
+            <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />
+            </svg>
+            <span>Search</span>
+          </button>
+        </div>
+
+        <div id="topbar-compact-secondary-row" class="hidden h-11"></div>
+      </form>
+
+      <div
+        id="topbar-compact-dropdown"
+        aria-hidden="true"
+        class="hidden absolute left-0 right-0 z-[var(--z-modal)] rounded-3xl border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
+      >
+        <div class="flex items-center justify-between gap-4">
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recommended for you</h3>
+          <button
+            type="button"
+            tabindex="-1"
+            data-compact-expanded-interactive="true"
+            class="text-sm font-medium text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            Refresh
+          </button>
+        </div>
+
+        <div id="topbar-compact-reco-list" class="mt-3 space-y-2">
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="women's intimates" class="block text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400">women's intimates</button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="iphones 15 pro max" class="block text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400">iphones 15 pro max</button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="watch" class="block text-left text-[22px] font-normal leading-tight text-gray-900 transition-colors hover:text-primary-600 dark:text-white dark:hover:text-primary-400">watch</button>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between gap-4">
+          <p class="text-sm font-semibold text-primary-600 dark:text-primary-400">
+            <span class="mr-1" aria-hidden="true">&#10022;</span>
+            Navigate complex requirements with Deep Search
+          </p>
+          <a
+            href="/terms"
+            tabindex="-1"
+            data-compact-expanded-interactive="true"
+            class="text-sm text-gray-500 underline decoration-gray-300 underline-offset-2 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            Terms of use
+          </a>
+        </div>
+
+        <div class="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-3">
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Watch for Men" class="inline-flex items-center gap-1.5 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Watch for Men</span></button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Surron Light Bee X" class="inline-flex items-center gap-1.5 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Surron Light Bee X</span></button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Human Hair Wigs" class="inline-flex items-center gap-1.5 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Human Hair Wigs</span></button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Generates the delivery country selector with popover panel
  */
 function renderCountrySelector(): string {
@@ -410,14 +519,17 @@ export function TopBar(): string {
   return `
     <div class="relative z-30 dark:bg-gray-900" style="height: 64px;">
       <div class="container-boxed h-full">
-        <div class="flex items-center justify-between h-full">
+        <div class="flex h-full items-center">
           <!-- Logo -->
           <div class="flex-shrink-0">
             ${renderLogo()}
           </div>
 
+          <!-- Compact Sticky Search -->
+          ${renderCompactStickySearch()}
+
           <!-- Right Side: Selectors + Icons + Cart + Auth -->
-          <div class="flex items-center gap-2 md:gap-4">
+          <div class="ml-auto flex items-center gap-2 md:gap-4">
             <!-- Country Selector (hidden on mobile) -->
             <div class="hidden md:block">
               ${renderCountrySelector()}

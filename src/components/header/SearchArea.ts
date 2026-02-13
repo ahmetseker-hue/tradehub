@@ -234,7 +234,7 @@ function renderWelcomeRow(): string {
  */
 export function SearchArea(): string {
   return `
-    <section class="relative py-5 dark:bg-gray-900" aria-label="Search area">
+    <section id="hero-search-area" class="relative py-5 dark:bg-gray-900" aria-label="Search area">
       <div class="container-boxed">
         <!-- Search Tabs -->
         ${renderSearchTabs()}

@@ -11,9 +11,7 @@ export { SubHeader } from './SubHeader';
 
 // SearchArea component - search input with tabs, deep search, camera button
 export { SearchArea, initSearchArea } from './SearchArea';
-
-// WelcomeBar component - welcome message and CTA buttons
-export { WelcomeBar } from './WelcomeBar';
+export { initStickyHeaderSearch } from './StickyHeaderSearch';
 
 // MegaMenu component - full-width category dropdown
 export { MegaMenu, initMegaMenu, megaCategories, getCategoryIcon } from './MegaMenu';
