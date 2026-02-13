@@ -32,12 +32,29 @@ const currencyOptions: CurrencyOption[] = [
 ];
 
 /**
+ * Get base URL for assets (handles GitHub Pages subdirectory)
+ */
+const getBaseUrl = (): string => {
+  // Vite provides BASE_URL at build time
+  if (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) {
+    return import.meta.env.BASE_URL;
+  }
+  // Fallback: detect from current path
+  const path = window.location.pathname;
+  if (path.startsWith('/tradehub/')) {
+    return '/tradehub/';
+  }
+  return '/';
+};
+
+/**
  * Generates the iSTOC logo
  */
 function renderLogo(): string {
+  const baseUrl = getBaseUrl();
   return `
-    <a href="/" class="flex items-center hover:opacity-80 transition-opacity" aria-label="iSTOC Home">
-      <img src="/images/istoc-logo.png" alt="iSTOC" class="h-8 lg:h-9" />
+    <a href="${baseUrl}" class="flex items-center hover:opacity-80 transition-opacity" aria-label="iSTOC Home">
+      <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-8 lg:h-9" />
     </a>
   `;
 }
@@ -530,8 +547,8 @@ function renderMobileDrawer(): string {
 
           <!-- Header: Logo + Close -->
           <div class="flex items-center justify-between px-4 pt-4 pb-2">
-            <a href="/" aria-label="iSTOC Home">
-              <img src="/images/istoc-logo.png" alt="iSTOC" class="h-8" />
+            <a href="${getBaseUrl()}" aria-label="iSTOC Home">
+              <img src="${getBaseUrl()}images/istoc-logo.png" alt="iSTOC" class="h-8" />
             </a>
             <button
               type="button"

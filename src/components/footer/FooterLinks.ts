@@ -97,12 +97,29 @@ function getSocialIcon(platform: string): string {
 }
 
 /**
+ * Get base URL for assets (handles GitHub Pages subdirectory)
+ */
+const getBaseUrl = (): string => {
+  // Vite provides BASE_URL at build time
+  if (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) {
+    return import.meta.env.BASE_URL;
+  }
+  // Fallback: detect from current path
+  const path = window.location.pathname;
+  if (path.startsWith('/tradehub/')) {
+    return '/tradehub/';
+  }
+  return '/';
+};
+
+/**
  * Renders the footer logo
  */
 function renderFooterLogo(): string {
+  const baseUrl = getBaseUrl();
   return `
-    <a href="/" class="flex items-center mb-5" aria-label="iSTOC Home">
-      <img src="/images/istoc-logo.png" alt="iSTOC" class="h-8" />
+    <a href="${baseUrl}" class="flex items-center mb-5" aria-label="iSTOC Home">
+      <img src="${baseUrl}images/istoc-logo.png" alt="iSTOC" class="h-8" />
     </a>
   `;
 }
