@@ -100,13 +100,14 @@ function getSocialIcon(platform: string): string {
  * Get base URL for assets (handles GitHub Pages subdirectory)
  */
 const getBaseUrl = (): string => {
-  // Vite provides BASE_URL at build time
-  if (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) {
-    return import.meta.env.BASE_URL;
+  // Vite replaces import.meta.env.BASE_URL at build time.
+  // If it's set to a subdirectory (not just "/"), use it directly.
+  const viteBase = typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL : undefined;
+  if (viteBase && viteBase !== '/') {
+    return viteBase;
   }
-  // Fallback: detect from current path
-  const path = window.location.pathname;
-  if (path.startsWith('/tradehub/')) {
+  // Runtime fallback: detect GitHub Pages subdirectory from URL
+  if (window.location.pathname.startsWith('/tradehub/')) {
     return '/tradehub/';
   }
   return '/';
