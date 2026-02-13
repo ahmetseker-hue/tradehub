@@ -22,27 +22,6 @@ export interface MegaMenuCategory {
 
 export const megaCategories: MegaMenuCategory[] = [
   {
-    id: 'for-you',
-    name: 'Categories for you',
-    icon: 'star',
-    products: [
-      { name: 'Patio Swings', href: '/search?q=patio+swings' },
-      { name: 'Bridesmaid Dresses', href: '/search?q=bridesmaid+dresses' },
-      { name: 'Garden Sets', href: '/search?q=garden+sets' },
-      { name: 'Sun Loungers', href: '/search?q=sun+loungers' },
-      { name: 'Patio Furniture', href: '/search?q=patio+furniture' },
-      { name: 'Hiking Shoes', href: '/search?q=hiking+shoes' },
-      { name: 'Carnival Costume', href: '/search?q=carnival+costume' },
-      { name: 'Wedding Dresses', href: '/search?q=wedding+dresses', badge: true },
-      { name: 'Electric Cars', href: '/search?q=electric+cars', badge: true },
-      { name: 'Electric Scooters', href: '/search?q=electric+scooters', badge: true },
-      { name: 'Vending Machines', href: '/search?q=vending+machines', badge: true },
-      { name: 'Running Shoes', href: '/search?q=running+shoes' },
-      { name: 'Telescopic Ladder', href: '/search?q=telescopic+ladder' },
-      { name: 'Handbags', href: '/search?q=handbags' },
-    ],
-  },
-  {
     id: 'apparel',
     name: 'Apparel & Accessories',
     icon: 'shirt',
@@ -681,9 +660,12 @@ export function initMegaMenu(): void {
         overlay.style.opacity = '1';
         overlay.style.pointerEvents = 'auto';
       }
-      // White header while mega menu is open
+      // White header while mega menu is open (remove gradient)
       const sh = document.getElementById('sticky-header');
-      if (sh) { sh.style.backgroundColor = '#fff'; sh.style.borderBottom = '1px solid #ddd'; }
+      if (sh) {
+        sh.classList.remove('header-gradient');
+        sh.style.borderBottom = '1px solid #ddd';
+      }
     }
 
     trigger.setAttribute('aria-expanded', 'true');
@@ -701,10 +683,13 @@ export function initMegaMenu(): void {
       overlay.style.opacity = '0';
       overlay.style.pointerEvents = 'none';
     }
-    // Restore header bg based on scroll position
+    // Restore header gradient if not scrolled
     const sh = document.getElementById('sticky-header');
     if (sh) {
-      if (window.scrollY <= 10) { sh.style.backgroundColor = ''; sh.style.borderBottom = ''; }
+      if (window.scrollY <= 10) {
+        sh.classList.add('header-gradient');
+        sh.style.borderBottom = '';
+      }
     }
 
     // Reset trigger states

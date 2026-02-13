@@ -4,7 +4,7 @@
  */
 
 // TopBar component - main navigation with logo, auth, cart, locale selectors
-export { TopBar, initMobileDrawer } from './TopBar';
+export { TopBar, MobileSearchTabs, initMobileDrawer } from './TopBar';
 
 // SubHeader component - secondary navigation with categories trigger, nav links
 export { SubHeader } from './SubHeader';

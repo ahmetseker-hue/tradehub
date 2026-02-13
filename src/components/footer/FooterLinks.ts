@@ -101,8 +101,8 @@ function getSocialIcon(platform: string): string {
  */
 function renderFooterLogo(): string {
   return `
-    <a href="/" class="flex items-center mb-4" aria-label="iSTOC Home">
-      <img src="/images/istoc-logo.png" alt="iSTOC" class="h-7" />
+    <a href="/" class="flex items-center mb-5" aria-label="iSTOC Home">
+      <img src="/images/istoc-logo.png" alt="iSTOC" class="h-8" />
     </a>
   `;
 }
@@ -112,13 +112,13 @@ function renderFooterLogo(): string {
  */
 function renderSocialIcons(): string {
   return `
-    <div class="flex items-center gap-3 flex-wrap">
+    <div class="flex items-center gap-1 flex-wrap">
       ${socialLinks.map(link => `
         <a
           href="${link.href}"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-gray-500 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-600 transition-all duration-200 hover:scale-110"
           aria-label="${link.ariaLabel}"
         >
           ${getSocialIcon(link.platform)}
@@ -136,7 +136,7 @@ function renderLink(link: NavLink): string {
     <li>
       <a
         href="${link.href}"
-        class="text-gray-500 hover:text-primary-500 dark:text-gray-400 dark:hover:text-primary-400 transition-colors duration-200"
+        class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors duration-200 leading-relaxed"
       >
         ${link.label}
       </a>
@@ -150,10 +150,10 @@ function renderLink(link: NavLink): string {
 function renderColumn(column: FooterColumn): string {
   return `
     <div class="footer-column">
-      <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
+      <h3 class="text-[13px] font-bold text-gray-800 dark:text-gray-100 uppercase tracking-widest mb-5">
         ${column.title}
       </h3>
-      <ul class="space-y-3 text-sm">
+      <ul class="space-y-3.5 text-sm">
         ${column.links.map(link => renderLink(link)).join('')}
       </ul>
     </div>
@@ -171,16 +171,17 @@ function renderColumn(column: FooterColumn): string {
 export function FooterLinks(): string {
   return `
     <section class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700" aria-label="Footer navigation">
-      <div class="container-boxed py-8 md:py-12">
-        <div class="flex flex-col md:flex-row gap-8 md:gap-12">
-          <!-- Left Side: Logo + Social Icons -->
-          <div class="flex flex-col items-center md:items-start md:w-48 shrink-0">
+      <div class="container-boxed py-12 md:py-16">
+        <div class="flex flex-col md:flex-row gap-10 md:gap-16">
+          <!-- Left Side: Logo + Description + Social Icons -->
+          <div class="flex flex-col items-center md:items-start md:w-56 shrink-0">
             ${renderFooterLogo()}
+            <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-6 text-center md:text-left">Global wholesale trade platform connecting buyers and sellers worldwide.</p>
             ${renderSocialIcons()}
           </div>
 
           <!-- Right Side: Link Columns -->
-          <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div class="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
             ${footerColumns.map(column => renderColumn(column)).join('')}
           </div>
         </div>

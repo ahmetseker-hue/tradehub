@@ -2,7 +2,7 @@ import './style.css'
 import { initFlowbite } from 'flowbite'
 
 // Header components
-import { TopBar, initMobileDrawer, SubHeader, SearchArea, initSearchArea, initStickyHeaderSearch, MegaMenu, initMegaMenu } from './components/header'
+import { TopBar, MobileSearchTabs, initMobileDrawer, SubHeader, SearchArea, initSearchArea, initStickyHeaderSearch, MegaMenu, initMegaMenu } from './components/header'
 
 // Hero components
 import {
@@ -27,13 +27,16 @@ import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <!-- Sticky Header (global, stays sticky across full page) -->
-  <div id="sticky-header" class="sticky top-0 z-[var(--z-header)] transition-[background-color,border-color,box-shadow] duration-300">
+  <div id="sticky-header" class="sticky top-0 z-[var(--z-header)] bg-white header-gradient transition-[border-color,box-shadow] duration-300">
     ${TopBar()}
     ${SubHeader()}
   </div>
 
+  <!-- Mobile Search Tabs (Products | Manufacturers | Worldwide) — non-sticky -->
+  ${MobileSearchTabs()}
+
   <!-- Hero Search Section (desktop only — mobile search is in TopBar) -->
-  <header class="hidden md:block" style="background: linear-gradient(135deg, #fff7ed 0%, #f6f4e8 25%, #fff1f2 50%, #fbfaf0 75%, #fff7ed 100%); background-size: 300% 300%; animation: searchGradientShift 12s ease infinite;">
+  <header class="hidden md:block header-gradient">
     ${SearchArea()}
   </header>
 
@@ -90,15 +93,15 @@ initFloatingPanel();
 initMobileDrawer();
 initAnimatedPlaceholder('#search-input');
 
-// Sticky header: white bg + border on scroll
+// Sticky header: warm gradient by default → white on scroll
 const stickyHeader = document.getElementById('sticky-header');
 if (stickyHeader) {
   const onScroll = (): void => {
     if (window.scrollY > 10) {
-      stickyHeader.style.backgroundColor = '#fff';
+      stickyHeader.classList.remove('header-gradient');
       stickyHeader.style.borderBottom = '1px solid #ddd';
     } else {
-      stickyHeader.style.backgroundColor = '';
+      stickyHeader.classList.add('header-gradient');
       stickyHeader.style.borderBottom = '';
     }
   };

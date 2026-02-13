@@ -97,7 +97,7 @@ export function FloatingPanel(): string {
   return `
     <div
       id="floating-panel"
-      class="fixed bottom-6 right-6 z-50 flex flex-col items-center gap-3"
+      class="fixed bottom-6 right-6 z-[var(--z-sidebar)] flex flex-col items-center gap-3"
       aria-label="Quick actions panel"
     >
       <!-- Scroll to Top Button (hidden by default, shown on scroll > 300px) -->

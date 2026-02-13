@@ -17,19 +17,24 @@ function renderBottomSheet(): string {
     <!-- Bottom Sheet Panel -->
     <div id="mcb-sheet-panel" class="fixed inset-x-0 bottom-0 z-[var(--z-modal)] transition-transform duration-300 ease-out lg:hidden" style="transform: translateY(100%)">
       <div class="bg-white dark:bg-gray-800 rounded-t-2xl max-h-[85vh] flex flex-col shadow-2xl">
-        <!-- Drag Handle + Close -->
-        <div class="flex items-center justify-center pt-3 pb-1 relative flex-shrink-0">
-          <div class="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
-          <button
-            type="button"
-            id="mcb-sheet-close"
-            class="absolute right-3 top-2 p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-            aria-label="Close"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
-            </svg>
-          </button>
+        <!-- Drag Handle + Title (swipe-to-dismiss target) -->
+        <div id="mcb-sheet-drag-handle" class="flex-shrink-0">
+          <div class="flex items-center justify-center pt-3 pb-2">
+            <div class="w-9 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          </div>
+          <div class="flex items-center px-5 border-b border-gray-100 dark:border-gray-700/50">
+            <span class="text-[15px] font-bold text-gray-900 dark:text-white">Categories</span>
+            <button
+              type="button"
+              id="mcb-sheet-close"
+              class="ml-auto p-1.5 -mr-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+              aria-label="Close"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
         </div>
 
         <!-- Category List -->
@@ -37,16 +42,12 @@ function renderBottomSheet(): string {
           ${megaCategories.map((cat, i) => `
             <button
               type="button"
-              class="mcb-sheet-item flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-100 dark:border-gray-700/50"
+              class="mcb-sheet-item flex items-center w-full px-5 py-4 text-left transition-colors border-b border-gray-50 dark:border-gray-700/50"
               data-mcb-sheet-cat="${cat.id}"
             >
-              <span class="flex-1 text-sm ${i === 0 ? 'font-medium text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}">${cat.name}</span>
-              <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${
-                i === 0
-                  ? 'border-gray-900 dark:border-white bg-gray-900 dark:bg-white'
-                  : 'border-gray-300 dark:border-gray-600'
-              } flex items-center justify-center">
-                ${i === 0 ? '<span class="w-2 h-2 rounded-full bg-white dark:bg-gray-800"></span>' : ''}
+              <span class="flex-1 text-[15px] text-gray-800 dark:text-gray-300">${cat.name}</span>
+              <span class="mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 ${i === 0 ? 'border-primary-500 bg-primary-500' : 'border-gray-300 dark:border-gray-600 bg-transparent'} flex items-center justify-center transition-colors">
+                <span class="w-2 h-2 rounded-full ${i === 0 ? 'bg-white' : 'bg-transparent'} transition-colors"></span>
               </span>
             </button>
           `).join('')}
@@ -149,21 +150,22 @@ export function initMobileCategoryBar(): void {
       activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
-    // Update bottom sheet radio states
+    // Update bottom sheet selected state (bold text + radio for active category)
     sheetItems.forEach(item => {
       const id = item.getAttribute('data-mcb-sheet-cat');
-      const radio = item.querySelector('.mcb-sheet-radio');
       const label = item.querySelector('span:first-child');
-      if (!radio || !label) return;
+      const radio = item.querySelector('.mcb-sheet-radio') as HTMLElement | null;
+      const radioDot = radio?.querySelector('span') as HTMLElement | null;
+      if (!label) return;
 
       if (id === catId) {
-        radio.className = 'mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-900 dark:border-white bg-gray-900 dark:bg-white flex items-center justify-center';
-        radio.innerHTML = '<span class="w-2 h-2 rounded-full bg-white dark:bg-gray-800"></span>';
-        label.className = 'flex-1 text-sm font-medium text-gray-900 dark:text-white';
+        label.className = 'flex-1 text-[15px] font-semibold text-gray-900 dark:text-white';
+        if (radio) radio.className = 'mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-primary-500 bg-primary-500 flex items-center justify-center transition-colors';
+        if (radioDot) radioDot.className = 'w-2 h-2 rounded-full bg-white transition-colors';
       } else {
-        radio.className = 'mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 flex items-center justify-center';
-        radio.innerHTML = '';
-        label.className = 'flex-1 text-sm text-gray-700 dark:text-gray-300';
+        label.className = 'flex-1 text-[15px] text-gray-800 dark:text-gray-300';
+        if (radio) radio.className = 'mcb-sheet-radio flex-shrink-0 w-5 h-5 rounded-full border-2 border-gray-300 dark:border-gray-600 bg-transparent flex items-center justify-center transition-colors';
+        if (radioDot) radioDot.className = 'w-2 h-2 rounded-full bg-transparent transition-colors';
       }
     });
 
@@ -213,6 +215,44 @@ export function initMobileCategoryBar(): void {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeSheet();
   });
+
+  // Swipe-down-to-dismiss gesture on the bottom sheet
+  if (sheetPanel) {
+    const headerArea = document.getElementById('mcb-sheet-drag-handle');
+    const dragTarget = headerArea || sheetPanel;
+    let startY = 0;
+    let currentY = 0;
+    let dragging = false;
+
+    dragTarget.addEventListener('touchstart', (e: TouchEvent) => {
+      startY = e.touches[0].clientY;
+      currentY = startY;
+      dragging = true;
+      sheetPanel!.style.transition = 'none';
+    }, { passive: true });
+
+    dragTarget.addEventListener('touchmove', (e: TouchEvent) => {
+      if (!dragging) return;
+      currentY = e.touches[0].clientY;
+      const deltaY = currentY - startY;
+      if (deltaY > 0) {
+        sheetPanel!.style.transform = `translateY(${deltaY}px)`;
+      }
+    }, { passive: true });
+
+    dragTarget.addEventListener('touchend', () => {
+      if (!dragging) return;
+      dragging = false;
+      sheetPanel!.style.transition = '';
+      const deltaY = currentY - startY;
+      const sheetHeight = sheetPanel!.offsetHeight;
+      if (deltaY > sheetHeight * 0.3) {
+        closeSheet();
+      } else {
+        sheetPanel!.style.transform = 'translateY(0)';
+      }
+    });
+  }
 
   // Sheet item clicks → select category + close sheet
   sheetItems.forEach(item => {

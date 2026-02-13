@@ -246,7 +246,7 @@ export function RecommendationSlider(): string {
         </div>
       </div>
 
-      <div class="reco-pagination mt-3 flex justify-center md:hidden"></div>
+      <div class="reco-pagination mt-3 flex justify-center hidden"></div>
 
       <button
         aria-label="Previous recommendations"

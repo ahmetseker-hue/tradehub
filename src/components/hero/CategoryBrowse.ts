@@ -44,7 +44,7 @@ function renderCategoryPopup(): string {
 
         <!-- Header -->
         <div id="cat-popup-header" class="flex items-center justify-between px-4 lg:px-6 py-3 lg:py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 select-none">
-          <h2 id="cat-popup-title" class="text-lg font-bold text-gray-900 dark:text-white">Categories for you</h2>
+          <h2 id="cat-popup-title" class="text-lg font-bold text-gray-900 dark:text-white">Categories</h2>
           <div class="flex items-center gap-4">
             <a href="/featured" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 hidden lg:inline">Browse featured selections</a>
             <button id="cat-popup-close" class="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Close">

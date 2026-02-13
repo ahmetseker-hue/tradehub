@@ -761,13 +761,22 @@ export function initMobileDrawer(): void {
 
   // TopBar mobile search tabs switching
   const topbarTabs = document.querySelectorAll<HTMLButtonElement>('.topbar-search-tab');
-  const TB_ACT = ['font-bold', 'text-gray-900', 'dark:text-white', 'border-gray-900', 'dark:border-white'];
-  const TB_INACT = ['font-normal', 'text-gray-500', 'dark:text-gray-400', 'border-transparent'];
+  const mobileSearchType = document.getElementById('mobile-search-type') as HTMLInputElement | null;
+  const mobileSearchInput = document.querySelector<HTMLInputElement>('#mobile-search-form input[name="mobile-search"]');
+  const TB_ACT = ['font-semibold', 'text-gray-900', 'dark:text-white', 'after:bg-gray-900', 'after:dark:bg-white'];
+  const TB_INACT = ['font-normal', 'text-gray-400', 'dark:text-gray-500', 'after:bg-transparent'];
   topbarTabs.forEach(tab => {
     tab.addEventListener('click', () => {
       topbarTabs.forEach(t => { t.classList.remove(...TB_ACT); t.classList.add(...TB_INACT); });
       tab.classList.remove(...TB_INACT);
       tab.classList.add(...TB_ACT);
+      const tabValue = tab.getAttribute('data-search-tab') || 'products';
+      if (mobileSearchType) {
+        mobileSearchType.value = tabValue;
+      }
+      if (mobileSearchInput) {
+        mobileSearchInput.placeholder = `Search ${tabValue}...`;
+      }
     });
   });
 
@@ -863,6 +872,20 @@ export function initMobileDrawer(): void {
 }
 
 /**
+ * Mobile Search Tabs (Products | Manufacturers | Worldwide)
+ * Rendered outside the sticky header as a separate non-sticky section.
+ */
+export function MobileSearchTabs(): string {
+  return `
+    <div class="md:hidden flex items-center gap-6 px-3 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
+      <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full" data-search-tab="products">Products</button>
+      <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="manufacturers">Manufacturers</button>
+      <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="worldwide">Worldwide</button>
+    </div>
+  `;
+}
+
+/**
  * TopBar Component
  * Renders the top navigation bar containing:
  * - iSTOC logo
@@ -886,7 +909,8 @@ export function TopBar(): string {
 
           <!-- Mobile Inline Search (between logo and icons) -->
           <div class="flex-1 min-w-0 mx-2 md:hidden">
-            <form action="/search" method="GET" role="search">
+            <form id="mobile-search-form" action="/search" method="GET" role="search">
+              <input type="hidden" id="mobile-search-type" name="searchType" value="products" />
               <div class="flex">
                 <input
                   type="text"
@@ -965,12 +989,6 @@ export function TopBar(): string {
           </div>
         </div>
 
-        <!-- Row 2: Mobile Search Tabs (Products | Manufacturers | Worldwide) -->
-        <div class="md:hidden flex items-center gap-5 px-1 border-b border-gray-200 dark:border-gray-700">
-          <button type="button" class="topbar-search-tab pb-2 text-sm font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white" data-search-tab="products">Products</button>
-          <button type="button" class="topbar-search-tab pb-2 text-sm font-normal text-gray-500 dark:text-gray-400 border-b-2 border-transparent" data-search-tab="manufacturers">Manufacturers</button>
-          <button type="button" class="topbar-search-tab pb-2 text-sm font-normal text-gray-500 dark:text-gray-400 border-b-2 border-transparent" data-search-tab="worldwide">Worldwide</button>
-        </div>
       </div>
 
       ${renderMobileDrawer()}
