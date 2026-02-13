@@ -297,9 +297,9 @@ function renderProductItem(product: { name: string; href: string; badge?: boolea
 function renderCategoriesView(): string {
   return `
     <div data-mega-view="categories" class="hidden">
-      <div class="flex" style="min-height: 480px;">
+      <div class="flex flex-col lg:flex-row" style="min-height: 480px;">
         <!-- Sidebar -->
-        <div class="w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-900" style="max-height: 520px;" id="mega-sidebar">
+        <div class="w-full lg:w-64 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-900" style="max-height: 520px;" id="mega-sidebar">
           <ul class="py-1">
             ${megaCategories.map((cat, index) => `
               <li>
@@ -317,7 +317,7 @@ function renderCategoriesView(): string {
           </ul>
         </div>
         <!-- Content: all categories visible, scrollable -->
-        <div class="flex-1 overflow-y-auto px-6 py-4" style="max-height: 520px;" id="mega-content">
+        <div class="flex-1 overflow-y-auto px-4 lg:px-6 py-4" style="max-height: 520px;" id="mega-content">
           ${megaCategories.map(cat => `
             <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
               <div class="flex items-center justify-between mb-5">
@@ -326,7 +326,7 @@ function renderCategoriesView(): string {
                   Browse all &rarr;
                 </a>
               </div>
-              <div class="grid grid-cols-7 gap-y-5 gap-x-4">
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-y-5 gap-x-4">
                 ${cat.products.map(product => renderProductItem(product)).join('')}
               </div>
             </div>
@@ -344,7 +344,7 @@ function renderCategoriesView(): string {
 function renderFeaturedView(): string {
   return `
     <div data-mega-view="featured" class="hidden py-6">
-      <div class="grid grid-cols-4 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <!-- Left: 3 Feature cards -->
         ${featureCards.map(card => `
           <a href="${card.href}" class="flex flex-col items-center justify-center gap-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-8 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-500 transition-all group">
@@ -379,9 +379,9 @@ function renderFeaturedView(): string {
 function renderProtectionsView(): string {
   return `
     <div data-mega-view="protections" class="hidden py-8">
-      <div class="flex gap-10 items-center">
+      <div class="flex flex-col md:flex-row gap-6 md:gap-10 items-center">
         <!-- Left: Trade Assurance branding -->
-        <div class="w-2/5 flex-shrink-0">
+        <div class="w-full md:w-2/5 md:flex-shrink-0">
           <div class="flex items-center gap-3 mb-4">
             <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/40">
               <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
@@ -394,7 +394,7 @@ function renderProtectionsView(): string {
           </a>
         </div>
         <!-- Right: 2x2 protection cards -->
-        <div class="flex-1 grid grid-cols-2 gap-4">
+        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
           ${protectionCards.map(card => `
             <a href="${card.href}" class="flex items-center gap-4 px-5 py-5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:shadow-md hover:border-primary-300 dark:hover:border-primary-500 transition-all group">
               <span class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/40">
@@ -465,7 +465,7 @@ const buyerCentralColumns: BuyerCentralColumn[] = [
 function renderBuyerCentralView(): string {
   return `
     <div data-mega-view="buyer-central" class="hidden py-8 px-4">
-      <div class="grid grid-cols-5 gap-8">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
         ${buyerCentralColumns.map(col => `
           <div>
             <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-4">${col.title}</h4>
@@ -492,7 +492,7 @@ function renderBuyerCentralView(): string {
 function renderHelpCenterView(): string {
   return `
     <div data-mega-view="help-center" class="hidden py-8 px-4">
-      <div class="flex gap-8">
+      <div class="flex flex-col md:flex-row gap-6 md:gap-8">
         <!-- Left: Two cards -->
         <div class="flex gap-6 flex-1">
           <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-400 hover:bg-primary-50/30 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-all group">
@@ -513,7 +513,7 @@ function renderHelpCenterView(): string {
           </a>
         </div>
         <!-- Right: Links -->
-        <div class="w-56 flex flex-col justify-center">
+        <div class="w-full md:w-56 flex flex-col justify-center">
           <ul class="space-y-4">
             <li>
               <a href="/help/dispute" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
@@ -544,9 +544,9 @@ function renderHelpCenterView(): string {
 function renderAppExtensionView(): string {
   return `
     <div data-mega-view="app-extension" class="hidden py-8 px-4">
-      <div class="flex divide-x divide-gray-200 dark:divide-gray-700">
+      <div class="flex flex-col md:flex-row md:divide-x divide-gray-200 dark:divide-gray-700">
         <!-- Left: Get the app -->
-        <div class="flex-1 pr-10">
+        <div class="flex-1 md:pr-10">
           <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Get the iSTOC app</h4>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-sm">Find products, communicate with suppliers, and manage and pay for your orders with the iSTOC app anytime, anywhere.</p>
           <div class="flex items-center gap-5">
@@ -577,7 +577,7 @@ function renderAppExtensionView(): string {
           </div>
         </div>
         <!-- Right: Discover Lens -->
-        <div class="flex-1 pl-10">
+        <div class="flex-1 pt-6 md:pt-0 md:pl-10 border-t md:border-t-0 border-gray-200 dark:border-gray-700">
           <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Discover iSTOC Lens</h4>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-md">Use this image search extension to find and compare similar products with wholesale prices and customization options anywhere online.</p>
           <div class="flex flex-col items-start gap-3">
@@ -605,8 +605,8 @@ export function MegaMenu(): string {
       style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
     ></div>
     <div id="istoc-mega-panel"
-      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;"
-      class="bg-white border-b border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700"
+      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;max-height:100vh;"
+      class="bg-white border-b border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700 max-h-[100vh] lg:!max-h-[80vh] overflow-y-auto"
     >
       <div class="container-boxed">
         ${renderCategoriesView()}

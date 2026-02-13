@@ -4,7 +4,7 @@
  */
 
 import Swiper from 'swiper';
-import { Navigation } from 'swiper/modules';
+import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 
 type RecommendationImageKind =
@@ -239,16 +239,18 @@ function renderCard(card: RecommendationCard): string {
 
 export function RecommendationSlider(): string {
   return `
-    <div class="group/recommendation relative recommendation-slider-wrapper h-[300px] px-7 lg:px-0">
+    <div class="group/recommendation relative recommendation-slider-wrapper h-[260px] lg:h-[300px] px-4 lg:px-0">
       <div class="swiper recommendation-swiper h-full" aria-label="Frequently searched product slider">
         <div class="swiper-wrapper h-full">
           ${recommendationCards.map(card => renderCard(card)).join('')}
         </div>
       </div>
 
+      <div class="reco-pagination mt-3 flex justify-center md:hidden"></div>
+
       <button
         aria-label="Previous recommendations"
-        class="rec-swiper-prev absolute left-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none lg:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="rec-swiper-prev absolute left-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -257,7 +259,7 @@ export function RecommendationSlider(): string {
 
       <button
         aria-label="Next recommendations"
-        class="rec-swiper-next absolute right-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none lg:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
+        class="rec-swiper-next absolute right-2 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-lg transition-all duration-200 hover:text-gray-900 opacity-0 pointer-events-none md:flex group-hover/recommendation:opacity-100 group-hover/recommendation:pointer-events-auto focus-visible:opacity-100 focus-visible:pointer-events-auto focus-visible:ring-2 focus-visible:ring-primary-300 disabled:opacity-0 disabled:pointer-events-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:hover:text-white"
       >
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -272,7 +274,7 @@ export function initRecommendationSlider(): void {
   if (!sliderElement) return;
 
   new Swiper(sliderElement, {
-    modules: [Navigation],
+    modules: [Navigation, Pagination],
     loop: true,
     slidesPerView: 1,
     slidesPerGroup: 1,
@@ -281,24 +283,23 @@ export function initRecommendationSlider(): void {
       nextEl: '.rec-swiper-next',
       prevEl: '.rec-swiper-prev',
     },
+    pagination: {
+      el: '.reco-pagination',
+      clickable: true,
+      dynamicBullets: true,
+    },
     breakpoints: {
       0: {
         slidesPerView: 1,
-        slidesPerGroup: 1,
+        spaceBetween: 12,
       },
       640: {
+        slidesPerView: 1,
+        spaceBetween: 16,
+      },
+      960: {
         slidesPerView: 2,
-        slidesPerGroup: 2,
-      },
-      1280: {
-        slidesPerView: 'auto',
-        slidesPerGroup: 1,
-        spaceBetween: 8,
-      },
-      1536: {
-        slidesPerView: 3,
-        slidesPerGroup: 3,
-        spaceBetween: 8,
+        spaceBetween: 20,
       },
     },
   });

@@ -27,11 +27,11 @@ function renderAIIcon(): string {
 }
 
 /**
- * Generates the search tabs
+ * Desktop search tabs: centered with primary color accents + AI Mode tab
  */
 function renderSearchTabs(): string {
   return `
-    <div class="flex justify-center items-center mb-6">
+    <div class="hidden md:flex justify-center items-center mb-6">
       <ul class="flex items-center gap-0" role="tablist">
         ${searchTabs.map((tab, index) => `
           ${index > 0 ? '<li class="text-gray-300 dark:text-gray-600 text-lg select-none px-1" aria-hidden="true">|</li>' : ''}
@@ -43,7 +43,7 @@ function renderSearchTabs(): string {
               role="tab"
               aria-controls="search-panel-${tab.id}"
               aria-selected="${tab.isActive ? 'true' : 'false'}"
-              class="inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${
+              class="search-tab-btn inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${
                 tab.isActive
                   ? 'text-primary-600 border-primary-500 dark:text-primary-400 dark:border-primary-400'
                   : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
@@ -137,37 +137,6 @@ function renderDesktopSearchBar(): string {
   `;
 }
 
-/**
- * Generates the mobile search input
- */
-function renderMobileSearchInput(): string {
-  return `
-    <div class="md:hidden">
-      <div class="flex">
-        <div class="relative flex-1">
-          <input
-            type="text"
-            id="mobile-search-input"
-            name="mobile-search"
-            class="w-full h-11 px-4 text-sm text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            placeholder="Search products..."
-            autocomplete="off"
-            aria-label="Search products"
-          />
-        </div>
-        <button
-          type="submit"
-          class="flex items-center justify-center h-11 px-4 text-white bg-primary-500 hover:bg-primary-600 rounded-r-lg transition-colors"
-          aria-label="Search"
-        >
-          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-  `;
-}
 
 
 /**
@@ -175,15 +144,15 @@ function renderMobileSearchInput(): string {
  */
 function renderWelcomeRow(): string {
   return `
-    <div class="hidden sm:flex items-center justify-between mb-7 dark:bg-gray-800" style="background-color:#f8f8f8; border-bottom:1.5px solid #f8f8f8; min-height:70px;">
-      <div class="container-boxed flex items-center justify-between w-full">
+    <div class="hidden md:flex items-center justify-between mb-4 sm:mb-7 dark:bg-gray-800 overflow-x-auto" style="background-color:#f8f8f8; border-bottom:1.5px solid #f8f8f8; min-height:56px;">
+      <div class="container-boxed flex items-center justify-between w-full gap-4">
         <!-- Welcome Text -->
-        <h2 class="text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap">
+        <h2 class="hidden sm:block text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap">
           iSTOC'a Hoş Geldiniz
         </h2>
 
         <!-- Action Links -->
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 sm:gap-4 mx-auto sm:mx-0">
           <!-- Request for Quotation -->
           <a href="/rfq/create" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
             <span class="flex items-center justify-center w-7 h-7 rounded-full bg-emerald-50 dark:bg-emerald-900/40">
@@ -195,7 +164,7 @@ function renderWelcomeRow(): string {
           </a>
 
           <!-- Separator -->
-          <span class="text-gray-200 text-lg" aria-hidden="true">|</span>
+          <span class="hidden sm:inline text-gray-200 text-lg" aria-hidden="true">|</span>
 
           <!-- Top Ranking -->
           <a href="/products/top-ranking" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
@@ -208,7 +177,7 @@ function renderWelcomeRow(): string {
           </a>
 
           <!-- Separator -->
-          <span class="text-gray-200 text-lg" aria-hidden="true">|</span>
+          <span class="hidden sm:inline text-gray-200 text-lg" aria-hidden="true">|</span>
 
           <!-- Fast Customization -->
           <a href="/customize" class="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors">
@@ -234,16 +203,13 @@ function renderWelcomeRow(): string {
  */
 export function SearchArea(): string {
   return `
-    <section id="hero-search-area" class="relative py-5 dark:bg-gray-900" aria-label="Search area">
+    <section id="hero-search-area" class="relative py-3 md:py-5 dark:bg-gray-900" aria-label="Search area">
       <div class="container-boxed">
-        <!-- Search Tabs -->
+        <!-- Desktop Search Tabs (above search bar) -->
         ${renderSearchTabs()}
 
         <!-- Desktop Search Bar -->
         ${renderDesktopSearchBar()}
-
-        <!-- Mobile Search Bar -->
-        ${renderMobileSearchInput()}
       </div>
     </section>
 
@@ -258,8 +224,8 @@ export function SearchArea(): string {
 export function initSearchArea(): void {
   if (typeof document !== 'undefined') {
     const init = (): void => {
-      // Tab switching
-      const tabButtons = document.querySelectorAll('[role="tab"][id^="search-tab-"]');
+      // Desktop tab switching
+      const tabButtons = document.querySelectorAll<HTMLButtonElement>('.search-tab-btn');
       tabButtons.forEach(button => {
         button.addEventListener('click', () => {
           tabButtons.forEach(btn => {

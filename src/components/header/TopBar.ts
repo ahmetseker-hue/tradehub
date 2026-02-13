@@ -6,6 +6,7 @@
  */
 
 import type { LocaleOption, CurrencyOption } from '../../types/navigation';
+import { megaCategories } from './MegaMenu';
 
 /** Default country options for the delivery selector */
 const countryOptions: LocaleOption[] = [
@@ -279,7 +280,7 @@ function renderMessagesButton(): string {
     <button
       data-popover-target="popover-messages"
       data-popover-placement="bottom"
-      class="hidden md:flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors relative"
+      class="flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors relative"
       type="button"
       aria-label="Messages"
     >
@@ -354,6 +355,7 @@ function renderOrdersButton(): string {
       class="hidden md:flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       type="button"
       aria-label="Orders"
+      title="Orders"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
@@ -487,21 +489,377 @@ function renderCartButton(itemCount: number = 0): string {
  */
 function renderAuthButtons(): string {
   return `
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-1 sm:gap-3">
       <a
         href="/login"
-        class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
+        class="hidden sm:inline-flex px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       >
         Sign In
       </a>
       <a
         href="/register"
-        class="px-5 py-2 text-sm font-semibold text-white bg-primary-500 hover:bg-primary-600 rounded-full shadow-sm hover:shadow-md transition-all"
+        class="px-3 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white bg-primary-500 hover:bg-primary-600 rounded-full shadow-sm hover:shadow-md transition-all"
       >
         Join Free
       </a>
     </div>
   `;
+}
+
+/**
+ * Renders the 3-panel sliding mobile drawer (istoc.com style)
+ * Panel 1: Main menu, Panel 2: Categories list, Panel 3: Subcategory detail
+ */
+function renderMobileDrawer(): string {
+  const filteredCategories = megaCategories.filter(
+    cat => !cat.id.startsWith('featured') && !cat.id.startsWith('new-') && !cat.id.startsWith('deal')
+  );
+
+  return `
+    <!-- Mobile Menu Drawer -->
+    <div
+      id="mobile-menu-drawer"
+      class="fixed top-0 left-0 z-[var(--z-backdrop)] h-screen overflow-hidden transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800"
+      tabindex="-1"
+      aria-labelledby="drawer-label"
+    >
+      <div class="relative h-full w-full">
+
+        <!-- Panel 1: Main Menu -->
+        <div id="drawer-panel-main" class="absolute inset-0 overflow-y-auto transition-transform duration-300 ease-in-out">
+
+          <!-- Header: Logo + Close -->
+          <div class="flex items-center justify-between px-4 pt-4 pb-2">
+            <a href="/" aria-label="iSTOC Home">
+              <img src="/images/istoc-logo.png" alt="iSTOC" class="h-8" />
+            </a>
+            <button
+              type="button"
+              data-drawer-hide="mobile-menu-drawer"
+              aria-controls="mobile-menu-drawer"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+              <span class="sr-only">Close menu</span>
+            </button>
+          </div>
+
+          <!-- Profile Section -->
+          <div class="mx-4 mt-2 rounded-lg bg-gray-50 dark:bg-gray-700 px-4 py-3 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+              <svg class="w-5 h-5 text-gray-400 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-1 text-sm">
+                <a href="/login" class="font-medium text-primary-600 hover:underline dark:text-primary-400">Sign In</a>
+                <span class="text-gray-400 dark:text-gray-500">|</span>
+                <a href="/register" class="font-medium text-primary-600 hover:underline dark:text-primary-400">Join Free</a>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Start shopping.</p>
+            </div>
+          </div>
+
+          <!-- My Account Section -->
+          <div class="mx-4 mt-3">
+            <button
+              id="drawer-account-toggle"
+              type="button"
+              class="flex items-center justify-between w-full py-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              <span>My Account</span>
+              <svg id="drawer-account-icon" class="w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+              </svg>
+            </button>
+            <div id="drawer-account-panel" class="hidden pb-2 space-y-1">
+              <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                <span>Messages</span>
+                <span class="ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">1</span>
+              </a>
+              <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                <span>Orders</span>
+              </a>
+              <a href="/buyer/cart" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                <span>Shopping Cart</span>
+                <span class="ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold text-white bg-primary-500 rounded-full">3</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Navigation Section -->
+          <div class="border-b border-gray-200 dark:border-gray-700 mx-4 pb-3 space-y-1">
+
+            <!-- Categories Button -->
+            <button
+              id="drawer-open-categories"
+              type="button"
+              class="flex items-center gap-3 w-full px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-left transition-colors"
+            >
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-bold text-gray-900 dark:text-white">Categories</span>
+                  <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold text-white bg-primary-500 rounded-full">ALL</span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Browse categories to discover products</p>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+            </button>
+
+            <!-- Campaigns -->
+            <a href="/campaigns" class="block px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <span class="text-sm font-bold text-gray-900 dark:text-white">Campaigns</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Deals, discounts, campaigns</p>
+            </a>
+
+            <!-- Brands -->
+            <a href="/brands" class="block px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <span class="text-sm font-bold text-gray-900 dark:text-white">Brands</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Official registered brands on iSTOC</p>
+            </a>
+
+            <!-- Sellers -->
+            <a href="/sellers" class="block px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <span class="text-sm font-bold text-gray-900 dark:text-white">Sellers</span>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Browse sellers on iSTOC marketplace</p>
+            </a>
+
+            <!-- iSTOC B2B Marketplace -->
+            <a href="/b2b" class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                <span class="text-sm font-bold text-gray-700 dark:text-gray-200">iS</span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <span class="text-sm font-bold text-gray-900 dark:text-white">iSTOC B2B Marketplace</span>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Learn how to sell on iSTOC</p>
+              </div>
+              <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+            </a>
+          </div>
+
+          <!-- Language / Currency Pills -->
+          <div class="mx-4 mt-3 space-y-3">
+            <!-- Language pills -->
+            <div class="flex flex-wrap gap-2">
+              ${languageOptions.map((lang, i) => `
+                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? 'border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20' : 'border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500'}">
+                  ${lang.code}
+                </button>
+              `).join('')}
+            </div>
+            <!-- Currency pills -->
+            <div class="flex flex-wrap gap-2">
+              ${currencyOptions.map((currency, i) => `
+                <button type="button" class="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${i === 0 ? 'border-primary-500 text-primary-600 bg-primary-50 dark:border-primary-400 dark:text-primary-400 dark:bg-primary-900/20' : 'border-gray-300 text-gray-600 dark:border-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500'}">
+                  ${currency.code === 'TRY' ? 'TL' : currency.symbol}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Deliver to -->
+          <div class="mx-4 mt-4 mb-6">
+            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Deliver to</label>
+            <select class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+              ${countryOptions.map(country => `
+                <option value="${country.code}">${country.flag} ${country.name}</option>
+              `).join('')}
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Panel 2: Categories List -->
+        <div id="drawer-panel-categories" class="absolute inset-0 overflow-y-auto translate-x-full transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+
+          <!-- Header: Back + Close -->
+          <div class="flex items-center justify-between px-4 pt-4 pb-2">
+            <button id="drawer-categories-back" type="button" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+              <span>Back</span>
+            </button>
+            <button
+              type="button"
+              data-drawer-hide="mobile-menu-drawer"
+              aria-controls="mobile-menu-drawer"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+              <span class="sr-only">Close menu</span>
+            </button>
+          </div>
+
+          <!-- Category Header Bar -->
+          <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-700">
+            <span class="text-lg font-bold text-gray-900 dark:text-white">Categories</span>
+            <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold text-white bg-primary-500 rounded-full">ALL</span>
+          </div>
+
+          <!-- Category List -->
+          <div class="divide-y divide-gray-100 dark:divide-gray-700">
+            ${filteredCategories.map(cat => `
+              <button
+                type="button"
+                data-drawer-cat-id="${cat.id}"
+                class="flex items-center justify-between w-full px-4 py-3 text-sm text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
+                <span>${cat.name}</span>
+                <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+              </button>
+            `).join('')}
+          </div>
+
+        </div>
+
+        <!-- Panel 3: Subcategory -->
+        <div id="drawer-panel-subcategory" class="absolute inset-0 overflow-y-auto translate-x-full transition-transform duration-300 ease-in-out bg-white dark:bg-gray-800">
+
+          <!-- Header: Back + Close -->
+          <div class="flex items-center justify-between px-4 pt-4 pb-2">
+            <button id="drawer-subcategory-back" type="button" class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"/></svg>
+              <span>Categories</span>
+            </button>
+            <button
+              type="button"
+              data-drawer-hide="mobile-menu-drawer"
+              aria-controls="mobile-menu-drawer"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+            >
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
+              <span class="sr-only">Close menu</span>
+            </button>
+          </div>
+
+          <!-- Subcategory Header -->
+          <div class="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-700">
+            <span id="drawer-subcategory-title" class="text-lg font-bold text-gray-900 dark:text-white"></span>
+            <a id="drawer-subcategory-link" href="#" class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-400">Detail</a>
+          </div>
+
+          <!-- Subcategory List -->
+          <div id="drawer-subcategory-list"></div>
+
+        </div>
+
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Initializes mobile drawer interactivity:
+ * - Account toggle expand/collapse
+ * - Panel sliding (main -> categories -> subcategory)
+ * - MutationObserver to reset panels on drawer close
+ */
+export function initMobileDrawer(): void {
+  // Move drawer to body so it escapes all stacking contexts (sticky-header, TopBar z-30)
+  const drawerEl = document.getElementById('mobile-menu-drawer');
+  if (drawerEl) document.body.appendChild(drawerEl);
+
+  // TopBar mobile search tabs switching
+  const topbarTabs = document.querySelectorAll<HTMLButtonElement>('.topbar-search-tab');
+  const TB_ACT = ['font-bold', 'text-gray-900', 'dark:text-white', 'border-gray-900', 'dark:border-white'];
+  const TB_INACT = ['font-normal', 'text-gray-500', 'dark:text-gray-400', 'border-transparent'];
+  topbarTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      topbarTabs.forEach(t => { t.classList.remove(...TB_ACT); t.classList.add(...TB_INACT); });
+      tab.classList.remove(...TB_INACT);
+      tab.classList.add(...TB_ACT);
+    });
+  });
+
+  // Account toggle
+  const accountToggle = document.getElementById('drawer-account-toggle');
+  const accountPanel = document.getElementById('drawer-account-panel');
+  const accountIcon = document.getElementById('drawer-account-icon');
+  if (accountToggle && accountPanel && accountIcon) {
+    accountToggle.addEventListener('click', () => {
+      accountPanel.classList.toggle('hidden');
+      const path = accountIcon.querySelector('path');
+      if (path) {
+        const isOpen = !accountPanel.classList.contains('hidden');
+        path.setAttribute('d', isOpen ? 'M5 12h14' : 'M12 4.5v15m7.5-7.5h-15');
+      }
+    });
+  }
+
+  const panelMain = document.getElementById('drawer-panel-main');
+  const panelCategories = document.getElementById('drawer-panel-categories');
+  const panelSubcategory = document.getElementById('drawer-panel-subcategory');
+
+  // Open categories panel
+  const openCategories = document.getElementById('drawer-open-categories');
+  if (openCategories && panelMain && panelCategories) {
+    openCategories.addEventListener('click', () => {
+      panelMain.classList.add('-translate-x-full');
+      panelCategories.classList.remove('translate-x-full');
+    });
+  }
+
+  // Back from categories
+  const categoriesBack = document.getElementById('drawer-categories-back');
+  if (categoriesBack && panelMain && panelCategories) {
+    categoriesBack.addEventListener('click', () => {
+      panelMain.classList.remove('-translate-x-full');
+      panelCategories.classList.add('translate-x-full');
+    });
+  }
+
+  // Open subcategory panel
+  const catButtons = document.querySelectorAll<HTMLButtonElement>('[data-drawer-cat-id]');
+  const subcategoryTitle = document.getElementById('drawer-subcategory-title');
+  const subcategoryLink = document.getElementById('drawer-subcategory-link') as HTMLAnchorElement | null;
+  const subcategoryList = document.getElementById('drawer-subcategory-list');
+
+  catButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const catId = btn.getAttribute('data-drawer-cat-id');
+      const cat = megaCategories.find(c => c.id === catId);
+      if (!cat || !panelCategories || !panelSubcategory || !subcategoryTitle || !subcategoryLink || !subcategoryList) return;
+
+      subcategoryTitle.textContent = cat.name;
+      subcategoryLink.href = `/categories/${cat.id}`;
+      subcategoryList.innerHTML = cat.products.map(
+        p => `<a href="${p.href}" class="block px-4 py-3 text-sm text-gray-900 hover:bg-gray-50 dark:text-white dark:hover:bg-gray-700 transition-colors">${p.name}</a>`
+      ).join('');
+
+      panelCategories.classList.add('-translate-x-full');
+      panelSubcategory.classList.remove('translate-x-full');
+    });
+  });
+
+  // Back from subcategory
+  const subcategoryBack = document.getElementById('drawer-subcategory-back');
+  if (subcategoryBack && panelCategories && panelSubcategory) {
+    subcategoryBack.addEventListener('click', () => {
+      panelCategories.classList.remove('-translate-x-full');
+      panelSubcategory.classList.add('translate-x-full');
+    });
+  }
+
+  // Reset panels when drawer is closed
+  const drawer = document.getElementById('mobile-menu-drawer');
+  if (drawer && panelMain && panelCategories && panelSubcategory) {
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (drawer.classList.contains('-translate-x-full')) {
+            setTimeout(() => {
+              panelMain.classList.remove('-translate-x-full');
+              panelCategories.classList.remove('-translate-x-full');
+              panelCategories.classList.add('translate-x-full');
+              panelSubcategory.classList.remove('-translate-x-full');
+              panelSubcategory.classList.add('translate-x-full');
+            }, 300);
+          }
+        }
+      }
+    });
+    observer.observe(drawer, { attributes: true, attributeFilter: ['class'] });
+  }
 }
 
 /**
@@ -517,19 +875,52 @@ function renderAuthButtons(): string {
  */
 export function TopBar(): string {
   return `
-    <div class="relative z-30 dark:bg-gray-900" style="height: 64px;">
-      <div class="container-boxed h-full">
-        <div class="flex h-full items-center">
+    <div class="relative z-30 dark:bg-gray-900">
+      <div class="container-boxed">
+        <!-- Row 1: Logo + Search (mobile) + Icons -->
+        <div class="flex items-center h-16 gap-2 md:gap-0">
           <!-- Logo -->
           <div class="flex-shrink-0">
             ${renderLogo()}
           </div>
 
-          <!-- Compact Sticky Search -->
+          <!-- Mobile Inline Search (between logo and icons) -->
+          <div class="flex-1 min-w-0 mx-2 md:hidden">
+            <form action="/search" method="GET" role="search">
+              <div class="flex">
+                <input
+                  type="text"
+                  name="mobile-search"
+                  class="w-full h-10 px-3 text-sm text-gray-900 bg-white border-2 border-primary-400 border-r-0 rounded-l-xl focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-primary-600 dark:placeholder-gray-400 dark:text-white"
+                  placeholder="Search products..."
+                  autocomplete="off"
+                  aria-label="Search products"
+                />
+                <a href="/image-search" class="flex items-center justify-center h-10 px-2.5 bg-white border-2 border-primary-400 border-l-0 border-r-0 text-gray-400 hover:text-primary-600 transition-colors dark:bg-gray-700 dark:border-primary-600" aria-label="Image search">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"/>
+                  </svg>
+                </a>
+                <button
+                  type="submit"
+                  class="flex items-center justify-center h-10 px-4 text-white rounded-r-xl transition-colors"
+                  style="background: linear-gradient(135deg, #f5a623 0%, #e8740c 100%);"
+                  aria-label="Search"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Desktop Compact Sticky Search -->
           ${renderCompactStickySearch()}
 
           <!-- Right Side: Selectors + Icons + Cart + Auth -->
-          <div class="ml-auto flex items-center gap-2 md:gap-4">
+          <div class="ml-auto flex items-center gap-2 md:gap-4 flex-shrink-0">
             <!-- Country Selector (hidden on mobile) -->
             <div class="hidden md:block">
               ${renderCountrySelector()}
@@ -540,17 +931,21 @@ export function TopBar(): string {
               ${renderLanguageCurrencySelector()}
             </div>
 
-            <!-- Messages Button -->
-            ${renderMessagesButton()}
+            <!-- Messages Button (hidden on mobile) -->
+            <div class="hidden md:block">
+              ${renderMessagesButton()}
+            </div>
 
-            <!-- Orders Button -->
-            ${renderOrdersButton()}
+            <!-- Orders Button (hidden on mobile) -->
+            <div class="hidden md:block">
+              ${renderOrdersButton()}
+            </div>
 
             <!-- Cart Button -->
             ${renderCartButton(3)}
 
-            <!-- Auth Buttons -->
-            <div class="hidden sm:block">
+            <!-- Auth Buttons (hidden on mobile) -->
+            <div class="hidden md:block">
               ${renderAuthButtons()}
             </div>
 
@@ -558,90 +953,27 @@ export function TopBar(): string {
             <button
               data-drawer-target="mobile-menu-drawer"
               data-drawer-toggle="mobile-menu-drawer"
-              class="inline-flex items-center p-2 text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              class="inline-flex items-center p-2 text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               type="button"
               aria-controls="mobile-menu-drawer"
               aria-label="Open main menu"
             >
-              <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
               </svg>
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- Mobile Menu Drawer -->
-      <div
-        id="mobile-menu-drawer"
-        class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80 dark:bg-gray-800"
-        tabindex="-1"
-        aria-labelledby="drawer-label"
-      >
-        <h5 id="drawer-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
-        <button
-          type="button"
-          data-drawer-hide="mobile-menu-drawer"
-          aria-controls="mobile-menu-drawer"
-          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-2.5 end-2.5 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
-        >
-          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-          </svg>
-          <span class="sr-only">Close menu</span>
-        </button>
-
-        <div class="py-4 space-y-4">
-          <!-- Mobile Auth Buttons -->
-          <div class="flex flex-col gap-2">
-            <a href="/login" class="w-full px-4 py-3 text-center text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700">
-              Sign In
-            </a>
-            <a href="/register" class="w-full px-4 py-3 text-center text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-full">
-              Join Free
-            </a>
-          </div>
-
-          <!-- Mobile Country Selector -->
-          <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <h6 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Deliver to</h6>
-            <div class="space-y-1">
-              ${countryOptions.map(country => `
-                <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  <span>${country.flag}</span>
-                  <span>${country.name}</span>
-                </a>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- Mobile Language Selector -->
-          <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <h6 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Language</h6>
-            <div class="space-y-1">
-              ${languageOptions.map(lang => `
-                <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  <span>${lang.flag}</span>
-                  <span>${lang.name}</span>
-                </a>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- Mobile Currency Selector -->
-          <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <h6 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Currency</h6>
-            <div class="space-y-1">
-              ${currencyOptions.map(currency => `
-                <a href="#" class="flex items-center gap-2 px-3 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
-                  <span class="font-medium">${currency.symbol}</span>
-                  <span>${currency.name}</span>
-                </a>
-              `).join('')}
-            </div>
-          </div>
+        <!-- Row 2: Mobile Search Tabs (Products | Manufacturers | Worldwide) -->
+        <div class="md:hidden flex items-center gap-5 px-1 border-b border-gray-200 dark:border-gray-700">
+          <button type="button" class="topbar-search-tab pb-2 text-sm font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white" data-search-tab="products">Products</button>
+          <button type="button" class="topbar-search-tab pb-2 text-sm font-normal text-gray-500 dark:text-gray-400 border-b-2 border-transparent" data-search-tab="manufacturers">Manufacturers</button>
+          <button type="button" class="topbar-search-tab pb-2 text-sm font-normal text-gray-500 dark:text-gray-400 border-b-2 border-transparent" data-search-tab="worldwide">Worldwide</button>
         </div>
       </div>
+
+      ${renderMobileDrawer()}
     </div>
   `;
 }

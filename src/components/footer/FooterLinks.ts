@@ -112,7 +112,7 @@ function renderFooterLogo(): string {
  */
 function renderSocialIcons(): string {
   return `
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3 flex-wrap">
       ${socialLinks.map(link => `
         <a
           href="${link.href}"

@@ -34,14 +34,19 @@ function renderCategoryPopup(): string {
     <div id="cat-popup-overlay" class="fixed inset-0 z-[var(--z-backdrop)] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
 
     <!-- Category Popup Panel -->
-    <div id="cat-popup-panel" class="fixed inset-0 z-[var(--z-modal)] flex items-start justify-center pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-5xl max-h-[80vh] flex flex-col overflow-hidden">
+    <div id="cat-popup-panel" class="fixed inset-0 z-[var(--z-modal)] flex items-end lg:items-start justify-center lg:pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
+      <div id="cat-popup-sheet" class="bg-white dark:bg-gray-800 rounded-t-2xl lg:rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 w-full lg:max-w-5xl max-h-[85vh] lg:max-h-[80vh] flex flex-col overflow-hidden transition-transform duration-200 will-change-transform">
+
+        <!-- Drag handle (mobile) -->
+        <div id="cat-popup-drag-handle" class="lg:hidden flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing flex-shrink-0">
+          <div class="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
 
         <!-- Header -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div id="cat-popup-header" class="flex items-center justify-between px-4 lg:px-6 py-3 lg:py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 select-none">
           <h2 id="cat-popup-title" class="text-lg font-bold text-gray-900 dark:text-white">Categories for you</h2>
           <div class="flex items-center gap-4">
-            <a href="/featured" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">Browse featured selections</a>
+            <a href="/featured" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 hidden lg:inline">Browse featured selections</a>
             <button id="cat-popup-close" class="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors" aria-label="Close">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12"/>
@@ -51,20 +56,20 @@ function renderCategoryPopup(): string {
         </div>
 
         <!-- Body: sidebar + content -->
-        <div class="flex flex-1 min-h-0">
+        <div class="flex flex-col lg:flex-row flex-1 min-h-0">
           <!-- Sidebar -->
-          <div class="w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-900" id="cat-popup-sidebar">
-            <ul class="py-1">
+          <div class="w-full lg:w-56 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 overflow-x-auto lg:overflow-x-visible overflow-y-auto bg-gray-50 dark:bg-gray-900" id="cat-popup-sidebar">
+            <ul class="py-1 flex lg:block overflow-x-auto lg:overflow-x-visible gap-1 px-2 lg:px-0">
               ${megaCategories.map((cat, index) => `
-                <li>
+                <li class="flex-shrink-0 lg:flex-shrink">
                   <button
                     type="button"
-                    class="cat-popup-btn flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left transition-colors ${index === 0 ? ACT : INACT}"
+                    class="cat-popup-btn flex items-center gap-2 lg:gap-3 w-full px-3 lg:px-4 py-2 lg:py-2.5 text-sm text-left transition-colors whitespace-nowrap lg:whitespace-normal ${index === 0 ? ACT : INACT}"
                     data-category="${cat.id}"
                   >
                     <span class="flex-shrink-0 text-gray-400">${getCategoryIcon(cat.icon)}</span>
                     <span class="flex-1 truncate">${cat.name}</span>
-                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0 hidden lg:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
                   </button>
                 </li>
               `).join('')}
@@ -72,10 +77,10 @@ function renderCategoryPopup(): string {
           </div>
 
           <!-- Content: product grid for active category -->
-          <div class="flex-1 overflow-y-auto px-6 py-5" id="cat-popup-content">
+          <div class="flex-1 overflow-y-auto px-4 lg:px-6 py-5" id="cat-popup-content">
             ${megaCategories.map(cat => `
               <div class="cat-popup-section hidden" data-popup-section="${cat.id}">
-                <div class="grid grid-cols-7 gap-y-5 gap-x-4">
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4">
                   ${cat.products.map(product => renderProductItem(product)).join('')}
                   <!-- View all item -->
                   <a href="/category/${cat.id}" class="flex flex-col items-center gap-2 group/product">
@@ -107,7 +112,7 @@ export function CategoryBrowse(): string {
               <li>
                 <button
                   type="button"
-                  class="category-browse-item flex items-center gap-3.5 w-full px-5 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors group text-left"
+                  class="category-browse-item flex items-center gap-3.5 w-full px-5 py-3.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/60 hover:text-gray-900 dark:hover:text-white transition-colors group text-left"
                   data-category-id="${cat.id}"
                 >
                   <span class="flex-shrink-0 text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
@@ -223,4 +228,102 @@ export function initCategoryBrowse(): void {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePopup();
   });
+
+  // ── Drag-down to close (mouse + touch) ──
+  const sheet = document.getElementById('cat-popup-sheet');
+  const dragHandle = document.getElementById('cat-popup-drag-handle');
+  const popupHeader = document.getElementById('cat-popup-header');
+  if (sheet) {
+    let startY = 0;
+    let deltaY = 0;
+    let dragging = false;
+    let didDrag = false;
+
+    function beginDrag(y: number) {
+      startY = y;
+      deltaY = 0;
+      dragging = true;
+      didDrag = false;
+      sheet!.style.transition = 'none';
+      document.body.style.userSelect = 'none';
+      document.body.style.webkitUserSelect = 'none';
+    }
+
+    function updateDrag(y: number) {
+      if (!dragging) return;
+      deltaY = y - startY;
+      if (deltaY < 0) deltaY = 0;
+      if (deltaY > 5) didDrag = true;
+      sheet!.style.transform = `translateY(${deltaY}px)`;
+      // Dim overlay proportionally
+      const progress = Math.min(deltaY / 300, 1);
+      overlay!.style.opacity = String(1 - progress * 0.6);
+    }
+
+    function finishDrag() {
+      if (!dragging) return;
+      dragging = false;
+      document.body.style.userSelect = '';
+      document.body.style.webkitUserSelect = '';
+      sheet!.style.transition = 'transform 0.25s cubic-bezier(.2,.9,.3,1)';
+      overlay!.style.transition = 'opacity 0.25s ease';
+      if (deltaY > 80) {
+        sheet!.style.transform = `translateY(100%)`;
+        overlay!.style.opacity = '0';
+        setTimeout(() => {
+          closePopup();
+          sheet!.style.transform = '';
+          sheet!.style.transition = '';
+        }, 250);
+      } else {
+        sheet!.style.transform = '';
+        overlay!.style.opacity = '1';
+      }
+    }
+
+    // Prevent close-button click when drag happened
+    closeBtn.addEventListener('click', (e) => {
+      if (didDrag) { e.stopImmediatePropagation(); didDrag = false; }
+    }, true);
+
+    // Mouse: attach on drag handle + header
+    [dragHandle, popupHeader].forEach(el => {
+      if (!el) return;
+      el.addEventListener('mousedown', (e: MouseEvent) => {
+        // Skip if clicked directly on close button
+        if ((e.target as HTMLElement).closest('#cat-popup-close')) return;
+        e.preventDefault();
+        beginDrag(e.clientY);
+      });
+    });
+
+    document.addEventListener('mousemove', (e: MouseEvent) => {
+      if (!dragging) return;
+      e.preventDefault();
+      updateDrag(e.clientY);
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (dragging) finishDrag();
+    });
+
+    // Touch: same targets
+    [dragHandle, popupHeader].forEach(el => {
+      if (!el) return;
+      el.addEventListener('touchstart', (e: TouchEvent) => {
+        if ((e.target as HTMLElement).closest('#cat-popup-close')) return;
+        beginDrag(e.touches[0].clientY);
+      }, { passive: true });
+    });
+
+    document.addEventListener('touchmove', (e: TouchEvent) => {
+      if (!dragging) return;
+      e.preventDefault();
+      updateDrag(e.touches[0].clientY);
+    }, { passive: false });
+
+    document.addEventListener('touchend', () => {
+      if (dragging) finishDrag();
+    });
+  }
 }

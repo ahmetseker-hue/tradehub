@@ -97,7 +97,7 @@ function renderUtilityLinks(): string {
  */
 export function SubHeader(): string {
   return `
-    <nav class="dark:bg-gray-900 dark:border-gray-700" aria-label="Secondary navigation">
+    <nav class="hidden md:block dark:bg-gray-900 dark:border-gray-700" aria-label="Secondary navigation">
       <div class="container-boxed">
         <div class="flex items-center justify-between">
           <!-- Left Side: Categories Trigger + Navigation Links -->
