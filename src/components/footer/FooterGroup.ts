@@ -10,7 +10,7 @@
  */
 export function FooterGroup(): string {
   return `
-    <section class="bg-gray-100/80 dark:bg-gray-800 border-t border-gray-200/60 dark:border-gray-700 py-6" aria-label="Payment methods and security">
+    <section class="dark:bg-gray-800 border-t dark:border-gray-700 py-6" style="background-color:var(--footer-bg);border-color:var(--footer-border-color)" aria-label="Payment methods and security">
       <div class="container-boxed">
         <div class="flex items-center justify-center">
           <!-- Payment Methods (Turkey) -->

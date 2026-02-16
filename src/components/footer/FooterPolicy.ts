@@ -24,19 +24,19 @@ const policyLinks: NavLink[] = [
  */
 export function FooterPolicy(): string {
   return `
-    <section class="bg-gray-100 dark:bg-gray-800/80 border-t border-gray-200/60 dark:border-gray-700 py-5" aria-label="Policy links and copyright">
+    <section class="dark:bg-gray-800/80 border-t dark:border-gray-700 py-5" style="background-color:var(--footer-bg);border-color:var(--footer-border-color)" aria-label="Policy links and copyright">
       <div class="container-boxed">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <!-- Policy Links -->
-          <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-xs text-gray-500 dark:text-gray-400">
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1.5 text-xs dark:text-gray-400" style="color:var(--footer-text-color)">
             ${policyLinks.map(link => `
-              <a href="${link.href}" class="hover:text-gray-900 dark:hover:text-gray-200 transition-colors duration-200">${link.label}</a>
+              <a href="${link.href}" class="th-footer-link dark:hover:text-gray-200 transition-colors duration-200">${link.label}</a>
             `).join('')}
           </div>
 
           <!-- Copyright -->
-          <p class="text-xs text-gray-400 dark:text-gray-500 text-center md:text-right whitespace-nowrap">
-            &copy; 2010-2026 <a href="/" class="hover:text-gray-700 dark:hover:text-gray-300 transition-colors duration-200">iSTOC.com</a>. All rights reserved.
+          <p class="text-xs dark:text-gray-500 text-center md:text-right whitespace-nowrap" style="color:var(--footer-text-color)">
+            &copy; 2010-2026 <a href="/" class="th-footer-link dark:hover:text-gray-300 transition-colors duration-200">iSTOC.com</a>. All rights reserved.
           </p>
         </div>
       </div>

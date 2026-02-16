@@ -22,12 +22,20 @@ import { FooterLinks } from './components/footer'
 // Floating components
 import { FloatingPanel, initFloatingPanel } from './components/floating'
 
+// Theme editor
+import { ThemeEditorPanel, initThemeEditorPanel } from './components/theme'
+
 // Utilities
 import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+const appEl = document.querySelector<HTMLDivElement>('#app')!;
+appEl.classList.add('relative');
+appEl.innerHTML = `
+  <!-- Single gradient overlay (absolute, covers sticky-header + search area seamlessly) -->
+  <div id="gradient-overlay" class="absolute top-0 left-0 right-0 h-[350px] hidden md:block pointer-events-none header-gradient"></div>
+
   <!-- Sticky Header (global, stays sticky across full page) -->
-  <div id="sticky-header" class="sticky top-0 z-[var(--z-header)] bg-white header-gradient transition-[border-color,box-shadow] duration-300">
+  <div id="sticky-header" class="sticky top-0 z-[var(--z-header)] transition-[border-color,box-shadow] duration-300">
     ${TopBar()}
     ${SubHeader()}
   </div>
@@ -36,7 +44,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   ${MobileSearchTabs()}
 
   <!-- Hero Search Section (desktop only — mobile search is in TopBar) -->
-  <header class="hidden md:block header-gradient">
+  <header class="hidden md:block">
     ${SearchArea()}
   </header>
 
@@ -74,6 +82,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <!-- Floating Panel -->
   ${FloatingPanel()}
 
+  <!-- Theme Editor Panel -->
+  ${ThemeEditorPanel()}
+
 `
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
@@ -90,18 +101,23 @@ initMobileCategoryBar();
 initRecommendationSlider();
 initHeroSideBannerSlider();
 initFloatingPanel();
+
+initThemeEditorPanel();
 initMobileDrawer();
 initAnimatedPlaceholder('#search-input');
 
-// Sticky header: warm gradient by default → white on scroll
+// Sticky header: warm gradient by default → header-bg on scroll
 const stickyHeader = document.getElementById('sticky-header');
+const gradientOverlay = document.getElementById('gradient-overlay');
 if (stickyHeader) {
   const onScroll = (): void => {
     if (window.scrollY > 10) {
-      stickyHeader.classList.remove('header-gradient');
-      stickyHeader.style.borderBottom = '1px solid #ddd';
+      if (gradientOverlay) gradientOverlay.style.display = 'none';
+      stickyHeader.style.backgroundColor = 'var(--header-bg)';
+      stickyHeader.style.borderBottom = '1px solid var(--header-border-color)';
     } else {
-      stickyHeader.classList.add('header-gradient');
+      if (gradientOverlay) gradientOverlay.style.display = '';
+      stickyHeader.style.backgroundColor = '';
       stickyHeader.style.borderBottom = '';
     }
   };

@@ -258,13 +258,13 @@ export function getCategoryIcon(iconName: string): string {
 function renderProductItem(product: { name: string; href: string; badge?: boolean }): string {
   return `
     <a href="${product.href}" class="flex flex-col items-center gap-2 group/product">
-      <div class="relative w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden group-hover/product:ring-2 group-hover/product:ring-primary-300 transition-all">
+      <div class="relative w-20 h-20 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-all" style="background:var(--card-bg);--tw-ring-color:var(--nav-hover-color)">
         <svg class="w-8 h-8 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
         </svg>
         ${product.badge ? `<span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>` : ''}
       </div>
-      <span class="text-xs text-gray-600 dark:text-gray-400 text-center leading-tight group-hover/product:text-primary-600 dark:group-hover/product:text-primary-400 transition-colors max-w-20">${product.name}</span>
+      <span class="th-nav-link text-center leading-tight transition-colors max-w-20" style="font-size:var(--mega-font-size)">${product.name}</span>
     </a>
   `;
 }
@@ -278,13 +278,13 @@ function renderCategoriesView(): string {
     <div data-mega-view="categories" class="hidden">
       <div class="flex flex-col lg:flex-row" style="min-height: 480px;">
         <!-- Sidebar -->
-        <div class="w-full lg:w-64 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-900" style="max-height: 520px;" id="mega-sidebar">
+        <div class="w-full lg:w-64 lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r dark:border-gray-700 overflow-y-auto dark:bg-gray-900" style="max-height:520px;background-color:var(--mega-sidebar-bg);border-color:var(--mega-border-color)" id="mega-sidebar">
           <ul class="py-1">
             ${megaCategories.map((cat, index) => `
               <li>
                 <a
                   href="/category/${cat.id}"
-                  class="mega-cat-btn flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left transition-colors ${index === 0 ? 'text-gray-900 bg-white border-l-2 border-primary-500 font-medium dark:text-white dark:bg-gray-800' : 'text-gray-600 hover:bg-white hover:text-gray-900 border-l-2 border-transparent dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white'}"
+                  class="th-mega-sidebar-item mega-cat-btn flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left transition-colors border-l-2 border-transparent ${index === 0 ? 'th-mega-sidebar-item--active' : ''}"
                   data-category="${cat.id}"
                 >
                   <span class="flex-shrink-0 text-gray-400">${getCategoryIcon(cat.icon)}</span>
@@ -300,8 +300,8 @@ function renderCategoriesView(): string {
           ${megaCategories.map(cat => `
             <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
               <div class="flex items-center justify-between mb-5">
-                <h3 class="text-base font-bold text-gray-900 dark:text-white">${cat.name}</h3>
-                <a href="/category/${cat.id}" class="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 hover:underline">
+                <h3 class="text-base font-bold dark:text-white" style="color:var(--mega-text-color)">${cat.name}</h3>
+                <a href="/category/${cat.id}" class="th-nav-link hover:underline dark:text-primary-400 dark:hover:text-primary-300" style="color:var(--nav-hover-color)">
                   Browse all &rarr;
                 </a>
               </div>
@@ -326,11 +326,11 @@ function renderFeaturedView(): string {
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <!-- Left: 3 Feature cards -->
         ${featureCards.map(card => `
-          <a href="${card.href}" class="flex flex-col items-center justify-center gap-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-8 hover:shadow-md hover:border-primary-300 dark:hover:border-primary-500 transition-all group">
-            <span class="text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+          <a href="${card.href}" class="th-card th-mega-card flex flex-col items-center justify-center gap-3 hover:shadow-md transition-all group">
+            <span class="transition-colors" style="color:var(--mega-icon-color)">
               ${card.icon}
             </span>
-            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">${card.title}</span>
+            <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)">${card.title}</span>
           </a>
         `).join('')}
         <!-- Right: Quick links -->
@@ -338,8 +338,8 @@ function renderFeaturedView(): string {
           <ul class="space-y-4">
             ${quickLinks.map(link => `
               <li>
-                <a href="${link.href}" class="flex items-center gap-2.5 text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300 transition-colors">
-                  <span class="text-gray-400 dark:text-gray-500">${link.icon}</span>
+                <a href="${link.href}" class="th-mega-link flex items-center gap-2.5 text-sm transition-colors">
+                  <span style="color:var(--mega-icon-color)">${link.icon}</span>
                   ${link.label}
                 </a>
               </li>
@@ -362,25 +362,25 @@ function renderProtectionsView(): string {
         <!-- Left: Trade Assurance branding -->
         <div class="w-full md:w-2/5 md:flex-shrink-0">
           <div class="flex items-center gap-3 mb-4">
-            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/40">
-              <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            <span class="flex items-center justify-center w-10 h-10 rounded-full" style="background-color:var(--mega-accent-bg)">
+              <svg class="w-6 h-6" style="color:var(--mega-accent-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
             </span>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Trade Assurance</h3>
+            <h3 class="text-lg font-bold" style="color:var(--mega-heading-color)">Trade Assurance</h3>
           </div>
-          <p class="text-xl font-semibold text-gray-800 dark:text-gray-200 leading-snug mb-6">Enjoy protection from payment to delivery</p>
-          <a href="/order-protections" class="inline-block px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-full transition-colors">
+          <p class="text-xl font-semibold leading-snug mb-6" style="color:var(--mega-heading-color)">Enjoy protection from payment to delivery</p>
+          <a href="/order-protections" class="th-btn th-btn-pill inline-block px-6 py-2.5 transition-colors">
             Learn more
           </a>
         </div>
         <!-- Right: 2x2 protection cards -->
         <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
           ${protectionCards.map(card => `
-            <a href="${card.href}" class="flex items-center gap-4 px-5 py-5 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:shadow-md hover:border-primary-300 dark:hover:border-primary-500 transition-all group">
-              <span class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/40">
-                <span class="text-primary-600 dark:text-primary-400">${card.icon}</span>
+            <a href="${card.href}" class="th-card th-mega-card flex items-center gap-4 hover:shadow-md transition-all group">
+              <span class="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-full" style="background-color:var(--mega-accent-bg)">
+                <span style="color:var(--mega-accent-color)">${card.icon}</span>
               </span>
-              <span class="flex-1 text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">${card.title}</span>
-              <svg class="w-5 h-5 text-gray-400 group-hover:text-primary-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
+              <span class="flex-1 text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)">${card.title}</span>
+              <svg class="w-5 h-5 transition-colors flex-shrink-0" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg>
             </a>
           `).join('')}
         </div>
@@ -447,11 +447,11 @@ function renderBuyerCentralView(): string {
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
         ${buyerCentralColumns.map(col => `
           <div>
-            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-4">${col.title}</h4>
+            <h4 class="text-sm font-bold mb-4" style="color:var(--mega-heading-color)">${col.title}</h4>
             <ul class="space-y-3">
               ${col.links.map(link => `
                 <li>
-                  <a href="${link.href}" class="text-sm text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+                  <a href="${link.href}" class="th-mega-link text-sm">
                     ${link.label}
                   </a>
                 </li>
@@ -474,38 +474,38 @@ function renderHelpCenterView(): string {
       <div class="flex flex-col md:flex-row gap-6 md:gap-8">
         <!-- Left: Two cards -->
         <div class="flex gap-6 flex-1">
-          <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-400 hover:bg-primary-50/30 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-all group">
-            <span class="flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 transition-colors">
-              <svg class="w-7 h-7 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-lg p-8 transition-all group" style="border-color:var(--mega-border-color)">
+            <span class="flex items-center justify-center w-14 h-14 rounded-full transition-colors" style="background-color:var(--mega-icon-bg)">
+              <svg class="w-7 h-7 transition-colors" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
               </svg>
             </span>
-            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">For buyers</span>
+            <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)">For buyers</span>
           </a>
-          <a href="/help/suppliers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-primary-400 hover:bg-primary-50/30 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-all group">
-            <span class="flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 dark:bg-gray-700 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/40 transition-colors">
-              <svg class="w-7 h-7 text-gray-500 dark:text-gray-400 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <a href="/help/suppliers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-lg p-8 transition-all group" style="border-color:var(--mega-border-color)">
+            <span class="flex items-center justify-center w-14 h-14 rounded-full transition-colors" style="background-color:var(--mega-icon-bg)">
+              <svg class="w-7 h-7 transition-colors" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/>
               </svg>
             </span>
-            <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">For suppliers</span>
+            <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)">For suppliers</span>
           </a>
         </div>
         <!-- Right: Links -->
         <div class="w-full md:w-56 flex flex-col justify-center">
           <ul class="space-y-4">
             <li>
-              <a href="/help/dispute" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
+              <a href="/help/dispute" class="th-mega-link text-sm">
                 Open a dispute
               </a>
             </li>
             <li>
-              <a href="/help/ipr" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
+              <a href="/help/ipr" class="th-mega-link text-sm">
                 Report IPR infringement
               </a>
             </li>
             <li>
-              <a href="/help/abuse" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors">
+              <a href="/help/abuse" class="th-mega-link text-sm">
                 Report abuse
               </a>
             </li>
@@ -523,11 +523,11 @@ function renderHelpCenterView(): string {
 function renderAppExtensionView(): string {
   return `
     <div data-mega-view="app-extension" class="hidden py-8 px-4">
-      <div class="flex flex-col md:flex-row md:divide-x divide-gray-200 dark:divide-gray-700">
+      <div class="flex flex-col md:flex-row">
         <!-- Left: Get the app -->
         <div class="flex-1 md:pr-10">
-          <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Get the iSTOC app</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-sm">Find products, communicate with suppliers, and manage and pay for your orders with the iSTOC app anytime, anywhere.</p>
+          <h4 class="text-lg font-bold mb-2" style="color:var(--mega-heading-color)">Get the iSTOC app</h4>
+          <p class="text-sm mb-5 max-w-sm" style="color:var(--mega-body-text)">Find products, communicate with suppliers, and manage and pay for your orders with the iSTOC app anytime, anywhere.</p>
           <div class="flex items-center gap-5">
             <!-- App badges -->
             <div class="flex flex-col gap-2.5">
@@ -547,8 +547,8 @@ function renderAppExtensionView(): string {
               </a>
             </div>
             <!-- QR Code placeholder -->
-            <div class="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center justify-center">
-              <svg class="w-10 h-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+            <div class="w-24 h-24 rounded-lg border flex items-center justify-center" style="background-color:var(--mega-icon-bg);border-color:var(--mega-border-color)">
+              <svg class="w-10 h-10" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z"/>
               </svg>
@@ -556,14 +556,14 @@ function renderAppExtensionView(): string {
           </div>
         </div>
         <!-- Right: Discover Lens -->
-        <div class="flex-1 pt-6 md:pt-0 md:pl-10 border-t md:border-t-0 border-gray-200 dark:border-gray-700">
-          <h4 class="text-lg font-bold text-gray-900 dark:text-white mb-2">Discover iSTOC Lens</h4>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-5 max-w-md">Use this image search extension to find and compare similar products with wholesale prices and customization options anywhere online.</p>
+        <div class="flex-1 pt-6 md:pt-0 md:pl-10 border-t md:border-t-0 md:border-l" style="border-color:var(--mega-border-color)">
+          <h4 class="text-lg font-bold mb-2" style="color:var(--mega-heading-color)">Discover iSTOC Lens</h4>
+          <p class="text-sm mb-5 max-w-md" style="color:var(--mega-body-text)">Use this image search extension to find and compare similar products with wholesale prices and customization options anywhere online.</p>
           <div class="flex flex-col items-start gap-3">
-            <a href="/lens" class="text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 underline underline-offset-2 transition-colors">
+            <a href="/lens" class="th-mega-link text-sm underline underline-offset-2">
               Learn more
             </a>
-            <a href="/lens/chrome" class="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white text-sm font-semibold rounded-full px-6 py-2.5 transition-colors">
+            <a href="/lens/chrome" class="th-btn th-btn-pill inline-flex items-center gap-2 px-6 py-2.5 transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5a17.92 17.92 0 0 1-8.716-2.247m0 0A8.966 8.966 0 0 1 3 12c0-1.264.26-2.466.73-3.558"/></svg>
               Add to Chrome
             </a>
@@ -584,8 +584,8 @@ export function MegaMenu(): string {
       style="position:fixed;left:0;right:0;bottom:0;z-index:var(--z-backdrop);background:rgba(0,0,0,0.5);opacity:0;pointer-events:none;transition:opacity 0.2s ease;"
     ></div>
     <div id="istoc-mega-panel"
-      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;max-height:100vh;"
-      class="bg-white border-b border-gray-200 shadow-xl dark:bg-gray-800 dark:border-gray-700 max-h-[100vh] lg:!max-h-[80vh] overflow-y-auto"
+      style="position:fixed;left:0;width:100%;z-index:var(--z-modal);opacity:0;pointer-events:none;transform:translateY(-8px);transition:opacity 0.2s ease, transform 0.2s ease;max-height:100vh;background-color:var(--mega-bg);border-color:var(--mega-border-color)"
+      class="border-b shadow-xl dark:bg-gray-800 dark:border-gray-700 max-h-[100vh] lg:!max-h-[80vh] overflow-y-auto"
     >
       <div class="container-boxed">
         ${renderCategoriesView()}
@@ -662,9 +662,11 @@ export function initMegaMenu(): void {
       }
       // White header while mega menu is open (remove gradient)
       const sh = document.getElementById('sticky-header');
+      const go = document.getElementById('gradient-overlay');
       if (sh) {
-        sh.classList.remove('header-gradient');
-        sh.style.borderBottom = '1px solid #ddd';
+        if (go) go.style.display = 'none';
+        sh.style.backgroundColor = 'var(--header-bg)';
+        sh.style.borderBottom = `1px solid var(--header-border-color)`;
       }
     }
 
@@ -685,9 +687,11 @@ export function initMegaMenu(): void {
     }
     // Restore header gradient if not scrolled
     const sh = document.getElementById('sticky-header');
+    const go = document.getElementById('gradient-overlay');
     if (sh) {
       if (window.scrollY <= 10) {
-        sh.classList.add('header-gradient');
+        if (go) go.style.display = '';
+        sh.style.backgroundColor = '';
         sh.style.borderBottom = '';
       }
     }
@@ -746,8 +750,8 @@ export function initMegaMenu(): void {
   const catButtons = megaMenu.querySelectorAll<HTMLElement>('.mega-cat-btn');
   const contentContainer = document.getElementById('mega-content');
 
-  const ACT = ['text-gray-900', 'bg-white', 'border-primary-500', 'font-medium', 'dark:text-white', 'dark:bg-gray-800'];
-  const INACT = ['text-gray-600', 'hover:bg-white', 'hover:text-gray-900', 'border-transparent', 'dark:text-gray-400', 'dark:hover:bg-gray-800', 'dark:hover:text-white'];
+  const ACT = ['th-mega-sidebar-item--active'];
+  const INACT = ['border-transparent'];
 
   let isScrollingFromClick = false;
 

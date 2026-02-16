@@ -43,10 +43,10 @@ function renderSearchTabs(): string {
               role="tab"
               aria-controls="search-panel-${tab.id}"
               aria-selected="${tab.isActive ? 'true' : 'false'}"
-              class="search-tab-btn inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${
+              class="search-tab-btn th-search-tab inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${
                 tab.isActive
-                  ? 'text-primary-600 border-primary-500 dark:text-primary-400 dark:border-primary-400'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+                  ? 'th-search-tab--active dark:text-primary-400 dark:border-primary-400'
+                  : 'border-transparent dark:text-gray-400 dark:hover:text-gray-300'
               }"
             >
               ${tab.id === 'ai-mode' ? `${renderAIIcon()}<span>${tab.label}</span><span class="text-red-500 text-xs -mt-2 -ml-0.5">*</span>` : `<span>${tab.label}</span>`}
@@ -69,13 +69,14 @@ function renderDesktopSearchBar(): string {
       <form id="search-form" action="/search" method="GET" role="search">
         <div class="relative">
           <!-- Search Box -->
-          <div id="search-box" class="flex flex-col rounded-2xl border-2 border-primary-400 dark:border-primary-500 bg-white dark:bg-gray-800 px-4 py-3">
+          <div id="search-box" class="flex flex-col px-4 py-3" style="background-color:var(--search-box-bg);border: 2px solid var(--search-input-border-color);border-radius: var(--radius-input)">
             <!-- Row 1: Text Input -->
             <input
               type="text"
               id="search-input"
               name="search"
-              class="w-full py-3 px-2 text-base text-gray-900 bg-transparent border-0 focus:ring-0 focus:outline-none dark:placeholder-gray-400 dark:text-white"
+              class="w-full py-3 px-2 text-base bg-transparent border-0 focus:ring-0 focus:outline-none"
+              style="color:var(--search-input-text)"
               placeholder="Tekstil ve Konfeksiyon"
               autocomplete="off"
               aria-label="Search products, suppliers, or categories"
@@ -83,7 +84,7 @@ function renderDesktopSearchBar(): string {
 
             <!-- Row 2: Image Search + Search Button -->
             <div class="flex items-center justify-between px-2 pb-1">
-              <a href="/image-search" class="flex items-center gap-1.5 text-sm text-gray-500 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400 transition-colors">
+              <a href="/image-search" class="th-search-image-link flex items-center gap-1.5 text-sm transition-colors" style="color:var(--search-image-link-color)">
                 <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z"/>
                   <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z"/>
@@ -96,7 +97,7 @@ function renderDesktopSearchBar(): string {
                 type="submit"
                 id="search-submit-button"
                 class="flex items-center justify-center gap-2 px-7 py-2.5 text-sm font-semibold text-white rounded-full transition-all hover:shadow-lg"
-                style="background: linear-gradient(135deg, #f5a623 0%, #e8740c 100%);"
+                style="background: linear-gradient(135deg, var(--search-btn-gradient-start) 0%, var(--search-btn-gradient-end) 100%);"
                 aria-label="Search"
               >
                 ${renderAIIcon()}
@@ -106,27 +107,27 @@ function renderDesktopSearchBar(): string {
           </div>
 
           <!-- Search Dropdown (shown on input focus) -->
-          <div id="search-dropdown" class="hidden absolute left-0 right-0 z-10 bg-white dark:bg-gray-800 border border-primary-300 dark:border-primary-600 rounded-2xl px-5 py-3 shadow-lg mt-2">
+          <div id="search-dropdown" class="hidden absolute left-0 right-0 z-10 rounded-2xl px-5 py-3 shadow-lg mt-2" style="background-color:var(--search-dropdown-bg);border:1px solid var(--search-dropdown-border)">
             <!-- Deep Search Row -->
             <div class="flex items-center justify-between mb-2.5">
-              <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                <span class="w-2 h-2 rounded-full bg-amber-400 inline-block flex-shrink-0"></span>
+              <div class="flex items-center gap-2 text-sm" style="color:var(--search-dropdown-text)">
+                <span class="w-2 h-2 rounded-full inline-block flex-shrink-0" style="background-color:var(--search-chip-accent)"></span>
                 <span>Navigate complex requirements with Deep Search</span>
               </div>
-              <a href="/terms" class="text-xs text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 whitespace-nowrap ml-4">Terms of use</a>
+              <a href="/terms" class="text-xs whitespace-nowrap ml-4 transition-colors" style="color:var(--search-dropdown-muted)">Terms of use</a>
             </div>
             <!-- Suggestion Chips -->
             <div class="flex items-center gap-2 flex-wrap">
-              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                <span class="text-amber-400 text-xs">&#10022;</span>
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)">
+                <span class="text-xs" style="color:var(--search-chip-accent)">&#10022;</span>
                 <span>Wholesale Electronics Supplier</span>
               </button>
-              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                <span class="text-amber-400 text-xs">&#10022;</span>
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)">
+                <span class="text-xs" style="color:var(--search-chip-accent)">&#10022;</span>
                 <span>Custom Textile Manufacturing</span>
               </button>
-              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 rounded-full border border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                <span class="text-amber-400 text-xs">&#10022;</span>
+              <button type="button" class="search-chip flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors" style="color:var(--search-chip-text);background-color:var(--search-chip-bg);border:1px solid var(--search-chip-border)">
+                <span class="text-xs" style="color:var(--search-chip-accent)">&#10022;</span>
                 <span>Industrial Machinery Parts</span>
               </button>
             </div>
@@ -144,10 +145,10 @@ function renderDesktopSearchBar(): string {
  */
 function renderWelcomeRow(): string {
   return `
-    <div class="hidden md:flex items-center justify-between mb-4 sm:mb-7 dark:bg-gray-800 overflow-x-auto" style="background-color:#f8f8f8; border-bottom:1.5px solid #f8f8f8; min-height:56px;">
+    <div class="hidden md:flex items-center justify-between mt-2 mb-4 sm:mb-7 py-3 overflow-x-auto" style="background-color:var(--search-welcome-bg); border-bottom:1.5px solid var(--search-welcome-bg); min-height:56px;">
       <div class="container-boxed flex items-center justify-between w-full gap-4">
         <!-- Welcome Text -->
-        <h2 class="hidden sm:block text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap">
+        <h2 class="hidden sm:block text-lg font-bold whitespace-nowrap" style="color:var(--search-welcome-text)">
           iSTOC'a Hoş Geldiniz
         </h2>
 
@@ -203,7 +204,7 @@ function renderWelcomeRow(): string {
  */
 export function SearchArea(): string {
   return `
-    <section id="hero-search-area" class="relative py-3 md:py-5 dark:bg-gray-900" aria-label="Search area">
+    <section id="hero-search-area" class="relative pt-3 md:pt-5 pb-0 dark:bg-gray-900" style="background-color:var(--search-bg)" aria-label="Search area">
       <div class="container-boxed">
         <!-- Desktop Search Tabs (above search bar) -->
         ${renderSearchTabs()}
@@ -230,12 +231,12 @@ export function initSearchArea(): void {
         button.addEventListener('click', () => {
           tabButtons.forEach(btn => {
             btn.setAttribute('aria-selected', 'false');
-            btn.classList.remove('text-primary-600', 'border-primary-500', 'dark:text-primary-400', 'dark:border-primary-400');
-            btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-600', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
+            btn.classList.remove('th-search-tab--active', 'dark:text-primary-400', 'dark:border-primary-400');
+            btn.classList.add('border-transparent', 'dark:text-gray-400', 'dark:hover:text-gray-300');
           });
           button.setAttribute('aria-selected', 'true');
-          button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-600', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
-          button.classList.add('text-primary-600', 'border-primary-500', 'dark:text-primary-400', 'dark:border-primary-400');
+          button.classList.remove('border-transparent', 'dark:text-gray-400', 'dark:hover:text-gray-300');
+          button.classList.add('th-search-tab--active', 'dark:text-primary-400', 'dark:border-primary-400');
         });
       });
 

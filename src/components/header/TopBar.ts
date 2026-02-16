@@ -109,7 +109,7 @@ function renderCompactStickySearch(): string {
             id="topbar-compact-search-submit"
             type="submit"
             tabindex="-1"
-            class="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary-500 px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-primary-600"
+            class="th-btn th-btn-pill inline-flex items-center justify-center gap-1.5 px-4 py-1.5 text-sm font-semibold transition-colors"
           >
             <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.6-5.15a6.75 6.75 0 1 1-13.5 0 6.75 6.75 0 0 1 13.5 0Z" />
@@ -178,7 +178,7 @@ function renderCountrySelector(): string {
     <button
       data-popover-target="popover-deliver-to"
       data-popover-placement="bottom"
-      class="flex flex-col items-center px-2 py-1 text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+      class="th-header-icon flex flex-col items-center px-2 py-1 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
       type="button"
       aria-label="Select delivery country"
     >
@@ -195,7 +195,7 @@ function renderCountrySelector(): string {
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Shipping options and fees vary based on your location</p>
 
         <!-- Add Address Button -->
-        <button type="button" class="w-full px-4 py-2.5 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-full transition-colors mb-4">
+        <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4">
           Add address
         </button>
 
@@ -208,7 +208,7 @@ function renderCountrySelector(): string {
 
         <!-- Country Select -->
         <div class="mb-3">
-          <select class="w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${countryOptions.map(country => `
               <option value="${country.code}">${country.flag} ${country.name}</option>
             `).join('')}
@@ -220,12 +220,12 @@ function renderCountrySelector(): string {
           <input
             type="text"
             placeholder="Enter ZIP or postal code"
-            class="w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+            class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
           />
         </div>
 
         <!-- Save Button -->
-        <button type="button" class="w-full px-4 py-2.5 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-full transition-colors">
+        <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors">
           Save
         </button>
       </div>
@@ -242,7 +242,7 @@ function renderLanguageCurrencySelector(): string {
     <button
       data-popover-target="popover-language-currency"
       data-popover-placement="bottom"
-      class="flex items-center gap-1.5 px-2 py-1.5 text-sm text-gray-700 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
+      class="th-header-icon flex items-center gap-1.5 px-2 py-1.5 text-sm dark:text-gray-300 dark:hover:text-primary-400 transition-colors"
       type="button"
       aria-label="Select language and currency"
     >
@@ -263,7 +263,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Language Select -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Language</label>
-          <select class="w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${languageOptions.map(lang => `
               <option value="${lang.code}">${lang.name}</option>
             `).join('')}
@@ -273,7 +273,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Currency Select -->
         <div class="mb-5">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Currency</label>
-          <select class="w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${currencyOptions.map(currency => `
               <option value="${currency.code}">${currency.code} - ${currency.name}</option>
             `).join('')}
@@ -281,7 +281,7 @@ function renderLanguageCurrencySelector(): string {
         </div>
 
         <!-- Save Button -->
-        <button type="button" class="w-full px-4 py-2.5 text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 rounded-full transition-colors">
+        <button type="button" class="th-btn th-btn-pill w-full px-4 py-2.5 text-sm font-medium transition-colors">
           Save
         </button>
       </div>
@@ -298,14 +298,14 @@ function renderMessagesButton(): string {
     <button
       data-popover-target="popover-messages"
       data-popover-placement="bottom"
-      class="flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors relative"
+      class="th-header-icon flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors relative"
       type="button"
       aria-label="Messages"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
       </svg>
-      <span class="absolute -top-0.5 -right-0.5 flex items-center justify-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full">1</span>
+      <span class="th-badge absolute -top-0.5 -right-0.5 flex items-center justify-center w-4 h-4 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
     </button>
 
     <!-- Messages Popover -->
@@ -332,7 +332,7 @@ function renderMessagesButton(): string {
               <p class="text-xs text-gray-500 dark:text-gray-400">iSTOC.com</p>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">[Message]</p>
             </div>
-            <span class="flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">32</span>
+            <span class="th-badge flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">32</span>
           </div>
 
           <!-- Message 2 -->
@@ -348,12 +348,12 @@ function renderMessagesButton(): string {
               </div>
               <p class="text-xs text-gray-500 dark:text-gray-400">Guangzhou Senka Electronics Co., Ltd.</p>
             </div>
-            <span class="flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">1</span>
+            <span class="th-badge flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
           </div>
         </div>
 
         <!-- View More Button -->
-        <a href="/messages" class="block w-full px-4 py-2.5 text-sm font-medium text-center text-white bg-primary-500 hover:bg-primary-600 rounded-full transition-colors">
+        <a href="/messages" class="th-btn th-btn-pill block w-full px-4 py-2.5 text-sm font-medium text-center transition-colors">
           View more
         </a>
       </div>
@@ -370,7 +370,7 @@ function renderOrdersButton(): string {
     <button
       data-popover-target="popover-orders"
       data-popover-placement="bottom"
-      class="hidden md:flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
+      class="th-header-icon hidden md:flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       type="button"
       aria-label="Orders"
       title="Orders"
@@ -455,7 +455,7 @@ function renderCartButton(itemCount: number = 0): string {
     <button
       data-popover-target="popover-cart"
       data-popover-placement="bottom"
-      class="relative flex items-center justify-center p-2 rounded-full text-gray-700 hover:text-primary-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
+      class="th-header-icon relative flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       type="button"
       aria-label="Shopping cart${showBadge ? `, ${itemCount} items` : ''}"
     >
@@ -463,7 +463,7 @@ function renderCartButton(itemCount: number = 0): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
       </svg>
       ${showBadge ? `
-        <span class="absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold text-white bg-primary-500 rounded-full">
+        <span class="th-badge absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold" style="background:var(--btn-bg);color:var(--btn-text)">
           ${badgeText}
         </span>
       ` : ''}
@@ -510,13 +510,13 @@ function renderAuthButtons(): string {
     <div class="flex items-center gap-1 sm:gap-3">
       <a
         href="/login"
-        class="hidden sm:inline-flex px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
+        class="th-header-icon hidden sm:inline-flex px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       >
         Sign In
       </a>
       <a
         href="/register"
-        class="px-3 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white bg-primary-500 hover:bg-primary-600 rounded-full shadow-sm hover:shadow-md transition-all"
+        class="th-btn th-btn-pill px-3 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all"
       >
         Join Free
       </a>
@@ -594,14 +594,14 @@ function renderMobileDrawer(): string {
             <div id="drawer-account-panel" class="hidden pb-2 space-y-1">
               <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span>Messages</span>
-                <span class="ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">1</span>
+                <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
               </a>
               <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span>Orders</span>
               </a>
               <a href="/buyer/cart" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span>Shopping Cart</span>
-                <span class="ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold text-white bg-primary-500 rounded-full">3</span>
+                <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">3</span>
               </a>
             </div>
           </div>
@@ -618,7 +618,7 @@ function renderMobileDrawer(): string {
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
                   <span class="text-sm font-bold text-gray-900 dark:text-white">Categories</span>
-                  <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold text-white bg-primary-500 rounded-full">ALL</span>
+                  <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
                 </div>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Browse categories to discover products</p>
               </div>
@@ -711,7 +711,7 @@ function renderMobileDrawer(): string {
           <!-- Category Header Bar -->
           <div class="flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-700">
             <span class="text-lg font-bold text-gray-900 dark:text-white">Categories</span>
-            <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-bold text-white bg-primary-500 rounded-full">ALL</span>
+            <span class="th-badge inline-flex items-center px-2 py-0.5 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">ALL</span>
           </div>
 
           <!-- Category List -->
@@ -916,7 +916,7 @@ export function MobileSearchTabs(): string {
  */
 export function TopBar(): string {
   return `
-    <div class="relative z-30 dark:bg-gray-900">
+    <div class="relative z-30 dark:bg-gray-900" style="background-color:var(--header-bg);border-bottom:1px solid var(--header-border-color)">
       <div class="container-boxed">
         <!-- Row 1: Logo + Search (mobile) + Icons -->
         <div class="flex items-center h-16 gap-2 md:gap-0">
@@ -947,7 +947,7 @@ export function TopBar(): string {
                 <button
                   type="submit"
                   class="flex items-center justify-center h-10 px-4 text-white rounded-r-xl transition-colors"
-                  style="background: linear-gradient(135deg, #f5a623 0%, #e8740c 100%);"
+                  style="background: linear-gradient(135deg, var(--search-btn-gradient-start) 0%, var(--search-btn-gradient-end) 100%);"
                   aria-label="Search"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -995,7 +995,7 @@ export function TopBar(): string {
             <button
               data-drawer-target="mobile-menu-drawer"
               data-drawer-toggle="mobile-menu-drawer"
-              class="inline-flex items-center p-2 text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              class="th-header-icon inline-flex items-center p-2 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               type="button"
               aria-controls="mobile-menu-drawer"
               aria-label="Open main menu"

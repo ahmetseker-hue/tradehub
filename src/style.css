@@ -9,7 +9,7 @@
 /* ============================================================
    GOOGLE FONTS — Roboto Variable
    ============================================================ */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap');
 
 @import "tailwindcss";
 @plugin "flowbite/plugin";
@@ -205,37 +205,37 @@
     --spacing-64: 256px;
 
     /* --- Semantic Spacing Tokens --- */
-    --spacing-card-padding: var(--spacing-6);
+    --spacing-card-padding: 24px;
     /* 24px */
-    --spacing-card-gap: var(--spacing-4);
+    --spacing-card-gap: 16px;
     /* 16px */
-    --spacing-section-y: var(--spacing-16);
+    --spacing-section-y: 64px;
     /* 64px */
-    --spacing-section-y-lg: var(--spacing-24);
+    --spacing-section-y-lg: 96px;
     /* 96px */
-    --spacing-page-x: var(--spacing-4);
+    --spacing-page-x: 16px;
     /* 16px — mobile */
-    --spacing-page-x-lg: var(--spacing-8);
+    --spacing-page-x-lg: 32px;
     /* 32px — desktop */
-    --spacing-stack-sm: var(--spacing-2);
+    --spacing-stack-sm: 8px;
     /* 8px */
-    --spacing-stack-md: var(--spacing-4);
+    --spacing-stack-md: 16px;
     /* 16px */
-    --spacing-stack-lg: var(--spacing-8);
+    --spacing-stack-lg: 32px;
     /* 32px */
-    --spacing-inline-sm: var(--spacing-2);
+    --spacing-inline-sm: 8px;
     /* 8px */
-    --spacing-inline-md: var(--spacing-3);
+    --spacing-inline-md: 12px;
     /* 12px */
-    --spacing-inline-lg: var(--spacing-6);
+    --spacing-inline-lg: 24px;
     /* 24px */
-    --spacing-input-x: var(--spacing-3);
+    --spacing-input-x: 12px;
     /* 12px */
-    --spacing-input-y: var(--spacing-2);
+    --spacing-input-y: 8px;
     /* 8px */
-    --spacing-button-x: var(--spacing-6);
+    --spacing-button-x: 24px;
     /* 24px */
-    --spacing-button-y: var(--spacing-3);
+    --spacing-button-y: 12px;
     /* 12px */
 
     /* --- Container / Max-Width --- */
@@ -275,17 +275,17 @@
     --radius-full: 9999px;
 
     /* --- Semantic Radius --- */
-    --radius-button: var(--radius-md);
+    --radius-button: 8px;
     /* 8px */
-    --radius-card: var(--radius-lg);
+    --radius-card: 16px;
     /* 16px */
-    --radius-input: var(--radius-md);
+    --radius-input: 8px;
     /* 8px */
-    --radius-badge: var(--radius-full);
+    --radius-badge: 9999px;
     /* pill */
-    --radius-modal: var(--radius-xl);
+    --radius-modal: 32px;
     /* 32px */
-    --radius-tooltip: var(--radius-sm);
+    --radius-tooltip: 4px;
     /* 4px */
 
 
@@ -293,17 +293,13 @@
      6. SHADOW & ELEVATION
      ========================================================== */
 
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04),
-        0 1px 3px 0 rgba(0, 0, 0, 0.06);
+    --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.04), 0 1px 3px 0 rgba(0,0,0,0.06);
 
-    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.04),
-        0 4px 8px -1px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 2px 4px -1px rgba(0,0,0,0.04), 0 4px 8px -1px rgba(0,0,0,0.08);
 
-    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.06),
-        0 12px 24px -4px rgba(0, 0, 0, 0.10);
+    --shadow-lg: 0 4px 8px -2px rgba(0,0,0,0.06), 0 12px 24px -4px rgba(0,0,0,0.10);
 
-    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.06),
-        0 24px 48px -8px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 8px 16px -4px rgba(0,0,0,0.06), 0 24px 48px -8px rgba(0,0,0,0.12);
 
     /* --- Semantic Shadow --- */
     --shadow-card: var(--shadow-sm);
@@ -330,7 +326,151 @@
 
 
     /* ==========================================================
-     8. Z-INDEX
+     8. COMPONENT TOKENS
+     ========================================================== */
+
+    /* --- Button --- */
+    --btn-bg: #cc9900;
+    --btn-text: #ffffff;
+    --btn-border-width: 0px;
+    --btn-border-color: #cc9900;
+    --btn-font-size: 0.875rem;
+    --btn-font-weight: 600;
+    --btn-shadow: none;
+
+    /* --- Button Outline Variant --- */
+    --btn-outline-bg: #ffffff;
+    --btn-outline-text: #cc9900;
+    --btn-outline-border-width: 2px;
+    --btn-outline-border-color: #cc9900;
+
+    /* --- Card --- */
+    --card-bg: #ffffff;
+    --card-border-width: 1px;
+    --card-border-color: #e5e5e5;
+    --card-title-size: 0.875rem;
+    --card-title-weight: 700;
+
+    /* --- Input / Search --- */
+    --input-bg: #ffffff;
+    --input-border-width: 1px;
+    --input-border-color: #e5e5e5;
+    --input-text-color: #0a0a0a;
+    --input-font-size: 0.875rem;
+    --input-focus-border-color: #cc9900;
+
+    /* --- Badge --- */
+    --badge-font-size: 0.75rem;
+    --badge-font-weight: 600;
+    --badge-padding-x: 12px;
+    --badge-padding-y: 4px;
+
+    /* --- Navigation Link --- */
+    --nav-font-size: 0.8125rem;
+    --nav-font-weight: 300;
+    --nav-text-color: #525252;
+    --nav-hover-color: #a6ff00;
+
+
+    /* ==========================================================
+     9. PAGE SECTION TOKENS
+     ========================================================== */
+
+    /* --- Header / TopBar --- */
+    --header-bg: #ffffff;
+    --header-height: 64px;
+    --header-border-color: #e5e5e5;
+    --header-text-color: #374151;
+    --header-icon-color: #374151;
+    --header-icon-hover-color: #cc9900;
+
+    /* --- SubHeader --- */
+    --subheader-bg: transparent;
+    --subheader-text-color: #525252;
+    --subheader-hover-color: #b38600;
+    --subheader-hover-bg: rgba(255, 255, 255, 0.8);
+    --subheader-active-color: #b38600;
+    --subheader-border-color: #e5e5e5;
+
+    /* --- Header Gradient --- */
+    --header-gradient-1: #fff7ed;
+    --header-gradient-2: #f6f4e8;
+    --header-gradient-3: #fff1f2;
+    --header-gradient-4: #fbfaf0;
+    --header-gradient-5: #fff7ed;
+
+    /* --- Search Area --- */
+    --search-bg: transparent;
+    --search-tab-color: #6b7280;
+    --search-tab-active-color: #cc9900;
+    --search-input-border-color: #cc9900;
+    --search-btn-gradient-start: #f5a623;
+    --search-btn-gradient-end: #e8740c;
+    --search-box-bg: #ffffff;
+    --search-input-text: #111827;
+    --search-image-link-color: #6b7280;
+    --search-dropdown-bg: #ffffff;
+    --search-dropdown-border: #fcd34d;
+    --search-dropdown-text: #374151;
+    --search-dropdown-muted: #9ca3af;
+    --search-chip-bg: #f9fafb;
+    --search-chip-text: #4b5563;
+    --search-chip-border: #e5e7eb;
+    --search-chip-hover-bg: #f3f4f6;
+    --search-chip-accent: #fbbf24;
+    --search-welcome-bg: #f8f8f8;
+    --search-welcome-text: #111827;
+
+    /* --- MegaMenu --- */
+    --mega-bg: #ffffff;
+    --mega-sidebar-bg: #f9fafb;
+    --mega-sidebar-hover-bg: #ffffff;
+    --mega-sidebar-active-bg: #ffffff;
+    --mega-border-color: #e5e7eb;
+    --mega-text-color: #374151;
+    --mega-heading-color: #111827;
+    --mega-body-text: #6b7280;
+    --mega-link-color: #cc9900;
+    --mega-link-hover-color: #b38600;
+    --mega-icon-color: #6b7280;
+    --mega-icon-bg: #f3f4f6;
+    --mega-accent-color: #cc9900;
+    --mega-accent-bg: #fef3c7;
+    --mega-card-hover-border: #fcd34d;
+    --mega-font-size: 0.8125rem;
+    --mega-font-weight: 400;
+
+    /* --- Hero --- */
+    --hero-bg: #ffffff;
+    --hero-card-bg: #ffffff;
+    --hero-card-border-color: #e5e5e5;
+    --hero-title-color: #111827;
+
+    /* --- Category Popup --- */
+    --catpopup-bg: #ffffff;
+    --catpopup-border: #e5e7eb;
+    --catpopup-heading: #111827;
+    --catpopup-text: #4b5563;
+    --catpopup-link: #cc9900;
+    --catpopup-link-hover: #b38600;
+    --catpopup-sidebar-bg: #f9fafb;
+    --catpopup-sidebar-active-bg: #ffffff;
+    --catpopup-sidebar-active-border: #cc9900;
+    --catpopup-icon: #9ca3af;
+    --catpopup-product-bg: #f3f4f6;
+    --catpopup-close-color: #9ca3af;
+
+    /* --- Footer --- */
+    --footer-bg: #111827;
+    --footer-text-color: #9ca3af;
+    --footer-heading-color: #ffffff;
+    --footer-link-color: #9ca3af;
+    --footer-link-hover-color: #ffffff;
+    --footer-border-color: #1f2937;
+
+
+    /* ==========================================================
+     10. Z-INDEX
      ========================================================== */
 
     --z-behind: -1;
@@ -361,7 +501,7 @@
 
 @media (min-width: 960px) {
     .header-gradient {
-        background-image: linear-gradient(135deg, #fff7ed 0%, #f6f4e8 25%, #fff1f2 50%, #fbfaf0 75%, #fff7ed 100%);
+        background-image: linear-gradient(135deg, var(--header-gradient-1) 0%, var(--header-gradient-2) 25%, var(--header-gradient-3) 50%, var(--header-gradient-4) 75%, var(--header-gradient-5) 100%);
         background-size: 300% 300%;
         animation: searchGradientShift 12s ease infinite;
     }
@@ -405,35 +545,31 @@
    ============================================================ */
 
 .dark {
-    --color-surface: #0a0a0a;
-    --color-surface-muted: #141414;
-    --color-surface-raised: #1f1f1f;
-    --color-surface-overlay: rgba(0, 0, 0, 0.7);
-    --color-surface-inverse: #fafafa;
+    --color-surface: #ffffff;
+    --color-surface-muted: #fafafa;
+    --color-surface-raised: #f5f5f5;
+    --color-surface-overlay: rgba(0, 0, 0, 0.5);
+    --color-surface-inverse: #0a0a0a;
 
-    --color-text-primary: #fafafa;
-    --color-text-secondary: #a3a3a3;
-    --color-text-tertiary: #737373;
-    --color-text-disabled: #525252;
-    --color-text-inverse: #0a0a0a;
+    --color-text-primary: #0a0a0a;
+    --color-text-secondary: #525252;
+    --color-text-tertiary: #a3a3a3;
+    --color-text-disabled: #d4d4d4;
+    --color-text-inverse: #fafafa;
 
-    --color-border-default: #333333;
-    --color-border-strong: #737373;
+    --color-border-default: #e5e5e5;
+    --color-border-strong: #a3a3a3;
 
-    --color-primary-500: #e6b212;
-    --color-accent-500: #22d3ee;
+    --color-primary-500: #cc9900;
+    --color-accent-500: #06b6d4;
 
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.20),
-        0 1px 3px 0 rgba(0, 0, 0, 0.24);
+    --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.04), 0 1px 3px 0 rgba(0,0,0,0.06);
 
-    --shadow-md: 0 2px 4px -1px rgba(0, 0, 0, 0.24),
-        0 4px 8px -1px rgba(0, 0, 0, 0.28);
+    --shadow-md: 0 2px 4px -1px rgba(0,0,0,0.04), 0 4px 8px -1px rgba(0,0,0,0.08);
 
-    --shadow-lg: 0 4px 8px -2px rgba(0, 0, 0, 0.28),
-        0 12px 24px -4px rgba(0, 0, 0, 0.32);
+    --shadow-lg: 0 4px 8px -2px rgba(0,0,0,0.06), 0 12px 24px -4px rgba(0,0,0,0.10);
 
-    --shadow-xl: 0 8px 16px -4px rgba(0, 0, 0, 0.28),
-        0 24px 48px -8px rgba(0, 0, 0, 0.36);
+    --shadow-xl: 0 8px 16px -4px rgba(0,0,0,0.06), 0 24px 48px -8px rgba(0,0,0,0.12);
 }
 
 
@@ -478,6 +614,296 @@
             animation-iteration-count: 1 !important;
             transition-duration: 0.01ms !important;
         }
+    }
+}
+
+
+/* ============================================================
+   COMPONENT CLASSES — CSS variable driven
+   ============================================================ */
+
+@layer components {
+
+    /* --- Primary Button --- */
+    .th-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        background: var(--btn-bg);
+        color: var(--btn-text);
+        border: var(--btn-border-width) solid var(--btn-border-color);
+        border-radius: var(--radius-button);
+        padding: var(--spacing-button-y) var(--spacing-button-x);
+        font-size: var(--btn-font-size);
+        font-weight: var(--btn-font-weight);
+        box-shadow: var(--btn-shadow);
+        cursor: pointer;
+        line-height: 1.25;
+        transition: all 0.15s ease;
+    }
+
+    .th-btn:hover {
+        filter: brightness(0.9);
+    }
+
+    .th-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        filter: none;
+    }
+
+    /* --- Outline Button --- */
+    .th-btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        background: var(--btn-outline-bg);
+        color: var(--btn-outline-text);
+        border: var(--btn-outline-border-width) solid var(--btn-outline-border-color);
+        border-radius: var(--radius-button);
+        padding: var(--spacing-button-y) var(--spacing-button-x);
+        font-size: var(--btn-font-size);
+        font-weight: var(--btn-font-weight);
+        cursor: pointer;
+        line-height: 1.25;
+        transition: all 0.15s ease;
+    }
+
+    .th-btn-outline:hover {
+        filter: brightness(0.95);
+    }
+
+    /* --- Button Size Modifiers --- */
+    .th-btn-sm {
+        padding: calc(var(--spacing-button-y) * 0.65) calc(var(--spacing-button-x) * 0.7);
+        font-size: calc(var(--btn-font-size) * 0.85);
+    }
+
+    .th-btn-lg {
+        padding: calc(var(--spacing-button-y) * 1.3) calc(var(--spacing-button-x) * 1.3);
+        font-size: calc(var(--btn-font-size) * 1.15);
+    }
+
+    .th-btn-pill {
+        border-radius: var(--radius-full);
+    }
+
+    /* --- Card --- */
+    .th-card {
+        background: var(--card-bg);
+        border: var(--card-border-width) solid var(--card-border-color);
+        border-radius: var(--radius-card);
+        padding: var(--spacing-card-padding);
+        box-shadow: var(--shadow-card);
+        transition: all 0.2s ease;
+    }
+
+    .th-card-title {
+        font-size: var(--card-title-size);
+        font-weight: var(--card-title-weight);
+    }
+
+    /* --- Input --- */
+    .th-input {
+        background: var(--input-bg);
+        color: var(--input-text-color);
+        border: var(--input-border-width) solid var(--input-border-color);
+        border-radius: var(--radius-input);
+        padding: var(--spacing-input-y) var(--spacing-input-x);
+        font-size: var(--input-font-size);
+        outline: none;
+        transition: border-color 0.15s ease;
+    }
+
+    .th-input:focus {
+        border-color: var(--input-focus-border-color);
+    }
+
+    .th-input::placeholder {
+        color: var(--color-text-tertiary);
+    }
+
+    /* --- Badge --- */
+    .th-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: var(--radius-badge);
+        font-size: var(--badge-font-size);
+        font-weight: var(--badge-font-weight);
+        padding: var(--badge-padding-y) var(--badge-padding-x);
+        line-height: 1.25;
+    }
+
+    /* --- Navigation Link --- */
+    .th-nav-link {
+        font-size: var(--nav-font-size);
+        font-weight: var(--nav-font-weight);
+        color: var(--nav-text-color);
+        text-decoration: none;
+        transition: color 0.15s ease;
+    }
+
+    .th-nav-link:hover {
+        color: var(--nav-hover-color);
+    }
+
+    /* --- Header Icon (theme-variable driven hover) --- */
+    .th-header-icon {
+        color: var(--header-icon-color);
+        transition: color 0.15s ease;
+    }
+
+    .th-header-icon:hover {
+        color: var(--header-icon-hover-color);
+    }
+
+    /* --- SubHeader Link (theme-variable driven hover) --- */
+    .th-subheader-link {
+        color: var(--subheader-text-color);
+        font-size: var(--nav-font-size);
+        font-weight: var(--nav-font-weight);
+        transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .th-subheader-link:hover {
+        color: var(--subheader-hover-color);
+        background-color: var(--subheader-hover-bg);
+    }
+
+    /* --- Footer Link (theme-variable driven hover) --- */
+    .th-footer-link {
+        color: var(--footer-link-color);
+        transition: color 0.2s ease;
+    }
+
+    .th-footer-link:hover {
+        color: var(--footer-link-hover-color);
+    }
+
+    /* --- Footer Social Icon (theme-variable driven hover) --- */
+    .th-footer-social {
+        color: var(--footer-text-color);
+        transition: color 0.2s ease;
+    }
+
+    .th-footer-social:hover {
+        color: var(--footer-link-hover-color);
+    }
+
+    /* --- Search Tab (theme-variable driven) --- */
+    .th-search-tab {
+        color: var(--search-tab-color);
+        transition: color 0.15s ease;
+    }
+
+    .th-search-tab--active {
+        color: var(--search-tab-active-color);
+        border-color: var(--search-tab-active-color);
+    }
+
+    /* --- Search Chip (theme-variable driven hover) --- */
+    .search-chip:hover {
+        background-color: var(--search-chip-hover-bg) !important;
+    }
+
+    /* --- Search Image Link hover --- */
+    .th-search-image-link:hover {
+        color: var(--search-tab-active-color);
+    }
+
+    /* --- Mega Menu sidebar item --- */
+    .th-mega-sidebar-item {
+        color: var(--mega-text-color);
+        font-size: var(--mega-font-size);
+    }
+    .th-mega-sidebar-item:hover {
+        background-color: var(--mega-sidebar-hover-bg);
+        color: var(--mega-text-color);
+    }
+    .th-mega-sidebar-item--active {
+        background-color: var(--mega-sidebar-active-bg);
+        color: var(--mega-text-color);
+        font-weight: 500;
+        border-left: 2px solid var(--color-primary-500);
+    }
+
+    /* --- Mega Menu content elements --- */
+    .th-mega-heading {
+        color: var(--mega-heading-color);
+        font-size: var(--mega-font-size);
+        font-weight: 700;
+    }
+
+    .th-mega-body-text {
+        color: var(--mega-body-text);
+        font-size: var(--mega-font-size);
+    }
+
+    .th-mega-link {
+        color: var(--mega-link-color);
+        font-size: var(--mega-font-size);
+        font-weight: var(--mega-font-weight);
+        transition: color 0.15s ease;
+    }
+    .th-mega-link:hover {
+        color: var(--mega-link-hover-color);
+    }
+
+    .th-mega-icon {
+        color: var(--mega-icon-color);
+        transition: color 0.15s ease;
+    }
+
+    .th-mega-icon-circle {
+        background-color: var(--mega-icon-bg);
+        transition: background-color 0.15s ease;
+    }
+
+    .th-mega-accent-icon {
+        color: var(--mega-accent-color);
+    }
+
+    .th-mega-accent-bg {
+        background-color: var(--mega-accent-bg);
+    }
+
+    .th-mega-card:hover {
+        border-color: var(--mega-card-hover-border);
+    }
+
+    /* --- Category Popup sidebar item --- */
+    .th-catpopup-sidebar-item {
+        color: var(--catpopup-text);
+        border-left: 2px solid transparent;
+        transition: color 0.15s ease, background-color 0.15s ease;
+    }
+    .th-catpopup-sidebar-item:hover {
+        background-color: var(--catpopup-sidebar-active-bg);
+        color: var(--catpopup-heading);
+    }
+    .th-catpopup-sidebar-item--active {
+        background-color: var(--catpopup-sidebar-active-bg);
+        color: var(--catpopup-heading);
+        font-weight: 500;
+        border-left-color: var(--catpopup-sidebar-active-border);
+    }
+
+    /* --- Category Popup link --- */
+    .th-catpopup-link {
+        color: var(--catpopup-link);
+        transition: color 0.15s ease;
+    }
+    .th-catpopup-link:hover {
+        color: var(--catpopup-link-hover);
+    }
+
+    /* --- Category Popup product name hover --- */
+    .th-catpopup-product-name {
+        color: var(--catpopup-text);
+        transition: color 0.15s ease;
     }
 }
 

@@ -4,7 +4,7 @@
  */
 
 import Swiper from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Autoplay, Navigation, Pagination } from 'swiper/modules';
 import 'swiper/swiper-bundle.css';
 
 type RecommendationImageKind =
@@ -223,10 +223,11 @@ function renderCard(card: RecommendationCard): string {
         href="${card.href}"
         aria-label="${cardAriaLabel}"
         title="${card.imageAlt}"
-        class="group/card mx-auto flex h-full w-full flex-col rounded-2xl border border-[#e9e9e9] bg-[#f3f3f3] p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
+        class="th-card group/card mx-auto flex h-full w-full flex-col transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
+        style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color)"
       >
         <div class="mb-2">
-          <h3 class="text-[16px] font-bold leading-tight text-gray-900 dark:text-white">${card.title}</h3>
+          <h3 class="text-[16px] font-bold leading-tight dark:text-white" style="color:var(--hero-title-color)">${card.title}</h3>
           ${card.subtitle ? `<p class="mt-0.5 truncate text-[12px] font-semibold leading-tight text-gray-700 dark:text-gray-300">${card.subtitle}</p>` : ''}
         </div>
         <div class="min-h-0 flex-1">
@@ -274,11 +275,16 @@ export function initRecommendationSlider(): void {
   if (!sliderElement) return;
 
   new Swiper(sliderElement, {
-    modules: [Navigation, Pagination],
+    modules: [Autoplay, Navigation, Pagination],
     loop: true,
     slidesPerView: 1,
     slidesPerGroup: 1,
     spaceBetween: 8,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
     navigation: {
       nextEl: '.rec-swiper-next',
       prevEl: '.rec-swiper-prev',
@@ -299,6 +305,10 @@ export function initRecommendationSlider(): void {
       },
       960: {
         slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      1280: {
+        slidesPerView: 3,
         spaceBetween: 20,
       },
     },

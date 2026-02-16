@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TradeHub Design System</title>
+  <script type="module">
+    import './src/style.css';
+  </script>
+  <style>
+    /* Minimal page-specific styles that don't belong in the design system */
+    .ds-sidebar { position: fixed; top: 0; left: 0; width: 240px; height: 100vh; overflow-y: auto; z-index: 40; }
+    .ds-main { margin-left: 240px; }
+    .ds-swatch { cursor: pointer; position: relative; }
+    .ds-swatch .ds-copied { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); color: #fff; font-size: 11px; font-weight: 600; border-radius: inherit; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
+    .ds-swatch.copied .ds-copied { opacity: 1; }
+    .ds-spacing-bar { height: 24px; transition: width 0.3s ease; }
+    .ds-motion-box { width: 60px; height: 60px; border-radius: 8px; }
+    .ds-z-layer { height: 40px; position: relative; border: 1px solid; display: flex; align-items: center; padding-left: 12px; font-size: 13px; font-weight: 500; }
+    /* Component preview classes — driven by CSS variables */
+    .comp-btn {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: var(--btn-border-width) solid var(--btn-border-color);
+      border-radius: var(--radius-button);
+      padding: var(--spacing-button-y) var(--spacing-button-x);
+      font-size: var(--btn-font-size);
+      font-weight: var(--btn-font-weight);
+      box-shadow: var(--btn-shadow);
+      cursor: pointer;
+      line-height: 1.25;
+    }
+    .comp-btn:hover { filter: brightness(0.9); }
+    .comp-btn-sm { padding: calc(var(--spacing-button-y) * 0.65) calc(var(--spacing-button-x) * 0.7); font-size: calc(var(--btn-font-size) * 0.85); }
+    .comp-btn-lg { padding: calc(var(--spacing-button-y) * 1.3) calc(var(--spacing-button-x) * 1.3); font-size: calc(var(--btn-font-size) * 1.15); }
+    .comp-btn-outline {
+      background: var(--btn-outline-bg);
+      color: var(--btn-outline-text);
+      border: var(--btn-outline-border-width) solid var(--btn-outline-border-color);
+      border-radius: var(--radius-button);
+      padding: var(--spacing-button-y) var(--spacing-button-x);
+      font-size: var(--btn-font-size);
+      font-weight: var(--btn-font-weight);
+      cursor: pointer;
+      line-height: 1.25;
+    }
+    .comp-btn-outline:hover { filter: brightness(0.9); background: rgba(204,153,0,0.05); }
+    .comp-card {
+      background: var(--card-bg);
+      border: var(--card-border-width) solid var(--card-border-color);
+      border-radius: var(--radius-card);
+      padding: var(--spacing-card-padding);
+      box-shadow: var(--shadow-card);
+    }
+    .comp-card-title { font-size: var(--card-title-size); font-weight: var(--card-title-weight); }
+    .comp-input {
+      background: var(--input-bg);
+      color: var(--input-text-color);
+      border: var(--input-border-width) solid var(--input-border-color);
+      border-radius: var(--radius-input);
+      padding: var(--spacing-input-y) var(--spacing-input-x);
+      font-size: var(--input-font-size);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .comp-input:focus { border-color: var(--input-focus-border-color); }
+    .comp-badge {
+      display: inline-flex;
+      border-radius: var(--radius-badge);
+      font-size: var(--badge-font-size);
+      font-weight: var(--badge-font-weight);
+      padding: var(--badge-padding-y) var(--badge-padding-x);
+      line-height: 1.25;
+    }
+    .comp-nav-link {
+      font-size: var(--nav-font-size);
+      font-weight: var(--nav-font-weight);
+      color: var(--nav-text-color);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .comp-nav-link:hover, .comp-nav-active { color: var(--nav-hover-color); }
+
+    @media (max-width: 768px) {
+      .ds-sidebar { display: none; }
+      .ds-main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body class="bg-surface text-text-primary">
+
+<!-- Floating Save Button -->
+<button id="save-css-btn" onclick="saveToStyleCSS()" style="display:none; position:fixed; bottom:24px; right:24px; z-index:999; background:linear-gradient(135deg,#f5a623,#e8740c); color:#fff; border:none; padding:12px 24px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.2); align-items:center; gap:8px; transition:all 0.2s;">
+  <span id="save-btn-text">Save to style.css</span>
+  <span id="save-count" style="background:rgba(255,255,255,0.3); padding:2px 8px; border-radius:8px; font-size:12px;">0</span>
+</button>
+
+<!-- Toast Notification -->
+<div id="save-toast" style="display:none; position:fixed; top:24px; right:24px; z-index:9999; background:#1a1a1a; color:#fff; padding:16px 24px; border-radius:12px; font-size:14px; box-shadow:0 8px 32px rgba(0,0,0,0.3); max-width:400px; transition:all 0.3s ease; opacity:0; transform:translateY(-8px);">
+  <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+    <span id="toast-icon" style="font-size:18px;"></span>
+    <strong id="toast-title"></strong>
+  </div>
+  <p id="toast-message" style="margin:0; font-size:13px; color:#ccc;"></p>
+</div>
+
+<!-- Sidebar Navigation -->
+<nav class="ds-sidebar bg-white border-r border-border-default dark:bg-secondary-900 dark:border-secondary-700">
+  <div class="p-5 border-b border-border-default dark:border-secondary-700">
+    <h1 class="text-lg font-bold text-primary-600">TradeHub</h1>
+    <p class="text-xs text-text-secondary mt-1">Design System</p>
+  </div>
+  <ul class="py-3 text-sm">
+    <li><a href="#interactive-controls" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Interactive Controls</a></li>
+    <li><a href="#colors" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Colors</a></li>
+    <li><a href="#typography" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Typography</a></li>
+    <li><a href="#spacing" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Spacing</a></li>
+    <li><a href="#radius" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Border & Radius</a></li>
+    <li><a href="#shadows" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Shadows</a></li>
+    <li><a href="#z-index" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Z-Index</a></li>
+    <li><a href="#motion" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Motion</a></li>
+    <li><a href="#component-controls" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors font-semibold">Bileşen Kontrolleri</a></li>
+    <li class="mt-1 mx-3"><hr class="border-border-default"></li>
+    <li class="px-5 pt-2 pb-1"><span class="text-[10px] font-bold text-text-tertiary uppercase tracking-wider">Sayfa Bölümleri</span></li>
+    <li><a href="#section-header" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Header / TopBar</a></li>
+    <li><a href="#section-subheader" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">SubHeader</a></li>
+    <li><a href="#section-search" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Arama Alanı</a></li>
+    <li><a href="#section-gradient" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Header Gradient</a></li>
+    <li><a href="#section-mega" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">MegaMenu</a></li>
+    <li><a href="#section-hero" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Hero</a></li>
+    <li><a href="#section-footer" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Footer</a></li>
+    <li class="mt-1 mx-3"><hr class="border-border-default"></li>
+    <li><a href="#components" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Components</a></li>
+    <li><a href="#gradient" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Gradient Preview</a></li>
+  </ul>
+  <div class="p-5 border-t border-border-default dark:border-secondary-700">
+    <button id="dark-toggle" class="w-full text-sm font-medium px-4 py-2 rounded-md border border-border-default dark:border-secondary-600 hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors">
+      Toggle Dark Mode
+    </button>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="ds-main">
+  <div class="max-w-[1200px] mx-auto px-6 py-8">
+
+    <!-- Page Header -->
+    <header class="mb-12">
+      <h1 class="text-4xl font-bold tracking-tighter mb-2">Design System</h1>
+      <p class="text-text-secondary text-lg">TradeHub / Tailwind v4 Theme Tokens — Interactive Reference</p>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════
+         I. INTERACTIVE CONTROLS (auto-generated from ALL @theme vars)
+         ═══════════════════════════════════════════════════ -->
+    <section id="interactive-controls" class="mb-16">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-2xl font-bold">Interactive Controls</h2>
+          <p class="text-sm text-text-secondary">Every CSS variable from @theme. Change a value, watch the page update.</p>
+        </div>
+        <button id="reset-all-btn" class="px-4 py-2 text-xs font-semibold border border-error-500 text-error-500 hover:bg-error-50 rounded-md transition-colors">Reset All</button>
+      </div>
+
+      <!-- ── Theme Presets ── -->
+      <div class="mb-6">
+        <p class="text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-2">Hazır Temalar</p>
+        <div id="preset-tabs" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <div id="controls-container" class="space-y-2"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         I-B. COMPONENT CONTROLS (Bileşen Kontrolleri)
+         ═══════════════════════════════════════════════════ -->
+    <section id="component-controls" class="mb-16">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold">Bileşen Kontrolleri</h2>
+        <p class="text-sm text-text-secondary">Her bileşenin stilini ayrı ayrı düzenleyin. Değişiklikler anında önizlemede görünür ve style.css'e kaydedilebilir.</p>
+      </div>
+      <div id="component-editors" class="space-y-6"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         PAGE SECTION CONTROLS
+         ═══════════════════════════════════════════════════ -->
+    <section id="section-panels" class="mb-16">
+      <div class="mb-6">
+        <h2 class="text-2xl font-bold">Sayfa Bölümleri</h2>
+        <p class="text-sm text-text-secondary">Her sayfa bölümünün görünümünü ayrı ayrı kontrol edin. Değişiklikler anında önizlemede görünür.</p>
+      </div>
+      <div id="section-editors" class="space-y-6"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         A. COLOR SYSTEM
+         ═══════════════════════════════════════════════════ -->
+    <section id="colors" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Color System</h2>
+
+      <!-- Primary -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Primary (Amber / Gold)</h3>
+      <div class="grid grid-cols-5 sm:grid-cols-11 gap-2 mb-8" id="palette-primary"></div>
+
+      <!-- Secondary -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Secondary (Near-Black)</h3>
+      <div class="grid grid-cols-5 sm:grid-cols-11 gap-2 mb-8" id="palette-secondary"></div>
+
+      <!-- Accent -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Accent (Cyan)</h3>
+      <div class="grid grid-cols-5 sm:grid-cols-11 gap-2 mb-8" id="palette-accent"></div>
+
+      <!-- Semantic -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Colors</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div>
+          <p class="text-xs font-semibold mb-2">Success</p>
+          <div class="flex gap-2">
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-success-50)" data-var="--color-success-50"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-success-500)" data-var="--color-success-500"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-success-700)" data-var="--color-success-700"><span class="ds-copied">Copied</span></div>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-semibold mb-2">Warning</p>
+          <div class="flex gap-2">
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-warning-50)" data-var="--color-warning-50"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-warning-500)" data-var="--color-warning-500"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-warning-700)" data-var="--color-warning-700"><span class="ds-copied">Copied</span></div>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-semibold mb-2">Error</p>
+          <div class="flex gap-2">
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-error-50)" data-var="--color-error-50"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-error-500)" data-var="--color-error-500"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-error-700)" data-var="--color-error-700"><span class="ds-copied">Copied</span></div>
+          </div>
+        </div>
+        <div>
+          <p class="text-xs font-semibold mb-2">Info</p>
+          <div class="flex gap-2">
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-info-50)" data-var="--color-info-50"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-info-500)" data-var="--color-info-500"><span class="ds-copied">Copied</span></div>
+            <div class="ds-swatch w-12 h-12 rounded-md" style="background:var(--color-info-700)" data-var="--color-info-700"><span class="ds-copied">Copied</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Surface -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Surface Colors</h3>
+      <div class="flex flex-wrap gap-3 mb-8">
+        <div class="ds-swatch w-20 h-20 rounded-md border border-border-default flex flex-col items-center justify-center" style="background:var(--color-surface)" data-var="--color-surface">
+          <span class="text-[10px] font-mono">surface</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch w-20 h-20 rounded-md border border-border-default flex flex-col items-center justify-center" style="background:var(--color-surface-muted)" data-var="--color-surface-muted">
+          <span class="text-[10px] font-mono">muted</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch w-20 h-20 rounded-md border border-border-default flex flex-col items-center justify-center" style="background:var(--color-surface-raised)" data-var="--color-surface-raised">
+          <span class="text-[10px] font-mono">raised</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch w-20 h-20 rounded-md border border-border-default flex flex-col items-center justify-center" style="background:var(--color-surface-inverse)" data-var="--color-surface-inverse">
+          <span class="text-[10px] font-mono text-white">inverse</span><span class="ds-copied">Copied</span>
+        </div>
+      </div>
+
+      <!-- Text Colors -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Text Colors</h3>
+      <div class="flex flex-wrap gap-4 mb-8">
+        <div class="ds-swatch px-4 py-2 rounded-md border border-border-default" data-var="--color-text-primary">
+          <span style="color:var(--color-text-primary)" class="font-semibold text-sm">Primary</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch px-4 py-2 rounded-md border border-border-default" data-var="--color-text-secondary">
+          <span style="color:var(--color-text-secondary)" class="font-semibold text-sm">Secondary</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch px-4 py-2 rounded-md border border-border-default" data-var="--color-text-tertiary">
+          <span style="color:var(--color-text-tertiary)" class="font-semibold text-sm">Tertiary</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch px-4 py-2 rounded-md border border-border-default" data-var="--color-text-disabled">
+          <span style="color:var(--color-text-disabled)" class="font-semibold text-sm">Disabled</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch px-4 py-2 rounded-md border border-border-default" data-var="--color-text-link">
+          <span style="color:var(--color-text-link)" class="font-semibold text-sm">Link</span><span class="ds-copied">Copied</span>
+        </div>
+      </div>
+
+      <!-- Border Colors -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Border Colors</h3>
+      <div class="flex flex-wrap gap-4 mb-4">
+        <div class="ds-swatch w-24 h-16 rounded-md flex items-center justify-center" style="border:3px solid var(--color-border-default)" data-var="--color-border-default">
+          <span class="text-xs font-mono">default</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch w-24 h-16 rounded-md flex items-center justify-center" style="border:3px solid var(--color-border-strong)" data-var="--color-border-strong">
+          <span class="text-xs font-mono">strong</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch w-24 h-16 rounded-md flex items-center justify-center" style="border:3px solid var(--color-border-focus)" data-var="--color-border-focus">
+          <span class="text-xs font-mono">focus</span><span class="ds-copied">Copied</span>
+        </div>
+        <div class="ds-swatch w-24 h-16 rounded-md flex items-center justify-center" style="border:3px solid var(--color-border-error)" data-var="--color-border-error">
+          <span class="text-xs font-mono">error</span><span class="ds-copied">Copied</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         B. TYPOGRAPHY
+         ═══════════════════════════════════════════════════ -->
+    <section id="typography" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Typography</h2>
+
+      <!-- Font Sizes -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Font Sizes</h3>
+      <div class="space-y-4 mb-10 border border-border-default rounded-lg p-5 bg-white dark:bg-secondary-900">
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">xs (12px)</span><span class="text-xs">The quick brown fox jumps over the lazy dog</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">sm (14px)</span><span class="text-sm">The quick brown fox jumps over the lazy dog</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">base (18px)</span><span class="text-base">The quick brown fox jumps over the lazy dog</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">lg (20px)</span><span class="text-lg">The quick brown fox jumps over the lazy dog</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">xl (24px)</span><span class="text-xl">The quick brown fox jumps over the lazy dog</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">2xl (30px)</span><span class="text-2xl">The quick brown fox jumps</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">3xl (36px)</span><span class="text-3xl">The quick brown fox</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">4xl (48px)</span><span class="text-4xl">Quick brown fox</span></div>
+        <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">5xl (60px)</span><span class="text-5xl">Headlines</span></div>
+      </div>
+
+      <!-- Font Weights -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Font Weights</h3>
+      <div class="space-y-3 mb-10 border border-border-default rounded-lg p-5 bg-white dark:bg-secondary-900">
+        <p class="text-xl font-normal">Normal (400) &mdash; The quick brown fox jumps over the lazy dog</p>
+        <p class="text-xl font-medium">Medium (500) &mdash; The quick brown fox jumps over the lazy dog</p>
+        <p class="text-xl font-semibold">Semibold (600) &mdash; The quick brown fox jumps over the lazy dog</p>
+        <p class="text-xl font-bold">Bold (700) &mdash; The quick brown fox jumps over the lazy dog</p>
+        <p class="text-xl font-black">Black (900) &mdash; The quick brown fox jumps over the lazy dog</p>
+      </div>
+
+      <!-- Line Heights -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Line Heights</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div class="border border-border-default rounded-lg p-4 bg-white dark:bg-secondary-900">
+          <p class="text-xs font-mono text-text-tertiary mb-2">tight (1.25)</p>
+          <p class="leading-tight">Line height tight is used for headings like h1 through h3 where text is large.</p>
+        </div>
+        <div class="border border-border-default rounded-lg p-4 bg-white dark:bg-secondary-900">
+          <p class="text-xs font-mono text-text-tertiary mb-2">snug (1.375)</p>
+          <p class="leading-snug">Line height snug is used for subtitles and h4 through h6 headings.</p>
+        </div>
+        <div class="border border-border-default rounded-lg p-4 bg-white dark:bg-secondary-900">
+          <p class="text-xs font-mono text-text-tertiary mb-2">normal (1.625)</p>
+          <p class="leading-normal">Line height normal is the default body text setting for comfortable reading.</p>
+        </div>
+        <div class="border border-border-default rounded-lg p-4 bg-white dark:bg-secondary-900">
+          <p class="text-xs font-mono text-text-tertiary mb-2">relaxed (1.75)</p>
+          <p class="leading-relaxed">Line height relaxed is used for large text blocks that need extra breathing room.</p>
+        </div>
+        <div class="border border-border-default rounded-lg p-4 bg-white dark:bg-secondary-900">
+          <p class="text-xs font-mono text-text-tertiary mb-2">loose (2.0)</p>
+          <p class="leading-loose">Line height loose is designed for accessibility and maximum readability.</p>
+        </div>
+      </div>
+
+      <!-- Letter Spacing -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Letter Spacing</h3>
+      <div class="space-y-3 mb-4 border border-border-default rounded-lg p-5 bg-white dark:bg-secondary-900">
+        <p class="text-lg tracking-tighter"><span class="text-xs font-mono text-text-tertiary inline-block w-28">tighter -0.03em</span> The quick brown fox</p>
+        <p class="text-lg tracking-tight"><span class="text-xs font-mono text-text-tertiary inline-block w-28">tight -0.015em</span> The quick brown fox</p>
+        <p class="text-lg tracking-normal"><span class="text-xs font-mono text-text-tertiary inline-block w-28">normal 0em</span> The quick brown fox</p>
+        <p class="text-lg tracking-wide"><span class="text-xs font-mono text-text-tertiary inline-block w-28">wide 0.025em</span> THE QUICK BROWN FOX</p>
+        <p class="text-lg tracking-wider"><span class="text-xs font-mono text-text-tertiary inline-block w-28">wider 0.05em</span> THE QUICK BROWN FOX</p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         C. SPACING & SIZING
+         ═══════════════════════════════════════════════════ -->
+    <section id="spacing" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Spacing & Sizing</h2>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Base Scale</h3>
+      <div class="space-y-2 mb-10" id="spacing-bars"></div>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Spacing</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="semantic-spacing"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         D. BORDER & RADIUS
+         ═══════════════════════════════════════════════════ -->
+    <section id="radius" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Border & Radius</h2>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Base Radius</h3>
+      <div class="flex flex-wrap gap-5 mb-10">
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-none)"></div>
+          <span class="text-xs font-mono text-text-tertiary">none (0)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-sm)"></div>
+          <span class="text-xs font-mono text-text-tertiary">sm (4px)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-md)"></div>
+          <span class="text-xs font-mono text-text-tertiary">md (8px)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-lg)"></div>
+          <span class="text-xs font-mono text-text-tertiary">lg (16px)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-xl)"></div>
+          <span class="text-xs font-mono text-text-tertiary">xl (32px)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-full)"></div>
+          <span class="text-xs font-mono text-text-tertiary">full (pill)</span>
+        </div>
+      </div>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Radius</h3>
+      <div class="flex flex-wrap gap-5">
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-28 h-10 bg-primary-500 text-white text-xs font-semibold flex items-center justify-center" style="border-radius:var(--radius-button)">Button</div>
+          <span class="text-xs font-mono text-text-tertiary">button</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-28 h-20 bg-surface-raised border border-border-default flex items-center justify-center text-xs" style="border-radius:var(--radius-card)">Card</div>
+          <span class="text-xs font-mono text-text-tertiary">card</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <input type="text" value="Input" class="w-28 h-10 border border-border-default px-3 text-xs" style="border-radius:var(--radius-input)" readonly />
+          <span class="text-xs font-mono text-text-tertiary">input</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <span class="inline-flex px-4 py-1 bg-primary-100 text-primary-800 text-xs font-semibold" style="border-radius:var(--radius-badge)">Badge</span>
+          <span class="text-xs font-mono text-text-tertiary">badge (pill)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-28 h-20 bg-white border border-border-default shadow-lg flex items-center justify-center text-xs" style="border-radius:var(--radius-modal)">Modal</div>
+          <span class="text-xs font-mono text-text-tertiary">modal</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="w-28 h-10 bg-secondary-800 text-white text-xs flex items-center justify-center" style="border-radius:var(--radius-tooltip)">Tooltip</div>
+          <span class="text-xs font-mono text-text-tertiary">tooltip</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         E. SHADOWS
+         ═══════════════════════════════════════════════════ -->
+    <section id="shadows" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Shadows & Elevation</h2>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Base Shadows</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32 shadow-sm">
+          <span class="text-sm font-semibold">sm</span>
+          <span class="text-xs text-text-tertiary">--shadow-sm</span>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32 shadow-md">
+          <span class="text-sm font-semibold">md</span>
+          <span class="text-xs text-text-tertiary">--shadow-md</span>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32 shadow-lg">
+          <span class="text-sm font-semibold">lg</span>
+          <span class="text-xs text-text-tertiary">--shadow-lg</span>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32 shadow-xl">
+          <span class="text-sm font-semibold">xl</span>
+          <span class="text-xs text-text-tertiary">--shadow-xl</span>
+        </div>
+      </div>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Shadows</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32" style="box-shadow:var(--shadow-card)">
+          <span class="text-sm font-semibold">Card</span>
+          <span class="text-xs text-text-tertiary">--shadow-card</span>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32" style="box-shadow:var(--shadow-dropdown)">
+          <span class="text-sm font-semibold">Dropdown</span>
+          <span class="text-xs text-text-tertiary">--shadow-dropdown</span>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32" style="box-shadow:var(--shadow-modal)">
+          <span class="text-sm font-semibold">Modal</span>
+          <span class="text-xs text-text-tertiary">--shadow-modal</span>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32" style="box-shadow:var(--shadow-toast)">
+          <span class="text-sm font-semibold">Toast</span>
+          <span class="text-xs text-text-tertiary">--shadow-toast</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         F. Z-INDEX
+         ═══════════════════════════════════════════════════ -->
+    <section id="z-index" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Z-Index Scale</h2>
+      <div class="space-y-1 max-w-xl" id="z-index-stack"></div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         G. MOTION
+         ═══════════════════════════════════════════════════ -->
+    <section id="motion" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Motion & Transitions</h2>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Durations (hover to preview)</h3>
+      <div class="flex flex-wrap gap-6 mb-10">
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-primary-200 hover:bg-primary-500 hover:scale-110" style="transition:all var(--duration-fast) var(--ease-default)"></div>
+          <span class="text-xs font-mono text-text-tertiary">fast (100ms)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-primary-200 hover:bg-primary-500 hover:scale-110" style="transition:all var(--duration-default) var(--ease-default)"></div>
+          <span class="text-xs font-mono text-text-tertiary">default (200ms)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-primary-200 hover:bg-primary-500 hover:scale-110" style="transition:all var(--duration-slow) var(--ease-default)"></div>
+          <span class="text-xs font-mono text-text-tertiary">slow (300ms)</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-primary-200 hover:bg-primary-500 hover:scale-110" style="transition:all var(--duration-slower) var(--ease-default)"></div>
+          <span class="text-xs font-mono text-text-tertiary">slower (500ms)</span>
+        </div>
+      </div>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Easing Functions (hover to preview)</h3>
+      <div class="flex flex-wrap gap-6 mb-10">
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-accent-200 hover:bg-accent-500 hover:translate-x-4" style="transition:all 400ms var(--ease-default)"></div>
+          <span class="text-xs font-mono text-text-tertiary">ease-in-out</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-accent-200 hover:bg-accent-500 hover:translate-x-4" style="transition:all 400ms var(--ease-in)"></div>
+          <span class="text-xs font-mono text-text-tertiary">ease-in</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div class="ds-motion-box bg-accent-200 hover:bg-accent-500 hover:translate-x-4" style="transition:all 400ms var(--ease-out)"></div>
+          <span class="text-xs font-mono text-text-tertiary">ease-out</span>
+        </div>
+      </div>
+
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Fade Animations (click to replay)</h3>
+      <div class="flex gap-6">
+        <div class="flex flex-col items-center gap-2">
+          <div id="fade-in-demo" class="ds-motion-box bg-primary-500 rounded-lg cursor-pointer" style="animation:var(--animate-fade-in)"></div>
+          <span class="text-xs font-mono text-text-tertiary">fade-in</span>
+        </div>
+        <div class="flex flex-col items-center gap-2">
+          <div id="fade-out-demo" class="ds-motion-box bg-primary-500 rounded-lg cursor-pointer" style="animation:var(--animate-fade-out)"></div>
+          <span class="text-xs font-mono text-text-tertiary">fade-out</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         H. LIVE COMPONENT PREVIEWS
+         ═══════════════════════════════════════════════════ -->
+    <section id="components" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Component Previews</h2>
+
+      <!-- Buttons -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Buttons</h3>
+      <div class="flex flex-wrap items-center gap-3 mb-8 p-5 border border-border-default rounded-lg bg-white dark:bg-secondary-900">
+        <button class="comp-btn transition-all">Primary</button>
+        <button class="comp-btn transition-all" style="background:var(--color-secondary-700)">Secondary</button>
+        <button class="comp-btn-outline transition-all">Outline</button>
+        <button class="comp-btn comp-btn-sm transition-all">Small</button>
+        <button class="comp-btn comp-btn-lg transition-all">Large</button>
+        <button class="comp-btn transition-all opacity-50 cursor-not-allowed" disabled>Disabled</button>
+        <button class="comp-btn transition-all" style="border-radius:var(--radius-full)">Pill Button</button>
+      </div>
+
+      <!-- Cards -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Cards</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+        <div class="comp-card overflow-hidden">
+          <div class="w-full h-32 bg-primary-50 dark:bg-primary-950 mb-4" style="border-radius:var(--radius-md)"></div>
+          <h4 class="comp-card-title mb-1">Product Card</h4>
+          <p class="text-xs text-text-secondary mb-3">A sample product card using card tokens.</p>
+          <span class="text-primary-600 font-bold">$29.99</span>
+        </div>
+        <div class="comp-card overflow-hidden">
+          <div class="w-full h-32 bg-accent-50 dark:bg-accent-950 mb-4" style="border-radius:var(--radius-md)"></div>
+          <h4 class="comp-card-title mb-1">Feature Card</h4>
+          <p class="text-xs text-text-secondary mb-3">Card padding and radius respond to component controls above.</p>
+          <a href="#" class="text-sm text-primary-600 hover:text-primary-700 font-semibold">Learn more</a>
+        </div>
+        <div class="comp-card overflow-hidden">
+          <div class="w-full h-32 bg-secondary-100 dark:bg-secondary-700 mb-4" style="border-radius:var(--radius-md)"></div>
+          <h4 class="comp-card-title mb-1">Info Card</h4>
+          <p class="text-xs text-text-secondary mb-3">Shadows update when you change --shadow-card.</p>
+          <button class="comp-btn text-xs" style="padding:6px 14px">Action</button>
+        </div>
+      </div>
+
+      <!-- Inputs -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Input Fields</h3>
+      <div class="flex flex-wrap gap-4 mb-8 p-5 border border-border-default rounded-lg bg-white dark:bg-secondary-900">
+        <input type="text" placeholder="Text input" class="comp-input w-48" />
+        <input type="text" placeholder="Error state" class="comp-input w-48" style="border-color:var(--color-error-500);border-width:2px" />
+        <input type="text" placeholder="Disabled" class="comp-input w-48 opacity-50 cursor-not-allowed" disabled />
+        <select class="comp-input w-48">
+          <option>Select option</option>
+          <option>Option 1</option>
+          <option>Option 2</option>
+        </select>
+      </div>
+
+      <!-- Badges -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Badges & Pills</h3>
+      <div class="flex flex-wrap gap-3 mb-8 p-5 border border-border-default rounded-lg bg-white dark:bg-secondary-900">
+        <span class="comp-badge" style="background:var(--color-primary-100);color:var(--color-primary-800)">Primary</span>
+        <span class="comp-badge" style="background:var(--color-accent-100);color:var(--color-accent-800)">Accent</span>
+        <span class="comp-badge" style="background:var(--color-success-50);color:var(--color-success-700)">Success</span>
+        <span class="comp-badge" style="background:var(--color-warning-50);color:var(--color-warning-700)">Warning</span>
+        <span class="comp-badge" style="background:var(--color-error-50);color:var(--color-error-700)">Error</span>
+        <span class="comp-badge" style="background:var(--color-info-50);color:var(--color-info-700)">Info</span>
+        <span class="comp-badge" style="background:var(--color-secondary-100);color:var(--color-secondary-700)">Neutral</span>
+      </div>
+
+      <!-- Alerts -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Alerts / Notifications</h3>
+      <div class="space-y-3 mb-8">
+        <div class="flex items-center gap-3 px-4 py-3 bg-success-50 border border-success-500/30 text-success-700 text-sm" style="border-radius:var(--radius-md)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+          <span>Success: Your order has been placed successfully.</span>
+        </div>
+        <div class="flex items-center gap-3 px-4 py-3 bg-warning-50 border border-warning-500/30 text-warning-700 text-sm" style="border-radius:var(--radius-md)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg>
+          <span>Warning: Your session will expire in 5 minutes.</span>
+        </div>
+        <div class="flex items-center gap-3 px-4 py-3 bg-error-50 border border-error-500/30 text-error-700 text-sm" style="border-radius:var(--radius-md)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg>
+          <span>Error: Payment could not be processed. Please try again.</span>
+        </div>
+        <div class="flex items-center gap-3 px-4 py-3 bg-info-50 border border-info-500/30 text-info-700 text-sm" style="border-radius:var(--radius-md)">
+          <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+          <span>Info: New features are available. Check the changelog.</span>
+        </div>
+      </div>
+
+      <!-- Mini Header Mockup -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Mini Header Mockup</h3>
+      <div class="border border-border-default rounded-lg overflow-hidden mb-4">
+        <div class="header-gradient px-6 py-3 flex items-center justify-between">
+          <span class="font-bold text-lg text-primary-700">TradeHub</span>
+          <div class="flex items-center gap-3">
+            <input type="text" placeholder="Search products..." class="comp-input w-64" style="padding:6px 12px" />
+            <button class="comp-btn" style="padding:6px 16px">Search</button>
+          </div>
+          <div class="flex items-center gap-4">
+            <a href="#" class="comp-nav-link">Sign In</a>
+            <a href="#" class="comp-nav-link">Cart (0)</a>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-secondary-800 px-6 py-2 border-t border-border-default flex gap-6">
+          <a href="#" class="comp-nav-link">All Categories</a>
+          <a href="#" class="comp-nav-link">Featured</a>
+          <a href="#" class="comp-nav-link">Trade Assurance</a>
+          <a href="#" class="comp-nav-link">Buyer Central</a>
+          <a href="#" class="comp-nav-link">Help</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════
+         J. GRADIENT PREVIEW
+         ═══════════════════════════════════════════════════ -->
+    <section id="gradient" class="mb-16">
+      <h2 class="text-2xl font-bold mb-6">Gradient Preview</h2>
+      <div class="header-gradient rounded-xl h-48 flex items-center justify-center border border-border-default">
+        <p class="text-lg font-semibold text-text-secondary">Animated Header Gradient (desktop only, 960px+)</p>
+      </div>
+      <p class="text-xs text-text-tertiary mt-2">This is the live .header-gradient class with the searchGradientShift keyframe animation (12s infinite).</p>
+    </section>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     INLINE JAVASCRIPT
+     ═══════════════════════════════════════════════════════ -->
+<script type="module">
+  const root = document.documentElement;
+
+  // ──── Dark mode toggle ────
+  document.getElementById('dark-toggle').addEventListener('click', () => {
+    root.classList.toggle('dark');
+  });
+
+  // ──── Swatch click → copy variable name ────
+  document.querySelectorAll('.ds-swatch').forEach(el => {
+    el.addEventListener('click', () => {
+      const varName = el.getAttribute('data-var');
+      if (!varName) return;
+      navigator.clipboard.writeText(varName).then(() => {
+        el.classList.add('copied');
+        setTimeout(() => el.classList.remove('copied'), 800);
+      });
+    });
+  });
+
+  // ──── Generate color palettes ────
+  function buildPalette(containerId, prefix, shades) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    shades.forEach(shade => {
+      const varName = `--color-${prefix}-${shade}`;
+      const value = getComputedStyle(root).getPropertyValue(varName).trim();
+      const isLight = [50, 100, 200, 300].includes(shade);
+      container.innerHTML += `
+        <div class="ds-swatch rounded-lg flex flex-col items-center justify-center p-2 min-h-[72px] border border-black/5" style="background:var(${varName})" data-var="${varName}">
+          <span class="text-[10px] font-bold ${isLight ? 'text-gray-800' : 'text-white'}">${shade}</span>
+          <span class="text-[9px] font-mono ${isLight ? 'text-gray-600' : 'text-white/70'}">${value}</span>
+          <span class="ds-copied">Copied</span>
+        </div>
+      `;
+    });
+    // Re-bind click events for new swatches
+    container.querySelectorAll('.ds-swatch').forEach(el => {
+      el.addEventListener('click', () => {
+        const v = el.getAttribute('data-var');
+        if (!v) return;
+        navigator.clipboard.writeText(v).then(() => {
+          el.classList.add('copied');
+          setTimeout(() => el.classList.remove('copied'), 800);
+        });
+      });
+    });
+  }
+
+  const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+  buildPalette('palette-primary', 'primary', shades);
+  buildPalette('palette-secondary', 'secondary', shades);
+  buildPalette('palette-accent', 'accent', shades);
+
+  // ──── Generate spacing bars ────
+  const spacingTokens = [
+    ['0', '0px'], ['0.5', '2px'], ['1', '4px'], ['2', '8px'], ['3', '12px'],
+    ['4', '16px'], ['5', '20px'], ['6', '24px'], ['8', '32px'], ['10', '40px'],
+    ['12', '48px'], ['16', '64px'], ['20', '80px'], ['24', '96px'], ['32', '128px'],
+  ];
+  const spacingBars = document.getElementById('spacing-bars');
+  if (spacingBars) {
+    spacingTokens.forEach(([name, px]) => {
+      const pxNum = parseInt(px);
+      spacingBars.innerHTML += `
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-mono text-text-tertiary w-10 text-right flex-shrink-0">${name}</span>
+          <div class="ds-spacing-bar bg-primary-400 rounded-sm" style="width:${Math.max(pxNum, 2)}px"></div>
+          <span class="text-xs text-text-secondary">${px}</span>
+        </div>
+      `;
+    });
+  }
+
+  // ──── Generate semantic spacing ────
+  const semanticSpacing = [
+    ['card-padding', '24px'], ['card-gap', '16px'], ['section-y', '64px'],
+    ['section-y-lg', '96px'], ['page-x', '16px'], ['page-x-lg', '32px'],
+    ['stack-sm', '8px'], ['stack-md', '16px'], ['stack-lg', '32px'],
+    ['inline-sm', '8px'], ['inline-md', '12px'], ['inline-lg', '24px'],
+    ['input-x', '12px'], ['input-y', '8px'], ['button-x', '24px'], ['button-y', '12px'],
+  ];
+  const semanticContainer = document.getElementById('semantic-spacing');
+  if (semanticContainer) {
+    semanticSpacing.forEach(([name, px]) => {
+      const pxNum = parseInt(px);
+      semanticContainer.innerHTML += `
+        <div class="flex items-center gap-3 p-2 bg-white dark:bg-secondary-900 border border-border-default rounded-md">
+          <div class="ds-spacing-bar bg-accent-400 rounded-sm flex-shrink-0" style="width:${Math.max(pxNum, 2)}px; max-width:120px;"></div>
+          <div class="min-w-0">
+            <span class="text-xs font-mono font-semibold block truncate">${name}</span>
+            <span class="text-[10px] text-text-tertiary">${px}</span>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  // ──── Generate z-index stack ────
+  const zLayers = [
+    ['behind', -1, '#f87171'], ['base', 0, '#fb923c'], ['raised', 1, '#fbbf24'],
+    ['dropdown', 10, '#a3e635'], ['sticky', 20, '#34d399'], ['header', 30, '#22d3ee'],
+    ['sidebar', 35, '#60a5fa'], ['backdrop', 40, '#818cf8'], ['modal', 50, '#a78bfa'],
+    ['popover', 60, '#c084fc'], ['toast', 70, '#e879f9'], ['tooltip', 80, '#f472b6'],
+    ['spotlight', 90, '#fb7185'], ['max', 100, '#ef4444'],
+  ];
+  const zStack = document.getElementById('z-index-stack');
+  if (zStack) {
+    zLayers.forEach(([name, value, color]) => {
+      const widthPercent = ((value + 10) / 110) * 100;
+      zStack.innerHTML += `
+        <div class="ds-z-layer rounded" style="width:${Math.max(widthPercent, 15)}%; background:${color}15; border-color:${color}40; color:${color.replace('#', '#')}">
+          <span class="font-mono text-xs">${name}</span>
+          <span class="ml-auto pr-3 text-xs opacity-70">${value}</span>
+        </div>
+      `;
+    });
+  }
+
+  // ──── Fade animation replay ────
+  function replayAnimation(el, animation) {
+    el.style.animation = 'none';
+    el.offsetHeight; // trigger reflow
+    el.style.animation = animation;
+  }
+  document.getElementById('fade-in-demo')?.addEventListener('click', function() {
+    replayAnimation(this, 'var(--animate-fade-in)');
+  });
+  document.getElementById('fade-out-demo')?.addEventListener('click', function() {
+    replayAnimation(this, 'var(--animate-fade-out)');
+  });
+
+  // ══════════════════════════════════════════════
+  // THEME PRESETS
+  // ══════════════════════════════════════════════
+
+  const themePresets = [
+    {
+      name: 'Varsayılan',
+      desc: 'Fabrika ayarları',
+      icon: '↺',
+      overrides: {} // empty = use token.default for everything
+    },
+    {
+      name: 'Yuvarlak',
+      desc: 'Büyük radius, yumuşak gölgeler',
+      icon: '●',
+      overrides: {
+        '--radius-none': '4px', '--radius-sm': '8px', '--radius-md': '16px',
+        '--radius-lg': '24px', '--radius-xl': '48px',
+        '--radius-button': '24px', '--radius-card': '24px', '--radius-input': '16px',
+        '--radius-modal': '32px', '--radius-tooltip': '12px', '--radius-badge': '9999px',
+        '--shadow-sm': '0 2px 8px 0 rgba(0,0,0,0.05)',
+        '--shadow-md': '0 4px 16px -2px rgba(0,0,0,0.08)',
+        '--shadow-lg': '0 8px 32px -4px rgba(0,0,0,0.10)',
+        '--shadow-xl': '0 16px 48px -8px rgba(0,0,0,0.12)',
+        '--spacing-card-padding': '28px', '--spacing-card-gap': '20px',
+      }
+    },
+    {
+      name: 'Keskin / Düz',
+      desc: 'Sıfır radius, düz tasarım',
+      icon: '□',
+      overrides: {
+        '--radius-none': '0px', '--radius-sm': '0px', '--radius-md': '0px',
+        '--radius-lg': '0px', '--radius-xl': '0px', '--radius-full': '0px',
+        '--radius-button': '0px', '--radius-card': '0px', '--radius-input': '0px',
+        '--radius-modal': '0px', '--radius-tooltip': '0px', '--radius-badge': '2px',
+        '--shadow-sm': '0 1px 0 0 rgba(0,0,0,0.05)',
+        '--shadow-md': '0 1px 2px 0 rgba(0,0,0,0.08)',
+        '--shadow-lg': '0 2px 4px 0 rgba(0,0,0,0.10)',
+        '--shadow-xl': '0 4px 8px 0 rgba(0,0,0,0.12)',
+        '--spacing-card-padding': '20px',
+      }
+    },
+    {
+      name: 'Modern',
+      desc: 'Temiz, minimal, dengeli',
+      icon: '◆',
+      overrides: {
+        '--radius-sm': '6px', '--radius-md': '12px', '--radius-lg': '16px', '--radius-xl': '24px',
+        '--radius-button': '10px', '--radius-card': '16px', '--radius-input': '10px',
+        '--radius-modal': '20px', '--radius-tooltip': '8px',
+        '--shadow-sm': '0 1px 3px 0 rgba(0,0,0,0.04)',
+        '--shadow-md': '0 2px 6px -1px rgba(0,0,0,0.06), 0 4px 12px -2px rgba(0,0,0,0.05)',
+        '--shadow-lg': '0 4px 12px -2px rgba(0,0,0,0.06), 0 8px 24px -4px rgba(0,0,0,0.08)',
+        '--shadow-xl': '0 8px 24px -4px rgba(0,0,0,0.08), 0 16px 48px -8px rgba(0,0,0,0.10)',
+        '--spacing-card-padding': '24px', '--spacing-card-gap': '16px',
+        '--spacing-button-x': '20px', '--spacing-button-y': '10px',
+        '--color-surface': '#ffffff', '--color-surface-muted': '#f9fafb',
+        '--color-surface-raised': '#f3f4f6',
+        '--color-border-default': '#e5e7eb',
+        '--font-sans': "'Inter', ui-sans-serif, system-ui, sans-serif",
+      }
+    },
+    {
+      name: 'Kompakt',
+      desc: 'Sıkı aralık, küçük padding',
+      icon: '▬',
+      overrides: {
+        '--spacing-card-padding': '14px', '--spacing-card-gap': '10px',
+        '--spacing-section-y': '32px', '--spacing-section-y-lg': '48px',
+        '--spacing-page-x': '10px', '--spacing-page-x-lg': '20px',
+        '--spacing-stack-sm': '4px', '--spacing-stack-md': '10px', '--spacing-stack-lg': '20px',
+        '--spacing-inline-sm': '4px', '--spacing-inline-md': '8px', '--spacing-inline-lg': '16px',
+        '--spacing-input-x': '8px', '--spacing-input-y': '6px',
+        '--spacing-button-x': '16px', '--spacing-button-y': '8px',
+        '--radius-button': '6px', '--radius-card': '8px', '--radius-input': '6px',
+        '--radius-modal': '12px',
+        '--font-size-base': '1rem', '--font-size-lg': '1.125rem',
+      }
+    },
+    {
+      name: 'Ferah',
+      desc: 'Geniş aralık, büyük padding',
+      icon: '▭',
+      overrides: {
+        '--spacing-card-padding': '36px', '--spacing-card-gap': '24px',
+        '--spacing-section-y': '96px', '--spacing-section-y-lg': '128px',
+        '--spacing-page-x': '24px', '--spacing-page-x-lg': '48px',
+        '--spacing-stack-sm': '12px', '--spacing-stack-md': '24px', '--spacing-stack-lg': '48px',
+        '--spacing-inline-sm': '12px', '--spacing-inline-md': '16px', '--spacing-inline-lg': '32px',
+        '--spacing-input-x': '16px', '--spacing-input-y': '12px',
+        '--spacing-button-x': '32px', '--spacing-button-y': '16px',
+        '--radius-button': '12px', '--radius-card': '20px', '--radius-input': '12px',
+        '--radius-modal': '24px',
+        '--font-size-base': '1.25rem', '--font-size-lg': '1.375rem',
+      }
+    },
+    {
+      name: 'Altın Lüks',
+      desc: 'Altın vurgulu, zarif gölgeler',
+      icon: '♛',
+      overrides: {
+        '--color-primary-50': '#fef9e7', '--color-primary-100': '#fdf0c3',
+        '--color-primary-200': '#fbe08a', '--color-primary-300': '#f6c94d',
+        '--color-primary-400': '#e6b212', '--color-primary-500': '#cc9900',
+        '--color-primary-600': '#b38600', '--color-primary-700': '#8a6800',
+        '--color-primary-800': '#6b5100', '--color-primary-900': '#4d3a00',
+        '--color-primary-950': '#2e2200',
+        '--color-surface': '#fffdf7', '--color-surface-muted': '#faf8f2',
+        '--color-surface-raised': '#f5f3ec',
+        '--color-border-default': '#e8e4d9',
+        '--radius-button': '8px', '--radius-card': '16px', '--radius-input': '8px',
+        '--radius-modal': '24px',
+        '--shadow-sm': '0 1px 3px 0 rgba(180,140,40,0.06)',
+        '--shadow-md': '0 2px 8px -1px rgba(180,140,40,0.08), 0 4px 12px -2px rgba(180,140,40,0.06)',
+        '--shadow-lg': '0 4px 16px -2px rgba(180,140,40,0.08), 0 12px 32px -4px rgba(180,140,40,0.10)',
+        '--shadow-xl': '0 8px 24px -4px rgba(180,140,40,0.10), 0 24px 56px -8px rgba(180,140,40,0.14)',
+        '--spacing-card-padding': '28px',
+      }
+    },
+    {
+      name: 'Koyu Mod',
+      desc: 'Koyu zemin, açık yazı',
+      icon: '◐',
+      overrides: {
+        '--color-surface': '#0f0f0f', '--color-surface-muted': '#171717',
+        '--color-surface-raised': '#1e1e1e', '--color-surface-inverse': '#fafafa',
+        '--color-text-primary': '#f0f0f0', '--color-text-secondary': '#a0a0a0',
+        '--color-text-tertiary': '#666666', '--color-text-disabled': '#444444',
+        '--color-text-inverse': '#0a0a0a',
+        '--color-border-default': '#2a2a2a', '--color-border-strong': '#555555',
+        '--color-primary-50': '#2e2200', '--color-primary-100': '#4d3a00',
+        '--color-primary-200': '#6b5100', '--color-primary-300': '#8a6800',
+        '--color-primary-400': '#b38600', '--color-primary-500': '#cc9900',
+        '--color-primary-600': '#e6b212', '--color-primary-700': '#f6c94d',
+        '--color-primary-800': '#fbe08a', '--color-primary-900': '#fdf0c3',
+        '--color-primary-950': '#fef9e7',
+        '--radius-button': '8px', '--radius-card': '12px', '--radius-input': '8px',
+        '--shadow-sm': '0 1px 3px 0 rgba(0,0,0,0.3)',
+        '--shadow-md': '0 2px 8px -1px rgba(0,0,0,0.4)',
+        '--shadow-lg': '0 4px 16px -2px rgba(0,0,0,0.5)',
+        '--shadow-xl': '0 8px 32px -4px rgba(0,0,0,0.6)',
+      }
+    },
+    {
+      name: 'Mavi Kurumsal',
+      desc: 'Mavi vurgulu, profesyonel',
+      icon: '■',
+      overrides: {
+        '--color-primary-50': '#eff6ff', '--color-primary-100': '#dbeafe',
+        '--color-primary-200': '#bfdbfe', '--color-primary-300': '#93c5fd',
+        '--color-primary-400': '#60a5fa', '--color-primary-500': '#3b82f6',
+        '--color-primary-600': '#2563eb', '--color-primary-700': '#1d4ed8',
+        '--color-primary-800': '#1e40af', '--color-primary-900': '#1e3a8a',
+        '--color-primary-950': '#172554',
+        '--color-text-link': '#3b82f6', '--color-text-link-hover': '#2563eb',
+        '--color-border-focus': '#3b82f6',
+        '--radius-button': '6px', '--radius-card': '8px', '--radius-input': '6px',
+        '--radius-modal': '12px', '--radius-tooltip': '4px', '--radius-badge': '9999px',
+        '--shadow-sm': '0 1px 2px 0 rgba(0,0,0,0.04), 0 1px 3px 0 rgba(0,0,0,0.06)',
+        '--shadow-md': '0 2px 4px -1px rgba(0,0,0,0.04), 0 4px 8px -1px rgba(0,0,0,0.08)',
+        '--spacing-card-padding': '24px',
+        '--font-sans': "'Source Sans 3', ui-sans-serif, system-ui, sans-serif",
+      }
+    },
+  ];
+
+  // ══════════════════════════════════════════════
+  // INTERACTIVE CONTROLS — auto-generated for ALL @theme variables
+  // ══════════════════════════════════════════════
+
+  const tokenGroups = [
+    {
+      name: 'Primary Colors', collapsed: false, tokens: [
+        { var: '--color-primary-50', type: 'color', default: '#fef9e7' },
+        { var: '--color-primary-100', type: 'color', default: '#fdf0c3' },
+        { var: '--color-primary-200', type: 'color', default: '#fbe08a' },
+        { var: '--color-primary-300', type: 'color', default: '#f6c94d' },
+        { var: '--color-primary-400', type: 'color', default: '#e6b212' },
+        { var: '--color-primary-500', type: 'color', default: '#cc9900' },
+        { var: '--color-primary-600', type: 'color', default: '#b38600' },
+        { var: '--color-primary-700', type: 'color', default: '#8a6800' },
+        { var: '--color-primary-800', type: 'color', default: '#6b5100' },
+        { var: '--color-primary-900', type: 'color', default: '#4d3a00' },
+        { var: '--color-primary-950', type: 'color', default: '#2e2200' },
+      ]
+    },
+    {
+      name: 'Secondary Colors', collapsed: true, tokens: [
+        { var: '--color-secondary-50', type: 'color', default: '#f5f5f5' },
+        { var: '--color-secondary-100', type: 'color', default: '#e5e5e5' },
+        { var: '--color-secondary-200', type: 'color', default: '#cccccc' },
+        { var: '--color-secondary-300', type: 'color', default: '#a3a3a3' },
+        { var: '--color-secondary-400', type: 'color', default: '#737373' },
+        { var: '--color-secondary-500', type: 'color', default: '#525252' },
+        { var: '--color-secondary-600', type: 'color', default: '#333333' },
+        { var: '--color-secondary-700', type: 'color', default: '#1f1f1f' },
+        { var: '--color-secondary-800', type: 'color', default: '#141414' },
+        { var: '--color-secondary-900', type: 'color', default: '#0a0a0a' },
+        { var: '--color-secondary-950', type: 'color', default: '#050505' },
+      ]
+    },
+    {
+      name: 'Accent Colors', collapsed: true, tokens: [
+        { var: '--color-accent-50', type: 'color', default: '#ecfeff' },
+        { var: '--color-accent-100', type: 'color', default: '#cffafe' },
+        { var: '--color-accent-200', type: 'color', default: '#a5f3fc' },
+        { var: '--color-accent-300', type: 'color', default: '#67e8f9' },
+        { var: '--color-accent-400', type: 'color', default: '#22d3ee' },
+        { var: '--color-accent-500', type: 'color', default: '#06b6d4' },
+        { var: '--color-accent-600', type: 'color', default: '#0891b2' },
+        { var: '--color-accent-700', type: 'color', default: '#0e7490' },
+        { var: '--color-accent-800', type: 'color', default: '#155e75' },
+        { var: '--color-accent-900', type: 'color', default: '#164e63' },
+        { var: '--color-accent-950', type: 'color', default: '#083344' },
+      ]
+    },
+    {
+      name: 'Semantic Colors', collapsed: true, tokens: [
+        { var: '--color-success-50', type: 'color', default: '#f0fdf4' },
+        { var: '--color-success-500', type: 'color', default: '#22c55e' },
+        { var: '--color-success-700', type: 'color', default: '#15803d' },
+        { var: '--color-warning-50', type: 'color', default: '#fffbeb' },
+        { var: '--color-warning-500', type: 'color', default: '#f59e0b' },
+        { var: '--color-warning-700', type: 'color', default: '#b45309' },
+        { var: '--color-error-50', type: 'color', default: '#fef2f2' },
+        { var: '--color-error-500', type: 'color', default: '#ef4444' },
+        { var: '--color-error-700', type: 'color', default: '#b91c1c' },
+        { var: '--color-info-50', type: 'color', default: '#eff6ff' },
+        { var: '--color-info-500', type: 'color', default: '#3b82f6' },
+        { var: '--color-info-700', type: 'color', default: '#1d4ed8' },
+      ]
+    },
+    {
+      name: 'Surface Colors', collapsed: true, tokens: [
+        { var: '--color-surface', type: 'color', default: '#ffffff' },
+        { var: '--color-surface-muted', type: 'color', default: '#fafafa' },
+        { var: '--color-surface-raised', type: 'color', default: '#f5f5f5' },
+        { var: '--color-surface-overlay', type: 'text', default: 'rgba(0, 0, 0, 0.5)' },
+        { var: '--color-surface-inverse', type: 'color', default: '#0a0a0a' },
+      ]
+    },
+    {
+      name: 'Text Colors', collapsed: true, tokens: [
+        { var: '--color-text-primary', type: 'color', default: '#0a0a0a' },
+        { var: '--color-text-secondary', type: 'color', default: '#525252' },
+        { var: '--color-text-tertiary', type: 'color', default: '#a3a3a3' },
+        { var: '--color-text-disabled', type: 'color', default: '#d4d4d4' },
+        { var: '--color-text-inverse', type: 'color', default: '#fafafa' },
+        { var: '--color-text-link', type: 'color', default: '#cc9900' },
+        { var: '--color-text-link-hover', type: 'color', default: '#b38600' },
+      ]
+    },
+    {
+      name: 'Border Colors', collapsed: true, tokens: [
+        { var: '--color-border-default', type: 'color', default: '#e5e5e5' },
+        { var: '--color-border-strong', type: 'color', default: '#a3a3a3' },
+        { var: '--color-border-focus', type: 'color', default: '#cc9900' },
+        { var: '--color-border-error', type: 'color', default: '#ef4444' },
+      ]
+    },
+    {
+      name: 'Font Sizes', collapsed: true, tokens: [
+        { var: '--font-size-xs', type: 'range', default: 0.75, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-sm', type: 'range', default: 0.875, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-base', type: 'range', default: 1.125, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-lg', type: 'range', default: 1.25, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-xl', type: 'range', default: 1.5, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-2xl', type: 'range', default: 1.875, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-3xl', type: 'range', default: 2.25, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-4xl', type: 'range', default: 3, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+        { var: '--font-size-5xl', type: 'range', default: 3.75, min: 0.5, max: 5, step: 0.0625, unit: 'rem' },
+      ]
+    },
+    {
+      name: 'Font Weights', collapsed: true, tokens: [
+        { var: '--font-weight-normal', type: 'range', default: 400, min: 100, max: 900, step: 100, unit: '' },
+        { var: '--font-weight-medium', type: 'range', default: 500, min: 100, max: 900, step: 100, unit: '' },
+        { var: '--font-weight-semibold', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '' },
+        { var: '--font-weight-bold', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '' },
+        { var: '--font-weight-black', type: 'range', default: 900, min: 100, max: 900, step: 100, unit: '' },
+      ]
+    },
+    {
+      name: 'Line Heights', collapsed: true, tokens: [
+        { var: '--line-height-none', type: 'range', default: 1, min: 0.8, max: 3, step: 0.025, unit: '' },
+        { var: '--line-height-tight', type: 'range', default: 1.25, min: 0.8, max: 3, step: 0.025, unit: '' },
+        { var: '--line-height-snug', type: 'range', default: 1.375, min: 0.8, max: 3, step: 0.025, unit: '' },
+        { var: '--line-height-normal', type: 'range', default: 1.625, min: 0.8, max: 3, step: 0.025, unit: '' },
+        { var: '--line-height-relaxed', type: 'range', default: 1.75, min: 0.8, max: 3, step: 0.025, unit: '' },
+        { var: '--line-height-loose', type: 'range', default: 2, min: 0.8, max: 3, step: 0.025, unit: '' },
+      ]
+    },
+    {
+      name: 'Letter Spacing', collapsed: true, tokens: [
+        { var: '--letter-spacing-tighter', type: 'range', default: -0.03, min: -0.1, max: 0.15, step: 0.005, unit: 'em' },
+        { var: '--letter-spacing-tight', type: 'range', default: -0.015, min: -0.1, max: 0.15, step: 0.005, unit: 'em' },
+        { var: '--letter-spacing-normal', type: 'range', default: 0, min: -0.1, max: 0.15, step: 0.005, unit: 'em' },
+        { var: '--letter-spacing-wide', type: 'range', default: 0.025, min: -0.1, max: 0.15, step: 0.005, unit: 'em' },
+        { var: '--letter-spacing-wider', type: 'range', default: 0.05, min: -0.1, max: 0.15, step: 0.005, unit: 'em' },
+      ]
+    },
+    {
+      name: 'Base Spacing', collapsed: true, tokens: [
+        { var: '--spacing-0', type: 'range', default: 0, min: 0, max: 16, step: 1, unit: 'px' },
+        { var: '--spacing-0_5', type: 'range', default: 2, min: 0, max: 16, step: 1, unit: 'px' },
+        { var: '--spacing-1', type: 'range', default: 4, min: 0, max: 32, step: 1, unit: 'px' },
+        { var: '--spacing-2', type: 'range', default: 8, min: 0, max: 32, step: 1, unit: 'px' },
+        { var: '--spacing-3', type: 'range', default: 12, min: 0, max: 48, step: 1, unit: 'px' },
+        { var: '--spacing-4', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--spacing-5', type: 'range', default: 20, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--spacing-6', type: 'range', default: 24, min: 0, max: 96, step: 1, unit: 'px' },
+        { var: '--spacing-8', type: 'range', default: 32, min: 0, max: 128, step: 1, unit: 'px' },
+        { var: '--spacing-10', type: 'range', default: 40, min: 0, max: 160, step: 1, unit: 'px' },
+        { var: '--spacing-12', type: 'range', default: 48, min: 0, max: 192, step: 1, unit: 'px' },
+        { var: '--spacing-16', type: 'range', default: 64, min: 0, max: 256, step: 1, unit: 'px' },
+        { var: '--spacing-20', type: 'range', default: 80, min: 0, max: 320, step: 1, unit: 'px' },
+        { var: '--spacing-24', type: 'range', default: 96, min: 0, max: 384, step: 1, unit: 'px' },
+        { var: '--spacing-32', type: 'range', default: 128, min: 0, max: 512, step: 1, unit: 'px' },
+        { var: '--spacing-40', type: 'range', default: 160, min: 0, max: 512, step: 1, unit: 'px' },
+        { var: '--spacing-48', type: 'range', default: 192, min: 0, max: 512, step: 1, unit: 'px' },
+        { var: '--spacing-64', type: 'range', default: 256, min: 0, max: 512, step: 1, unit: 'px' },
+      ]
+    },
+    {
+      name: 'Semantic Spacing', collapsed: true, tokens: [
+        { var: '--spacing-card-padding', type: 'range', default: 24, min: 0, max: 96, step: 1, unit: 'px' },
+        { var: '--spacing-card-gap', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--spacing-section-y', type: 'range', default: 64, min: 0, max: 256, step: 1, unit: 'px' },
+        { var: '--spacing-section-y-lg', type: 'range', default: 96, min: 0, max: 384, step: 1, unit: 'px' },
+        { var: '--spacing-page-x', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--spacing-page-x-lg', type: 'range', default: 32, min: 0, max: 128, step: 1, unit: 'px' },
+        { var: '--spacing-stack-sm', type: 'range', default: 8, min: 0, max: 32, step: 1, unit: 'px' },
+        { var: '--spacing-stack-md', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--spacing-stack-lg', type: 'range', default: 32, min: 0, max: 128, step: 1, unit: 'px' },
+        { var: '--spacing-inline-sm', type: 'range', default: 8, min: 0, max: 32, step: 1, unit: 'px' },
+        { var: '--spacing-inline-md', type: 'range', default: 12, min: 0, max: 48, step: 1, unit: 'px' },
+        { var: '--spacing-inline-lg', type: 'range', default: 24, min: 0, max: 96, step: 1, unit: 'px' },
+        { var: '--spacing-input-x', type: 'range', default: 12, min: 0, max: 48, step: 1, unit: 'px' },
+        { var: '--spacing-input-y', type: 'range', default: 8, min: 0, max: 32, step: 1, unit: 'px' },
+        { var: '--spacing-button-x', type: 'range', default: 24, min: 0, max: 96, step: 1, unit: 'px' },
+        { var: '--spacing-button-y', type: 'range', default: 12, min: 0, max: 48, step: 1, unit: 'px' },
+      ]
+    },
+    {
+      name: 'Containers / Max-Width', collapsed: true, tokens: [
+        { var: '--container-xs', type: 'range', default: 320, min: 200, max: 600, step: 8, unit: 'px' },
+        { var: '--container-sm', type: 'range', default: 568, min: 320, max: 960, step: 8, unit: 'px' },
+        { var: '--container-md', type: 'range', default: 960, min: 600, max: 1400, step: 8, unit: 'px' },
+        { var: '--container-lg', type: 'range', default: 1400, min: 960, max: 2000, step: 8, unit: 'px' },
+        { var: '--container-xl', type: 'range', default: 1536, min: 1200, max: 2400, step: 8, unit: 'px' },
+      ]
+    },
+    {
+      name: 'Base Radius', collapsed: true, tokens: [
+        { var: '--radius-none', type: 'range', default: 0, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-sm', type: 'range', default: 4, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-md', type: 'range', default: 8, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-lg', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-xl', type: 'range', default: 32, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-full', type: 'range', default: 9999, min: 0, max: 9999, step: 1, unit: 'px' },
+      ]
+    },
+    {
+      name: 'Semantic Radius', collapsed: true, tokens: [
+        { var: '--radius-button', type: 'range', default: 8, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-card', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-input', type: 'range', default: 8, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-badge', type: 'range', default: 9999, min: 0, max: 9999, step: 1, unit: 'px' },
+        { var: '--radius-modal', type: 'range', default: 32, min: 0, max: 64, step: 1, unit: 'px' },
+        { var: '--radius-tooltip', type: 'range', default: 4, min: 0, max: 64, step: 1, unit: 'px' },
+      ]
+    },
+    {
+      name: 'Base Shadows', collapsed: true, tokens: [
+        { var: '--shadow-sm', type: 'text', default: '0 1px 2px 0 rgba(0,0,0,0.04), 0 1px 3px 0 rgba(0,0,0,0.06)' },
+        { var: '--shadow-md', type: 'text', default: '0 2px 4px -1px rgba(0,0,0,0.04), 0 4px 8px -1px rgba(0,0,0,0.08)' },
+        { var: '--shadow-lg', type: 'text', default: '0 4px 8px -2px rgba(0,0,0,0.06), 0 12px 24px -4px rgba(0,0,0,0.10)' },
+        { var: '--shadow-xl', type: 'text', default: '0 8px 16px -4px rgba(0,0,0,0.06), 0 24px 48px -8px rgba(0,0,0,0.12)' },
+      ]
+    },
+    {
+      name: 'Semantic Shadows', collapsed: true, tokens: [
+        { var: '--shadow-card', type: 'text', default: 'var(--shadow-sm)' },
+        { var: '--shadow-dropdown', type: 'text', default: 'var(--shadow-md)' },
+        { var: '--shadow-modal', type: 'text', default: 'var(--shadow-xl)' },
+        { var: '--shadow-toast', type: 'text', default: 'var(--shadow-lg)' },
+      ]
+    },
+    {
+      name: 'Motion — Durations', collapsed: true, tokens: [
+        { var: '--duration-fast', type: 'range', default: 100, min: 0, max: 2000, step: 10, unit: 'ms' },
+        { var: '--duration-default', type: 'range', default: 200, min: 0, max: 2000, step: 10, unit: 'ms' },
+        { var: '--duration-slow', type: 'range', default: 300, min: 0, max: 2000, step: 10, unit: 'ms' },
+        { var: '--duration-slower', type: 'range', default: 500, min: 0, max: 2000, step: 10, unit: 'ms' },
+      ]
+    },
+    {
+      name: 'Motion — Easing', collapsed: true, tokens: [
+        { var: '--ease-default', type: 'text', default: 'ease-in-out' },
+        { var: '--ease-in', type: 'text', default: 'ease-in' },
+        { var: '--ease-out', type: 'text', default: 'ease-out' },
+      ]
+    },
+    {
+      name: 'Animations', collapsed: true, tokens: [
+        { var: '--animate-fade-in', type: 'text', default: 'fade-in var(--duration-default) var(--ease-default)' },
+        { var: '--animate-fade-out', type: 'text', default: 'fade-out var(--duration-default) var(--ease-default)' },
+      ]
+    },
+    {
+      name: 'Font Families', collapsed: false, tokens: [
+        { var: '--font-sans', type: 'font', default: "'Roboto', ui-sans-serif, system-ui, sans-serif",
+          options: [
+            { label: 'Roboto', value: "'Roboto', ui-sans-serif, system-ui, sans-serif", google: 'Roboto:wght@100..900' },
+            { label: 'Inter', value: "'Inter', ui-sans-serif, system-ui, sans-serif", google: 'Inter:wght@100..900' },
+            { label: 'Open Sans', value: "'Open Sans', ui-sans-serif, system-ui, sans-serif", google: 'Open+Sans:wght@300..800' },
+            { label: 'Poppins', value: "'Poppins', ui-sans-serif, system-ui, sans-serif", google: 'Poppins:wght@100;200;300;400;500;600;700;800;900' },
+            { label: 'Montserrat', value: "'Montserrat', ui-sans-serif, system-ui, sans-serif", google: 'Montserrat:wght@100..900' },
+            { label: 'Lato', value: "'Lato', ui-sans-serif, system-ui, sans-serif", google: 'Lato:wght@100;300;400;700;900' },
+            { label: 'Nunito', value: "'Nunito', ui-sans-serif, system-ui, sans-serif", google: 'Nunito:wght@200..1000' },
+            { label: 'Raleway', value: "'Raleway', ui-sans-serif, system-ui, sans-serif", google: 'Raleway:wght@100..900' },
+            { label: 'Plus Jakarta Sans', value: "'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif", google: 'Plus+Jakarta+Sans:wght@200..800' },
+            { label: 'DM Sans', value: "'DM Sans', ui-sans-serif, system-ui, sans-serif", google: 'DM+Sans:wght@100..1000' },
+            { label: 'Quicksand', value: "'Quicksand', ui-sans-serif, system-ui, sans-serif", google: 'Quicksand:wght@300..700' },
+            { label: 'Outfit', value: "'Outfit', ui-sans-serif, system-ui, sans-serif", google: 'Outfit:wght@100..900' },
+            { label: 'Rubik', value: "'Rubik', ui-sans-serif, system-ui, sans-serif", google: 'Rubik:wght@300..900' },
+            { label: 'Manrope', value: "'Manrope', ui-sans-serif, system-ui, sans-serif", google: 'Manrope:wght@200..800' },
+            { label: 'Source Sans 3', value: "'Source Sans 3', ui-sans-serif, system-ui, sans-serif", google: 'Source+Sans+3:wght@200..900' },
+            { label: 'Noto Sans', value: "'Noto Sans', ui-sans-serif, system-ui, sans-serif", google: 'Noto+Sans:wght@100..900' },
+            { label: 'Work Sans', value: "'Work Sans', ui-sans-serif, system-ui, sans-serif", google: 'Work+Sans:wght@100..900' },
+            { label: 'Sora', value: "'Sora', ui-sans-serif, system-ui, sans-serif", google: 'Sora:wght@100..800' },
+            { label: 'System UI', value: "ui-sans-serif, system-ui, -apple-system, sans-serif", google: null },
+          ]
+        },
+        { var: '--font-mono', type: 'font', default: "ui-monospace, 'Cascadia Code', 'Fira Code', monospace",
+          options: [
+            { label: 'System Mono', value: "ui-monospace, 'Cascadia Code', 'Fira Code', monospace", google: null },
+            { label: 'Fira Code', value: "'Fira Code', ui-monospace, monospace", google: 'Fira+Code:wght@300..700' },
+            { label: 'JetBrains Mono', value: "'JetBrains Mono', ui-monospace, monospace", google: 'JetBrains+Mono:wght@100..800' },
+            { label: 'Source Code Pro', value: "'Source Code Pro', ui-monospace, monospace", google: 'Source+Code+Pro:wght@200..900' },
+            { label: 'IBM Plex Mono', value: "'IBM Plex Mono', ui-monospace, monospace", google: 'IBM+Plex+Mono:wght@100..700' },
+            { label: 'Space Mono', value: "'Space Mono', ui-monospace, monospace", google: 'Space+Mono:wght@400;700' },
+            { label: 'Inconsolata', value: "'Inconsolata', ui-monospace, monospace", google: 'Inconsolata:wght@200..900' },
+          ]
+        },
+      ]
+    },
+    {
+      name: 'Containers — Full', collapsed: true, tokens: [
+        { var: '--container-full', type: 'text', default: '100%' },
+      ]
+    },
+    {
+      name: 'Z-Index', collapsed: true, tokens: [
+        { var: '--z-behind', type: 'range', default: -1, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-base', type: 'range', default: 0, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-raised', type: 'range', default: 1, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-dropdown', type: 'range', default: 10, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-sticky', type: 'range', default: 20, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-header', type: 'range', default: 30, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-sidebar', type: 'range', default: 35, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-backdrop', type: 'range', default: 40, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-modal', type: 'range', default: 50, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-popover', type: 'range', default: 60, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-toast', type: 'range', default: 70, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-tooltip', type: 'range', default: 80, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-spotlight', type: 'range', default: 90, min: -10, max: 200, step: 1, unit: '' },
+        { var: '--z-max', type: 'range', default: 100, min: -10, max: 200, step: 1, unit: '' },
+      ]
+    },
+    {
+      name: 'Breakpoints', collapsed: true, tokens: [
+        { var: '--breakpoint-xs', type: 'range', default: 320, min: 200, max: 600, step: 8, unit: 'px' },
+        { var: '--breakpoint-sm', type: 'range', default: 568, min: 320, max: 960, step: 8, unit: 'px' },
+        { var: '--breakpoint-md', type: 'range', default: 960, min: 600, max: 1400, step: 8, unit: 'px' },
+        { var: '--breakpoint-lg', type: 'range', default: 1280, min: 960, max: 2000, step: 8, unit: 'px' },
+        { var: '--breakpoint-xl', type: 'range', default: 1536, min: 1200, max: 2400, step: 8, unit: 'px' },
+      ]
+    },
+    {
+      name: 'Header / TopBar', collapsed: true, tokens: [
+        { var: '--header-bg', type: 'color', default: '#ffffff' },
+        { var: '--header-height', type: 'range', default: 64, min: 40, max: 100, step: 1, unit: 'px' },
+        { var: '--header-border-color', type: 'color', default: '#e5e5e5' },
+        { var: '--header-text-color', type: 'color', default: '#374151' },
+        { var: '--header-icon-color', type: 'color', default: '#374151' },
+        { var: '--header-icon-hover-color', type: 'color', default: '#cc9900' },
+      ]
+    },
+    {
+      name: 'SubHeader', collapsed: true, tokens: [
+        { var: '--subheader-bg', type: 'text', default: 'transparent' },
+        { var: '--subheader-text-color', type: 'color', default: '#525252' },
+        { var: '--subheader-hover-color', type: 'color', default: '#b38600' },
+        { var: '--subheader-hover-bg', type: 'text', default: 'rgba(255, 255, 255, 0.8)' },
+        { var: '--subheader-active-color', type: 'color', default: '#b38600' },
+        { var: '--subheader-border-color', type: 'color', default: '#e5e5e5' },
+      ]
+    },
+    {
+      name: 'Header Gradient', collapsed: true, tokens: [
+        { var: '--header-gradient-1', type: 'color', default: '#fff7ed' },
+        { var: '--header-gradient-2', type: 'color', default: '#f6f4e8' },
+        { var: '--header-gradient-3', type: 'color', default: '#fff1f2' },
+        { var: '--header-gradient-4', type: 'color', default: '#fbfaf0' },
+        { var: '--header-gradient-5', type: 'color', default: '#fff7ed' },
+      ]
+    },
+    {
+      name: 'Arama Alanı', collapsed: true, tokens: [
+        { var: '--search-bg', type: 'text', default: 'transparent' },
+        { var: '--search-tab-color', type: 'color', default: '#6b7280' },
+        { var: '--search-tab-active-color', type: 'color', default: '#cc9900' },
+        { var: '--search-input-border-color', type: 'color', default: '#cc9900' },
+        { var: '--search-btn-gradient-start', type: 'color', default: '#f5a623' },
+        { var: '--search-btn-gradient-end', type: 'color', default: '#e8740c' },
+      ]
+    },
+    {
+      name: 'MegaMenu', collapsed: true, tokens: [
+        { var: '--mega-bg', type: 'color', default: '#ffffff' },
+        { var: '--mega-sidebar-bg', type: 'color', default: '#f9fafb' },
+        { var: '--mega-sidebar-hover-bg', type: 'color', default: '#ffffff' },
+        { var: '--mega-sidebar-active-bg', type: 'color', default: '#ffffff' },
+        { var: '--mega-border-color', type: 'color', default: '#e5e7eb' },
+        { var: '--mega-text-color', type: 'color', default: '#374151' },
+      ]
+    },
+    {
+      name: 'Hero', collapsed: true, tokens: [
+        { var: '--hero-bg', type: 'color', default: '#ffffff' },
+        { var: '--hero-card-bg', type: 'color', default: '#ffffff' },
+        { var: '--hero-card-border-color', type: 'color', default: '#e5e5e5' },
+        { var: '--hero-title-color', type: 'color', default: '#111827' },
+      ]
+    },
+    {
+      name: 'Footer', collapsed: true, tokens: [
+        { var: '--footer-bg', type: 'color', default: '#111827' },
+        { var: '--footer-text-color', type: 'color', default: '#9ca3af' },
+        { var: '--footer-heading-color', type: 'color', default: '#ffffff' },
+        { var: '--footer-link-color', type: 'color', default: '#9ca3af' },
+        { var: '--footer-link-hover-color', type: 'color', default: '#ffffff' },
+        { var: '--footer-border-color', type: 'color', default: '#1f2937' },
+      ]
+    },
+    {
+      name: 'Buton Bileşeni', collapsed: true, tokens: [
+        { var: '--btn-bg', type: 'color', default: '#cc9900' },
+        { var: '--btn-text', type: 'color', default: '#ffffff' },
+        { var: '--btn-border-width', type: 'range', default: 0, min: 0, max: 8, step: 1, unit: 'px' },
+        { var: '--btn-border-color', type: 'color', default: '#cc9900' },
+        { var: '--btn-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem' },
+        { var: '--btn-font-weight', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '' },
+        { var: '--btn-shadow', type: 'text', default: 'none' },
+        { var: '--btn-outline-bg', type: 'color', default: '#ffffff' },
+        { var: '--btn-outline-text', type: 'color', default: '#cc9900' },
+        { var: '--btn-outline-border-width', type: 'range', default: 2, min: 0, max: 8, step: 1, unit: 'px' },
+        { var: '--btn-outline-border-color', type: 'color', default: '#cc9900' },
+      ]
+    },
+    {
+      name: 'Kart Bileşeni', collapsed: true, tokens: [
+        { var: '--card-bg', type: 'color', default: '#ffffff' },
+        { var: '--card-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px' },
+        { var: '--card-border-color', type: 'color', default: '#e5e5e5' },
+        { var: '--card-title-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem' },
+        { var: '--card-title-weight', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '' },
+      ]
+    },
+    {
+      name: 'Input Bileşeni', collapsed: true, tokens: [
+        { var: '--input-bg', type: 'color', default: '#ffffff' },
+        { var: '--input-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px' },
+        { var: '--input-border-color', type: 'color', default: '#e5e5e5' },
+        { var: '--input-text-color', type: 'color', default: '#0a0a0a' },
+        { var: '--input-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem' },
+        { var: '--input-focus-border-color', type: 'color', default: '#cc9900' },
+      ]
+    },
+    {
+      name: 'Badge Bileşeni', collapsed: true, tokens: [
+        { var: '--badge-font-size', type: 'range', default: 0.75, min: 0.5, max: 1.5, step: 0.0625, unit: 'rem' },
+        { var: '--badge-font-weight', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '' },
+        { var: '--badge-padding-x', type: 'range', default: 12, min: 0, max: 32, step: 1, unit: 'px' },
+        { var: '--badge-padding-y', type: 'range', default: 4, min: 0, max: 16, step: 1, unit: 'px' },
+      ]
+    },
+  ];
+
+  // ══════════════════════════════════════════════
+  // COMPONENT EDITORS — per-component controls + live preview
+  // ══════════════════════════════════════════════
+  const componentEditors = [
+    {
+      id: 'btn',
+      name: 'Butonlar',
+      icon: '▣',
+      tokens: [
+        { var: '--btn-bg', type: 'color', default: '#cc9900', label: 'Arkaplan' },
+        { var: '--btn-text', type: 'color', default: '#ffffff', label: 'Yazı Rengi' },
+        { var: '--radius-button', type: 'range', default: 8, min: 0, max: 64, step: 1, unit: 'px', label: 'Radius' },
+        { var: '--btn-border-width', type: 'range', default: 0, min: 0, max: 8, step: 1, unit: 'px', label: 'Border Kalınlık' },
+        { var: '--btn-border-color', type: 'color', default: '#cc9900', label: 'Border Rengi' },
+        { var: '--spacing-button-x', type: 'range', default: 24, min: 0, max: 64, step: 1, unit: 'px', label: 'Padding X' },
+        { var: '--spacing-button-y', type: 'range', default: 12, min: 0, max: 32, step: 1, unit: 'px', label: 'Padding Y' },
+        { var: '--btn-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
+        { var: '--btn-font-weight', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
+        { var: '--btn-shadow', type: 'text', default: 'none', label: 'Shadow' },
+      ],
+      outlineTokens: [
+        { var: '--btn-outline-bg', type: 'color', default: '#ffffff', label: 'Outline Arkaplan' },
+        { var: '--btn-outline-text', type: 'color', default: '#cc9900', label: 'Outline Yazı' },
+        { var: '--btn-outline-border-width', type: 'range', default: 2, min: 0, max: 8, step: 1, unit: 'px', label: 'Outline Border' },
+        { var: '--btn-outline-border-color', type: 'color', default: '#cc9900', label: 'Outline Border Rengi' },
+      ],
+      preview: () => `
+        <div class="flex flex-wrap items-center gap-3">
+          <button class="comp-btn transition-all">Primary</button>
+          <button class="comp-btn-outline transition-all">Outline</button>
+          <button class="comp-btn comp-btn-sm transition-all">Small</button>
+          <button class="comp-btn comp-btn-lg transition-all">Large</button>
+          <button class="comp-btn transition-all opacity-50 cursor-not-allowed" disabled>Disabled</button>
+          <button class="comp-btn transition-all" style="border-radius:var(--radius-full)">Pill</button>
+        </div>
+      `
+    },
+    {
+      id: 'card',
+      name: 'Kartlar',
+      icon: '▭',
+      tokens: [
+        { var: '--card-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--radius-card', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px', label: 'Radius' },
+        { var: '--card-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px', label: 'Border Kalınlık' },
+        { var: '--card-border-color', type: 'color', default: '#e5e5e5', label: 'Border Rengi' },
+        { var: '--spacing-card-padding', type: 'range', default: 20, min: 0, max: 64, step: 1, unit: 'px', label: 'Padding' },
+        { var: '--spacing-card-gap', type: 'range', default: 16, min: 0, max: 48, step: 1, unit: 'px', label: 'Gap' },
+        { var: '--shadow-card', type: 'text', default: 'var(--shadow-sm)', label: 'Shadow' },
+        { var: '--card-title-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Başlık Size' },
+        { var: '--card-title-weight', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '', label: 'Başlık Weight' },
+      ],
+      preview: () => `
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="comp-card overflow-hidden">
+            <div class="w-full h-28 bg-primary-50 dark:bg-primary-950 mb-3" style="border-radius:var(--radius-md)"></div>
+            <h4 class="comp-card-title mb-1">Ürün Kartı</h4>
+            <p class="text-xs text-text-secondary mb-2">Örnek ürün açıklaması burada yer alır.</p>
+            <span class="text-primary-600 font-bold text-sm">₺299.99</span>
+          </div>
+          <div class="comp-card overflow-hidden">
+            <div class="w-full h-28 bg-accent-50 dark:bg-accent-950 mb-3" style="border-radius:var(--radius-md)"></div>
+            <h4 class="comp-card-title mb-1">Kategori Kartı</h4>
+            <p class="text-xs text-text-secondary mb-2">Kategori kartı önizlemesi.</p>
+            <a href="#" class="text-sm text-primary-600 font-semibold">Devamını gör</a>
+          </div>
+          <div class="comp-card overflow-hidden">
+            <div class="w-full h-28 bg-secondary-100 dark:bg-secondary-700 mb-3" style="border-radius:var(--radius-md)"></div>
+            <h4 class="comp-card-title mb-1">Bilgi Kartı</h4>
+            <p class="text-xs text-text-secondary mb-2">Shadow ve border kontrollerini test edin.</p>
+            <button class="comp-btn text-xs" style="padding:6px 14px">Aksiyon</button>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'input',
+      name: 'Input / Arama',
+      icon: '▬',
+      tokens: [
+        { var: '--input-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--input-text-color', type: 'color', default: '#0a0a0a', label: 'Yazı Rengi' },
+        { var: '--radius-input', type: 'range', default: 8, min: 0, max: 64, step: 1, unit: 'px', label: 'Radius' },
+        { var: '--input-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px', label: 'Border Kalınlık' },
+        { var: '--input-border-color', type: 'color', default: '#e5e5e5', label: 'Border Rengi' },
+        { var: '--input-focus-border-color', type: 'color', default: '#cc9900', label: 'Focus Border' },
+        { var: '--spacing-input-x', type: 'range', default: 12, min: 0, max: 48, step: 1, unit: 'px', label: 'Padding X' },
+        { var: '--spacing-input-y', type: 'range', default: 8, min: 0, max: 32, step: 1, unit: 'px', label: 'Padding Y' },
+        { var: '--input-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
+      ],
+      preview: () => `
+        <div class="flex flex-wrap gap-4 items-start">
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-semibold text-text-secondary mb-1">Normal</label>
+            <input type="text" placeholder="Ürün ara..." class="comp-input w-full" />
+          </div>
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-semibold text-text-secondary mb-1">Focus (tıklayın)</label>
+            <input type="text" placeholder="Focus durumu..." class="comp-input comp-input-focus w-full" />
+          </div>
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-semibold text-text-secondary mb-1">Select</label>
+            <select class="comp-input w-full">
+              <option>Kategori seçin</option>
+              <option>Elektronik</option>
+              <option>Mobilya</option>
+            </select>
+          </div>
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-semibold text-text-secondary mb-1">Arama Çubuğu</label>
+            <div class="flex">
+              <input type="text" placeholder="Ne arıyorsunuz?" class="comp-input flex-1" style="border-radius:var(--radius-input) 0 0 var(--radius-input)" />
+              <button class="comp-btn" style="border-radius:0 var(--radius-input) var(--radius-input) 0; padding:0 16px;">Ara</button>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'badge',
+      name: 'Badge / Etiket',
+      icon: '●',
+      tokens: [
+        { var: '--radius-badge', type: 'range', default: 9999, min: 0, max: 9999, step: 1, unit: 'px', label: 'Radius' },
+        { var: '--badge-font-size', type: 'range', default: 0.75, min: 0.5, max: 1.5, step: 0.0625, unit: 'rem', label: 'Font Size' },
+        { var: '--badge-font-weight', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
+        { var: '--badge-padding-x', type: 'range', default: 12, min: 0, max: 32, step: 1, unit: 'px', label: 'Padding X' },
+        { var: '--badge-padding-y', type: 'range', default: 4, min: 0, max: 16, step: 1, unit: 'px', label: 'Padding Y' },
+      ],
+      preview: () => `
+        <div class="flex flex-wrap gap-3 items-center">
+          <span class="comp-badge" style="background:var(--color-primary-100);color:var(--color-primary-800)">Primary</span>
+          <span class="comp-badge" style="background:var(--color-accent-100);color:var(--color-accent-800)">Accent</span>
+          <span class="comp-badge" style="background:var(--color-success-50);color:var(--color-success-700)">Stokta</span>
+          <span class="comp-badge" style="background:var(--color-warning-50);color:var(--color-warning-700)">Sınırlı</span>
+          <span class="comp-badge" style="background:var(--color-error-50);color:var(--color-error-700)">Tükendi</span>
+          <span class="comp-badge" style="background:var(--color-info-50);color:var(--color-info-700)">Yeni</span>
+          <span class="comp-badge" style="background:var(--color-secondary-100);color:var(--color-secondary-700)">Nötr</span>
+          <span class="comp-badge" style="background:var(--color-error-500);color:#fff">-20%</span>
+        </div>
+      `
+    },
+  ];
+
+  // ──── Build controls UI ────
+  const controlsContainer = document.getElementById('controls-container');
+  if (controlsContainer) {
+    let totalTokens = 0;
+    tokenGroups.forEach(g => totalTokens += g.tokens.length);
+
+    tokenGroups.forEach((group, gi) => {
+      const groupId = `ctrl-group-${gi}`;
+      const isCollapsed = group.collapsed;
+
+      const section = document.createElement('div');
+      section.className = 'border border-border-default dark:border-secondary-700 rounded-lg bg-white dark:bg-secondary-900 overflow-hidden';
+      section.innerHTML = `
+        <button type="button" class="ds-accordion-btn w-full flex items-center justify-between px-4 py-3 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors" data-target="${groupId}">
+          <span class="flex items-center gap-2">
+            <svg class="ds-chevron w-4 h-4 text-text-tertiary transition-transform ${isCollapsed ? '' : 'rotate-90'}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+            <span class="text-sm font-semibold">${group.name}</span>
+            <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${group.tokens.length}</span>
+          </span>
+          <button type="button" class="ds-reset-group text-[10px] font-semibold text-error-500 hover:text-error-700 px-2 py-1 rounded hover:bg-error-50 transition-colors" data-group="${gi}">Reset</button>
+        </button>
+        <div id="${groupId}" class="${isCollapsed ? 'hidden' : ''} px-4 pb-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-3 pt-2"></div>
+        </div>
+      `;
+
+      const grid = section.querySelector('.grid');
+      group.tokens.forEach((token, ti) => {
+        const uid = `ctrl-${gi}-${ti}`;
+        const cell = document.createElement('div');
+
+        if (token.type === 'color') {
+          cell.innerHTML = `
+            <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
+            <div class="flex items-center gap-2">
+              <input type="color" id="${uid}" value="${token.default}" class="w-8 h-8 rounded cursor-pointer border-0 p-0 flex-shrink-0" />
+              <span id="${uid}-val" class="text-[11px] font-mono text-text-tertiary">${token.default}</span>
+            </div>
+          `;
+        } else if (token.type === 'range') {
+          const dispVal = token.unit ? `${token.default}${token.unit}` : `${token.default}`;
+          cell.innerHTML = `
+            <label class="flex items-baseline justify-between text-[11px] font-mono text-text-secondary mb-1 gap-1">
+              <span class="truncate" title="${token.var}">${token.var}</span>
+              <span id="${uid}-val" class="text-text-tertiary flex-shrink-0">${dispVal}</span>
+            </label>
+            <input type="range" id="${uid}" min="${token.min}" max="${token.max}" step="${token.step}" value="${token.default}" class="w-full accent-primary-500 h-1.5" />
+          `;
+        } else if (token.type === 'font') {
+          const opts = token.options.map(o => `<option value="${o.value}" data-google="${o.google || ''}" style="font-family:${o.value}">${o.label}</option>`).join('');
+          cell.className = 'sm:col-span-2';
+          cell.innerHTML = `
+            <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
+            <select id="${uid}" class="w-full text-sm border border-border-default dark:border-secondary-600 rounded-lg px-3 py-2 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none cursor-pointer">${opts}</select>
+            <p id="${uid}-preview" class="mt-1.5 text-base text-text-primary truncate" style="font-family:${token.default}">AaBbCcDd 0123 - Hızlı kahverengi tilki</p>
+          `;
+        } else {
+          cell.innerHTML = `
+            <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
+            <input type="text" id="${uid}" value="${token.default}" class="w-full text-[11px] font-mono border border-border-default dark:border-secondary-600 rounded px-2 py-1.5 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none" />
+          `;
+        }
+        grid.appendChild(cell);
+      });
+
+      controlsContainer.appendChild(section);
+    });
+
+    // ──── Initialize controls from ACTUAL computed CSS values ────
+    // This ensures controls show the real file values, not stale hardcoded defaults
+    const computed = getComputedStyle(root);
+    tokenGroups.forEach((group, gi) => {
+      group.tokens.forEach((token, ti) => {
+        const uid = `ctrl-${gi}-${ti}`;
+        const input = document.getElementById(uid);
+        if (!input) return;
+
+        const rawVal = computed.getPropertyValue(token.var).trim();
+        if (!rawVal) return;
+
+        if (token.type === 'color') {
+          // Convert rgb/rgba to hex if needed, color input requires #rrggbb
+          let hex = rawVal;
+          if (rawVal.startsWith('rgb')) {
+            const m = rawVal.match(/\d+/g);
+            if (m && m.length >= 3) {
+              hex = '#' + [m[0], m[1], m[2]].map(c => parseInt(c).toString(16).padStart(2, '0')).join('');
+            }
+          } else if (rawVal.startsWith('#') && rawVal.length === 4) {
+            hex = '#' + rawVal[1]+rawVal[1] + rawVal[2]+rawVal[2] + rawVal[3]+rawVal[3];
+          }
+          if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+            input.value = hex;
+            const valSpan = document.getElementById(`${uid}-val`);
+            if (valSpan) valSpan.textContent = hex;
+          }
+        } else if (token.type === 'range') {
+          const num = parseFloat(rawVal);
+          if (!isNaN(num)) {
+            input.value = num;
+            const valSpan = document.getElementById(`${uid}-val`);
+            if (valSpan) valSpan.textContent = token.unit ? `${num}${token.unit}` : `${num}`;
+          }
+        } else if (token.type === 'font') {
+          // Match the computed font-family to the closest option
+          const normalizedRaw = rawVal.replace(/['"]/g, '').toLowerCase();
+          let matched = false;
+          for (const opt of input.options) {
+            const normalizedOpt = opt.value.replace(/['"]/g, '').toLowerCase();
+            if (normalizedRaw === normalizedOpt || normalizedRaw.startsWith(normalizedOpt.split(',')[0].trim())) {
+              input.value = opt.value;
+              matched = true;
+              break;
+            }
+          }
+          const preview = document.getElementById(`${uid}-preview`);
+          if (preview) preview.style.fontFamily = rawVal;
+        } else {
+          input.value = rawVal;
+        }
+      });
+    });
+
+    // ──── Accordion toggle ────
+    controlsContainer.querySelectorAll('.ds-accordion-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (e.target.closest('.ds-reset-group')) return;
+        const targetId = btn.getAttribute('data-target');
+        const panel = document.getElementById(targetId);
+        const chevron = btn.querySelector('.ds-chevron');
+        if (panel) panel.classList.toggle('hidden');
+        if (chevron) chevron.classList.toggle('rotate-90');
+      });
+    });
+
+    // ──── Bind inputs to CSS var updates ────
+    tokenGroups.forEach((group, gi) => {
+      group.tokens.forEach((token, ti) => {
+        const uid = `ctrl-${gi}-${ti}`;
+        const input = document.getElementById(uid);
+        if (!input) return;
+
+        if (token.type === 'font') {
+          input.addEventListener('change', () => {
+            const value = input.value;
+            // Load Google Font if needed
+            const sel = input.options[input.selectedIndex];
+            const googleParam = sel?.getAttribute('data-google');
+            if (googleParam) loadGoogleFont(googleParam);
+            // Update preview
+            const preview = document.getElementById(`${uid}-preview`);
+            if (preview) preview.style.fontFamily = value;
+            root.style.setProperty(token.var, value);
+            // Also set --default-font-family so Tailwind preflight (* selector) picks it up
+            if (token.var === '--font-sans') {
+              root.style.setProperty('--default-font-family', value);
+            } else if (token.var === '--font-mono') {
+              root.style.setProperty('--default-mono-font-family', value);
+            }
+          });
+        } else {
+          const handler = () => {
+            let value;
+            if (token.type === 'color') {
+              value = input.value;
+              const valSpan = document.getElementById(`${uid}-val`);
+              if (valSpan) valSpan.textContent = value;
+            } else if (token.type === 'range') {
+              value = token.unit ? `${input.value}${token.unit}` : input.value;
+              const valSpan = document.getElementById(`${uid}-val`);
+              if (valSpan) valSpan.textContent = value;
+            } else {
+              value = input.value;
+            }
+            root.style.setProperty(token.var, value);
+          };
+          input.addEventListener('input', handler);
+        }
+      });
+    });
+
+    // ──── Helper: set a token's control UI + CSS var ────
+    function setTokenValue(gi, ti, value) {
+      const token = tokenGroups[gi]?.tokens[ti];
+      if (!token) return;
+      const uid = `ctrl-${gi}-${ti}`;
+      const input = document.getElementById(uid);
+      if (!input) return;
+
+      if (token.type === 'color') {
+        let hex = value;
+        if (hex.startsWith('rgb')) {
+          const m = hex.match(/\d+/g);
+          if (m && m.length >= 3) hex = '#' + [m[0],m[1],m[2]].map(c => parseInt(c).toString(16).padStart(2,'0')).join('');
+        } else if (hex.startsWith('#') && hex.length === 4) {
+          hex = '#' + hex[1]+hex[1] + hex[2]+hex[2] + hex[3]+hex[3];
+        }
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) input.value = hex;
+        const valSpan = document.getElementById(`${uid}-val`);
+        if (valSpan) valSpan.textContent = hex;
+        root.style.setProperty(token.var, value);
+      } else if (token.type === 'range') {
+        const num = parseFloat(value);
+        if (!isNaN(num)) input.value = num;
+        const display = token.unit ? `${num}${token.unit}` : `${num}`;
+        const valSpan = document.getElementById(`${uid}-val`);
+        if (valSpan) valSpan.textContent = display;
+        root.style.setProperty(token.var, value);
+      } else if (token.type === 'font') {
+        // Try to match value to an option
+        const normalizedVal = value.replace(/['"]/g, '').toLowerCase();
+        for (const opt of input.options) {
+          const normalizedOpt = opt.value.replace(/['"]/g, '').toLowerCase();
+          if (normalizedVal === normalizedOpt || normalizedVal.startsWith(normalizedOpt.split(',')[0].trim())) {
+            input.value = opt.value;
+            break;
+          }
+        }
+        const preview = document.getElementById(`${uid}-preview`);
+        if (preview) preview.style.fontFamily = value;
+        // Load Google Font if needed
+        const sel = input.options[input.selectedIndex];
+        const googleParam = sel?.getAttribute('data-google');
+        if (googleParam) loadGoogleFont(googleParam);
+        root.style.setProperty(token.var, value);
+        if (token.var === '--font-sans') root.style.setProperty('--default-font-family', value);
+        if (token.var === '--font-mono') root.style.setProperty('--default-mono-font-family', value);
+      } else {
+        input.value = value;
+        root.style.setProperty(token.var, value);
+      }
+    }
+
+    // ──── Helper: reset a token to factory default ────
+    function resetTokenToDefault(gi, ti) {
+      const token = tokenGroups[gi]?.tokens[ti];
+      if (!token) return;
+      const val = token.type === 'range' && token.unit ? `${token.default}${token.unit}` : `${token.default}`;
+      setTokenValue(gi, ti, val);
+    }
+
+    // ──── Helper: reset a token to CSS file value (remove inline override) ────
+    function resetTokenToFile(gi, ti) {
+      const token = tokenGroups[gi]?.tokens[ti];
+      if (!token) return;
+      const uid = `ctrl-${gi}-${ti}`;
+      root.style.removeProperty(token.var);
+      pendingChanges.delete(token.var);
+      // Read the CSS file's computed value
+      const rawVal = getComputedStyle(root).getPropertyValue(token.var).trim();
+      if (!rawVal) return;
+      const input = document.getElementById(uid);
+      if (!input) return;
+      if (token.type === 'color') {
+        let hex = rawVal;
+        if (hex.startsWith('rgb')) {
+          const m = hex.match(/\d+/g);
+          if (m && m.length >= 3) hex = '#' + [m[0],m[1],m[2]].map(c => parseInt(c).toString(16).padStart(2,'0')).join('');
+        }
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) input.value = hex;
+        const valSpan = document.getElementById(`${uid}-val`);
+        if (valSpan) valSpan.textContent = hex;
+      } else if (token.type === 'range') {
+        const num = parseFloat(rawVal);
+        if (!isNaN(num)) {
+          input.value = num;
+          const valSpan = document.getElementById(`${uid}-val`);
+          if (valSpan) valSpan.textContent = token.unit ? `${num}${token.unit}` : `${num}`;
+        }
+      } else if (token.type === 'font') {
+        const normalizedRaw = rawVal.replace(/['"]/g, '').toLowerCase();
+        for (const opt of input.options) {
+          const normalizedOpt = opt.value.replace(/['"]/g, '').toLowerCase();
+          if (normalizedRaw === normalizedOpt || normalizedRaw.startsWith(normalizedOpt.split(',')[0].trim())) {
+            input.value = opt.value;
+            break;
+          }
+        }
+        const preview = document.getElementById(`${uid}-preview`);
+        if (preview) preview.style.fontFamily = rawVal;
+      } else {
+        input.value = rawVal;
+      }
+    }
+
+    // ──── Reset group (back to CSS file values) ────
+    controlsContainer.querySelectorAll('.ds-reset-group').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const gi = parseInt(btn.getAttribute('data-group'));
+        const group = tokenGroups[gi];
+        if (!group) return;
+        group.tokens.forEach((_, ti) => resetTokenToFile(gi, ti));
+        updateSaveButton();
+      });
+    });
+
+    // ──── Reset All (back to CSS file values) ────
+    document.getElementById('reset-all-btn')?.addEventListener('click', () => {
+      tokenGroups.forEach((group, gi) => {
+        group.tokens.forEach((_, ti) => resetTokenToFile(gi, ti));
+      });
+      pendingChanges.clear();
+      updateSaveButton();
+      showToast('↺', 'Sıfırlandı', 'Tüm kontroller CSS dosyasındaki değerlere döndürüldü.', false);
+    });
+
+    // ──── Build preset tabs ────
+    const presetContainer = document.getElementById('preset-tabs');
+    if (presetContainer) {
+      themePresets.forEach((preset, pi) => {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.className = 'inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold border border-border-default rounded-lg hover:bg-primary-50 hover:border-primary-400 hover:text-primary-700 transition-all dark:hover:bg-secondary-800 dark:hover:border-secondary-500';
+        tab.setAttribute('data-preset', pi.toString());
+        tab.innerHTML = `<span>${preset.icon}</span> ${preset.name}`;
+        tab.title = preset.desc;
+        tab.addEventListener('click', () => applyPreset(pi));
+        presetContainer.appendChild(tab);
+      });
+    }
+
+    // ──── Apply preset ────
+    function applyPreset(pi) {
+      const preset = themePresets[pi];
+      if (!preset) return;
+
+      // First: reset everything to CSS file values
+      tokenGroups.forEach((group, gi) => {
+        group.tokens.forEach((_, ti) => {
+          const token = tokenGroups[gi].tokens[ti];
+          root.style.removeProperty(token.var);
+          pendingChanges.delete(token.var);
+        });
+      });
+
+      if (pi === 0) {
+        // "Varsayılan" preset: apply factory defaults for ALL tokens
+        tokenGroups.forEach((group, gi) => {
+          group.tokens.forEach((token, ti) => {
+            resetTokenToDefault(gi, ti);
+          });
+        });
+      } else {
+        // Apply only the overrides in this preset
+        const overrides = preset.overrides;
+        // First read CSS file values for all controls
+        tokenGroups.forEach((group, gi) => {
+          group.tokens.forEach((_, ti) => resetTokenToFile(gi, ti));
+        });
+        // Clear pending from the resetToFile calls
+        pendingChanges.clear();
+        // Then apply overrides
+        for (const [varName, value] of Object.entries(overrides)) {
+          // Find which token this var belongs to
+          tokenGroups.forEach((group, gi) => {
+            group.tokens.forEach((token, ti) => {
+              if (token.var === varName) {
+                setTokenValue(gi, ti, value);
+              }
+            });
+          });
+        }
+      }
+      updateSaveButton();
+
+      // Highlight active tab
+      document.querySelectorAll('#preset-tabs button').forEach((btn, i) => {
+        if (i === pi) {
+          btn.classList.add('bg-primary-100', 'border-primary-500', 'text-primary-700');
+          btn.classList.remove('border-border-default');
+        } else {
+          btn.classList.remove('bg-primary-100', 'border-primary-500', 'text-primary-700');
+          btn.classList.add('border-border-default');
+        }
+      });
+
+      showToast(preset.icon, `"${preset.name}" uygulandı`, `${Object.keys(preset.overrides).length || 'Tüm'} değişken ayarlandı. Kaydetmek için Save butonuna tıklayın.`, false);
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // COMPONENT EDITORS — per-component controls + live preview
+  // ══════════════════════════════════════════════
+  const compEditorsContainer = document.getElementById('component-editors');
+  if (compEditorsContainer) {
+    componentEditors.forEach((comp, ci) => {
+      // Merge all tokens (main + outline if any)
+      const allTokens = [...comp.tokens, ...(comp.outlineTokens || [])];
+
+      const card = document.createElement('div');
+      card.className = 'border border-border-default dark:border-secondary-700 rounded-xl bg-white dark:bg-secondary-900 overflow-hidden';
+      card.innerHTML = `
+        <button type="button" class="comp-editor-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="text-lg">${comp.icon}</span>
+            <span class="text-base font-bold">${comp.name}</span>
+            <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${allTokens.length} kontrol</span>
+          </span>
+          <svg class="comp-chevron w-5 h-5 text-text-tertiary transition-transform rotate-90" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <div class="comp-editor-body px-5 pb-5">
+          <!-- Controls -->
+          <div class="comp-controls grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-4 gap-y-3 mb-5"></div>
+          ${comp.outlineTokens ? '<hr class="border-border-default mb-4 -mx-5">' : ''}
+          ${comp.outlineTokens ? '<p class="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-3">Outline Varyant</p><div class="comp-outline-controls grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3 mb-5"></div>' : ''}
+          <!-- Preview -->
+          <div class="border border-dashed border-border-default rounded-lg p-5 bg-surface-muted dark:bg-secondary-800">
+            <p class="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-3">Önizleme</p>
+            <div class="comp-preview-area"></div>
+          </div>
+        </div>
+      `;
+
+      // Toggle open/close
+      const toggleBtn = card.querySelector('.comp-editor-toggle');
+      const body = card.querySelector('.comp-editor-body');
+      const chevron = card.querySelector('.comp-chevron');
+      toggleBtn.addEventListener('click', () => {
+        body.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-90');
+      });
+
+      // Build controls for main tokens
+      const controlsGrid = card.querySelector('.comp-controls');
+      comp.tokens.forEach((token, ti) => {
+        const uid = `comp-${ci}-${ti}`;
+        controlsGrid.appendChild(buildCompControl(uid, token));
+      });
+
+      // Build controls for outline tokens (if any)
+      if (comp.outlineTokens) {
+        const outlineGrid = card.querySelector('.comp-outline-controls');
+        comp.outlineTokens.forEach((token, ti) => {
+          const uid = `comp-${ci}-outline-${ti}`;
+          outlineGrid.appendChild(buildCompControl(uid, token));
+        });
+      }
+
+      // Render preview
+      const previewArea = card.querySelector('.comp-preview-area');
+      previewArea.innerHTML = comp.preview();
+
+      compEditorsContainer.appendChild(card);
+
+      // Initialize controls from computed CSS values
+      initCompControls(ci, comp.tokens, 'comp');
+      if (comp.outlineTokens) initCompControls(ci, comp.outlineTokens, 'comp', '-outline');
+    });
+  }
+
+  function buildCompControl(uid, token) {
+    const cell = document.createElement('div');
+    if (token.type === 'color') {
+      cell.innerHTML = `
+        <label class="block text-[11px] font-semibold text-text-secondary mb-1">${token.label}</label>
+        <div class="flex items-center gap-2">
+          <input type="color" id="${uid}" value="${token.default}" class="w-7 h-7 rounded cursor-pointer border-0 p-0 flex-shrink-0" />
+          <span id="${uid}-val" class="text-[10px] font-mono text-text-tertiary">${token.default}</span>
+        </div>
+      `;
+      const inp = cell.querySelector('input');
+      inp.addEventListener('input', () => {
+        root.style.setProperty(token.var, inp.value);
+        const valSpan = document.getElementById(`${uid}-val`);
+        if (valSpan) valSpan.textContent = inp.value;
+      });
+    } else if (token.type === 'range') {
+      const dispVal = token.unit ? `${token.default}${token.unit}` : `${token.default}`;
+      cell.innerHTML = `
+        <label class="flex items-baseline justify-between text-[11px] font-semibold text-text-secondary mb-1 gap-1">
+          <span class="truncate">${token.label}</span>
+          <span id="${uid}-val" class="text-text-tertiary flex-shrink-0 font-mono text-[10px]">${dispVal}</span>
+        </label>
+        <input type="range" id="${uid}" min="${token.min}" max="${token.max}" step="${token.step}" value="${token.default}" class="w-full accent-primary-500 h-1.5" />
+      `;
+      const inp = cell.querySelector('input');
+      inp.addEventListener('input', () => {
+        const v = token.unit ? `${inp.value}${token.unit}` : inp.value;
+        root.style.setProperty(token.var, v);
+        const valSpan = document.getElementById(`${uid}-val`);
+        if (valSpan) valSpan.textContent = v;
+      });
+    } else {
+      cell.innerHTML = `
+        <label class="block text-[11px] font-semibold text-text-secondary mb-1">${token.label}</label>
+        <input type="text" id="${uid}" value="${token.default}" class="w-full text-[10px] font-mono border border-border-default dark:border-secondary-600 rounded px-2 py-1 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none" />
+      `;
+      const inp = cell.querySelector('input');
+      inp.addEventListener('input', () => {
+        root.style.setProperty(token.var, inp.value);
+      });
+    }
+    return cell;
+  }
+
+  function initCompControls(ci, tokens, prefix, suffix = '') {
+    const computed = getComputedStyle(root);
+    tokens.forEach((token, ti) => {
+      const uid = `${prefix}-${ci}${suffix}-${ti}`;
+      const input = document.getElementById(uid);
+      if (!input) return;
+      const rawVal = computed.getPropertyValue(token.var).trim();
+      if (!rawVal) return;
+      if (token.type === 'color') {
+        let hex = rawVal;
+        if (hex.startsWith('rgb')) {
+          const m = hex.match(/\d+/g);
+          if (m && m.length >= 3) hex = '#' + [m[0],m[1],m[2]].map(c => parseInt(c).toString(16).padStart(2,'0')).join('');
+        }
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
+          input.value = hex;
+          const valSpan = document.getElementById(`${uid}-val`);
+          if (valSpan) valSpan.textContent = hex;
+        }
+      } else if (token.type === 'range') {
+        const num = parseFloat(rawVal);
+        if (!isNaN(num)) {
+          input.value = num;
+          const valSpan = document.getElementById(`${uid}-val`);
+          if (valSpan) valSpan.textContent = token.unit ? `${num}${token.unit}` : `${num}`;
+        }
+      } else {
+        input.value = rawVal;
+      }
+    });
+  }
+
+  // ══════════════════════════════════════════════
+  // SECTION EDITORS — per-page-section controls + mini live preview
+  // ══════════════════════════════════════════════
+  const sectionEditors = [
+    {
+      id: 'section-header',
+      name: 'Header / TopBar',
+      icon: '▔',
+      tokens: [
+        { var: '--header-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--header-height', type: 'range', default: 64, min: 40, max: 100, step: 1, unit: 'px', label: 'Yükseklik' },
+        { var: '--header-border-color', type: 'color', default: '#e5e5e5', label: 'Alt Border' },
+        { var: '--header-text-color', type: 'color', default: '#374151', label: 'Yazı Rengi' },
+        { var: '--header-icon-color', type: 'color', default: '#374151', label: 'İkon Rengi' },
+        { var: '--header-icon-hover-color', type: 'color', default: '#cc9900', label: 'İkon Hover' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border border-border-default">
+          <div class="flex items-center justify-between px-4" style="background:var(--header-bg); height:var(--header-height); border-bottom:1px solid var(--header-border-color)">
+            <span class="font-bold text-sm" style="color:var(--header-icon-hover-color)">iSTOC</span>
+            <div class="flex items-center gap-3">
+              <span class="text-xs" style="color:var(--header-text-color)">Deliver to: 🇹🇷 TR</span>
+              <span class="text-xs" style="color:var(--header-text-color)">English-USD</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4" style="color:var(--header-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/></svg>
+              <svg class="w-4 h-4" style="color:var(--header-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+              <span class="comp-btn text-[10px]" style="padding:4px 10px; border-radius:9999px">Join Free</span>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-subheader',
+      name: 'SubHeader / Navigasyon',
+      icon: '≡',
+      tokens: [
+        { var: '--subheader-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--subheader-border-color', type: 'color', default: '#e5e5e5', label: 'Alt Border' },
+        { var: '--nav-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
+        { var: '--nav-font-weight', type: 'range', default: 500, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
+        { var: '--subheader-text-color', type: 'color', default: '#525252', label: 'Yazı Rengi' },
+        { var: '--subheader-hover-color', type: 'color', default: '#b38600', label: 'Hover Rengi' },
+        { var: '--subheader-hover-bg', type: 'text', default: 'rgba(255, 255, 255, 0.8)', label: 'Hover Arkaplan' },
+        { var: '--subheader-active-color', type: 'color', default: '#b38600', label: 'Aktif Rengi' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border border-border-default">
+          <div class="flex items-center justify-between px-4 py-2" style="background:var(--subheader-bg); border-bottom:1px solid var(--subheader-border-color)">
+            <div class="flex items-center gap-4">
+              <span style="color:var(--subheader-active-color);font-size:var(--nav-font-size);font-weight:var(--nav-font-weight)">☰ Tüm Kategoriler</span>
+              <span style="color:var(--subheader-text-color);font-size:var(--nav-font-size);font-weight:var(--nav-font-weight)">Öne Çıkanlar</span>
+              <span style="color:var(--subheader-text-color);font-size:var(--nav-font-size);font-weight:var(--nav-font-weight)">Trade Assurance</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <span style="color:var(--subheader-text-color);font-size:var(--nav-font-size);font-weight:var(--nav-font-weight)">Alıcı Merkezi</span>
+              <span style="color:var(--subheader-text-color);font-size:var(--nav-font-size);font-weight:var(--nav-font-weight)">Yardım</span>
+              <span style="color:var(--subheader-text-color);font-size:var(--nav-font-size);font-weight:var(--nav-font-weight)">Sell on iSTOC</span>
+            </div>
+          </div>
+          <div class="flex gap-4 items-center px-4 py-2">
+            <a href="#" class="comp-nav-link">Giriş Yap</a>
+            <a href="#" class="comp-nav-link">Üye Ol</a>
+            <span class="text-text-tertiary">|</span>
+            <a href="#" class="comp-nav-link flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+              Sepet (0)
+            </a>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-search',
+      name: 'Arama Alanı',
+      icon: '⌕',
+      tokens: [
+        { var: '--search-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--search-tab-color', type: 'color', default: '#6b7280', label: 'Tab Rengi' },
+        { var: '--search-tab-active-color', type: 'color', default: '#cc9900', label: 'Aktif Tab' },
+        { var: '--search-input-border-color', type: 'color', default: '#cc9900', label: 'Input Border' },
+        { var: '--search-btn-gradient-start', type: 'color', default: '#f5a623', label: 'Buton Gradient Başı' },
+        { var: '--search-btn-gradient-end', type: 'color', default: '#e8740c', label: 'Buton Gradient Sonu' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border border-border-default p-4" style="background:var(--search-bg)">
+          <div class="flex justify-center gap-4 mb-3">
+            <span class="text-xs font-semibold pb-1" style="color:var(--search-tab-active-color); border-bottom:2px solid var(--search-tab-active-color)">Products</span>
+            <span class="text-xs" style="color:var(--search-tab-color)">Manufacturers</span>
+            <span class="text-xs" style="color:var(--search-tab-color)">Worldwide</span>
+          </div>
+          <div class="flex flex-col max-w-md mx-auto rounded-lg p-3" style="border:2px solid var(--search-input-border-color)">
+            <input type="text" placeholder="Tekstil ve Konfeksiyon" class="text-xs border-0 bg-transparent outline-none mb-2 text-text-primary" readonly />
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] text-text-tertiary">📷 Image Search</span>
+              <span class="text-[10px] text-white font-semibold px-3 py-1 rounded-full" style="background:linear-gradient(135deg, var(--search-btn-gradient-start), var(--search-btn-gradient-end))">✦ Search</span>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-gradient',
+      name: 'Header Gradient',
+      icon: '◑',
+      tokens: [
+        { var: '--header-gradient-1', type: 'color', default: '#fff7ed', label: 'Renk 1 (0%)' },
+        { var: '--header-gradient-2', type: 'color', default: '#f6f4e8', label: 'Renk 2 (25%)' },
+        { var: '--header-gradient-3', type: 'color', default: '#fff1f2', label: 'Renk 3 (50%)' },
+        { var: '--header-gradient-4', type: 'color', default: '#fbfaf0', label: 'Renk 4 (75%)' },
+        { var: '--header-gradient-5', type: 'color', default: '#fff7ed', label: 'Renk 5 (100%)' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden h-24 flex items-center justify-center" style="background-image:linear-gradient(135deg, var(--header-gradient-1) 0%, var(--header-gradient-2) 25%, var(--header-gradient-3) 50%, var(--header-gradient-4) 75%, var(--header-gradient-5) 100%); background-size:300% 300%; animation:searchGradientShift 12s ease infinite;">
+          <span class="text-xs font-medium text-text-secondary">Canlı Gradient Önizleme (animasyonlu)</span>
+        </div>
+      `
+    },
+    {
+      id: 'section-mega',
+      name: 'MegaMenu',
+      icon: '▤',
+      tokens: [
+        { var: '--mega-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--mega-sidebar-bg', type: 'color', default: '#f9fafb', label: 'Sidebar Arkaplan' },
+        { var: '--mega-sidebar-hover-bg', type: 'color', default: '#ffffff', label: 'Sidebar Hover' },
+        { var: '--mega-sidebar-active-bg', type: 'color', default: '#ffffff', label: 'Sidebar Aktif' },
+        { var: '--mega-border-color', type: 'color', default: '#e5e7eb', label: 'Border Rengi' },
+        { var: '--mega-text-color', type: 'color', default: '#374151', label: 'Yazı Rengi' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border" style="border-color:var(--mega-border-color)">
+          <div class="flex h-40" style="background:var(--mega-bg)">
+            <div class="w-48 flex-shrink-0 py-2 border-r" style="background:var(--mega-sidebar-bg); border-color:var(--mega-border-color)">
+              <div class="px-3 py-1.5 text-[10px] font-semibold" style="background:var(--mega-sidebar-active-bg); color:var(--mega-text-color)">Apparel & Accessories</div>
+              <div class="px-3 py-1.5 text-[10px]" style="color:var(--mega-text-color)">Consumer Electronics</div>
+              <div class="px-3 py-1.5 text-[10px]" style="color:var(--mega-text-color)">Sports & Entertainment</div>
+              <div class="px-3 py-1.5 text-[10px]" style="color:var(--mega-text-color)">Home & Garden</div>
+            </div>
+            <div class="flex-1 p-3">
+              <div class="grid grid-cols-3 gap-2">
+                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Bridesmaid Dresses</div>
+                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Carnival Costume</div>
+                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Rhinestones</div>
+                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Camouflage</div>
+                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Polyester Ties</div>
+                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Ice Hockey</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-hero',
+      name: 'Hero',
+      icon: '▣',
+      tokens: [
+        { var: '--hero-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--hero-card-bg', type: 'color', default: '#ffffff', label: 'Kart Arkaplan' },
+        { var: '--hero-card-border-color', type: 'color', default: '#e5e5e5', label: 'Kart Border' },
+        { var: '--hero-title-color', type: 'color', default: '#111827', label: 'Başlık Rengi' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border border-border-default p-4" style="background:var(--hero-bg)">
+          <div class="flex gap-3">
+            <div class="flex-1 h-24 rounded-lg flex items-center justify-center" style="background:var(--hero-card-bg); border:1px solid var(--hero-card-border-color)">
+              <span class="text-[10px]" style="color:var(--hero-title-color)">Banner Slider</span>
+            </div>
+            <div class="w-32 h-24 rounded-lg flex items-center justify-center" style="background:var(--hero-card-bg); border:1px solid var(--hero-card-border-color)">
+              <span class="text-[10px]" style="color:var(--hero-title-color)">Side Banner</span>
+            </div>
+          </div>
+          <div class="flex gap-2 mt-2">
+            <div class="flex-1 h-12 rounded-lg flex items-center justify-center" style="background:var(--hero-card-bg); border:1px solid var(--hero-card-border-color)">
+              <span class="text-[10px]" style="color:var(--hero-title-color)">Category</span>
+            </div>
+            <div class="flex-1 h-12 rounded-lg flex items-center justify-center" style="background:var(--hero-card-bg); border:1px solid var(--hero-card-border-color)">
+              <span class="text-[10px]" style="color:var(--hero-title-color)">Recommendation</span>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-footer',
+      name: 'Footer',
+      icon: '▁',
+      tokens: [
+        { var: '--footer-bg', type: 'color', default: '#111827', label: 'Arkaplan' },
+        { var: '--footer-text-color', type: 'color', default: '#9ca3af', label: 'Yazı Rengi' },
+        { var: '--footer-heading-color', type: 'color', default: '#ffffff', label: 'Başlık Rengi' },
+        { var: '--footer-link-color', type: 'color', default: '#9ca3af', label: 'Link Rengi' },
+        { var: '--footer-link-hover-color', type: 'color', default: '#ffffff', label: 'Link Hover' },
+        { var: '--footer-border-color', type: 'color', default: '#1f2937', label: 'Border Rengi' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden p-4" style="background:var(--footer-bg)">
+          <div class="grid grid-cols-4 gap-4 mb-3">
+            <div>
+              <p class="text-[10px] font-bold mb-1" style="color:var(--footer-heading-color)">Trade Services</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Trade Assurance</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Payments</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold mb-1" style="color:var(--footer-heading-color)">Get to Know Us</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">About iSTOC</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Careers</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold mb-1" style="color:var(--footer-heading-color)">Sell on iSTOC</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Start Selling</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Seller Central</p>
+            </div>
+            <div>
+              <p class="text-[10px] font-bold mb-1" style="color:var(--footer-heading-color)">Help</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Help Center</p>
+              <p class="text-[10px]" style="color:var(--footer-link-color)">Contact Us</p>
+            </div>
+          </div>
+          <div class="pt-2" style="border-top:1px solid var(--footer-border-color)">
+            <p class="text-[10px]" style="color:var(--footer-text-color)">© 2025 iSTOC. All rights reserved.</p>
+          </div>
+        </div>
+      `
+    },
+  ];
+
+  // Build section editors UI (reusing component editor pattern)
+  const sectionEditorsContainer = document.getElementById('section-editors');
+  if (sectionEditorsContainer) {
+    sectionEditors.forEach((sec, si) => {
+      const card = document.createElement('div');
+      card.id = sec.id;
+      card.className = 'border border-border-default dark:border-secondary-700 rounded-xl bg-white dark:bg-secondary-900 overflow-hidden';
+      card.innerHTML = `
+        <button type="button" class="sec-editor-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors">
+          <span class="flex items-center gap-2">
+            <span class="text-lg">${sec.icon}</span>
+            <span class="text-base font-bold">${sec.name}</span>
+            <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${sec.tokens.length} kontrol</span>
+          </span>
+          <svg class="sec-chevron w-5 h-5 text-text-tertiary transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <div class="sec-editor-body hidden px-5 pb-5">
+          <div class="sec-controls grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-3 mb-5"></div>
+          <div class="border border-dashed border-border-default rounded-lg p-4 bg-surface-muted dark:bg-secondary-800">
+            <p class="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-3">Önizleme</p>
+            <div class="sec-preview-area"></div>
+          </div>
+        </div>
+      `;
+
+      // Toggle
+      const toggleBtn = card.querySelector('.sec-editor-toggle');
+      const body = card.querySelector('.sec-editor-body');
+      const chevron = card.querySelector('.sec-chevron');
+      toggleBtn.addEventListener('click', () => {
+        body.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-90');
+      });
+
+      // Build controls
+      const controlsGrid = card.querySelector('.sec-controls');
+      sec.tokens.forEach((token, ti) => {
+        const uid = `sec-${si}-${ti}`;
+        controlsGrid.appendChild(buildCompControl(uid, token));
+      });
+
+      // Preview
+      const previewArea = card.querySelector('.sec-preview-area');
+      previewArea.innerHTML = sec.preview();
+
+      sectionEditorsContainer.appendChild(card);
+
+      // Init from computed
+      initCompControls(si, sec.tokens, 'sec');
+    });
+  }
+
+  // ══════════════════════════════════════════════
+  // GOOGLE FONT LOADER — dynamically loads fonts from Google Fonts CDN
+  // ══════════════════════════════════════════════
+
+  const loadedFonts = new Set();
+  function loadGoogleFont(fontParam) {
+    if (!fontParam || loadedFonts.has(fontParam)) return;
+    loadedFonts.add(fontParam);
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
+    document.head.appendChild(link);
+  }
+
+  // ══════════════════════════════════════════════
+  // SAVE TO style.css — writes changes to disk via Vite plugin
+  // Vite HMR picks up the file change → home page updates automatically
+  // ══════════════════════════════════════════════
+
+  // Track which CSS variables have been modified
+  const pendingChanges = new Map();
+
+  // Override setProperty to track changes
+  const origSetProperty = CSSStyleDeclaration.prototype.setProperty;
+  root.style.setProperty = function(prop, value, priority) {
+    if (prop.startsWith('--')) {
+      pendingChanges.set(prop, value);
+      updateSaveButton();
+    }
+    return origSetProperty.call(this, prop, value, priority);
+  };
+
+  function updateSaveButton() {
+    const btn = document.getElementById('save-css-btn');
+    const count = document.getElementById('save-count');
+    if (btn && count) {
+      count.textContent = pendingChanges.size.toString();
+      btn.style.display = pendingChanges.size > 0 ? 'flex' : 'none';
+    }
+  }
+
+  function showToast(icon, title, message, isError) {
+    const toast = document.getElementById('save-toast');
+    const ti = document.getElementById('toast-icon');
+    const tt = document.getElementById('toast-title');
+    const tm = document.getElementById('toast-message');
+    if (!toast || !ti || !tt || !tm) return;
+    ti.textContent = icon;
+    tt.textContent = title;
+    tm.textContent = message;
+    toast.style.background = isError ? '#7f1d1d' : '#1a1a1a';
+    toast.style.display = 'block';
+    requestAnimationFrame(() => {
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+    });
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(-8px)';
+      setTimeout(() => { toast.style.display = 'none'; }, 300);
+    }, 4000);
+  }
+
+  // Build Google Fonts @import URL(s) for any font changes in pending
+  function buildGoogleFontImports(updates) {
+    const fontUrls = [];
+    // Check if --font-sans or --font-mono changed
+    for (const varName of ['--font-sans', '--font-mono']) {
+      if (!updates[varName]) continue;
+      // Find matching token to get the google font param
+      for (const group of tokenGroups) {
+        for (const token of group.tokens) {
+          if (token.var !== varName || token.type !== 'font') continue;
+          for (const opt of token.options) {
+            if (opt.value === updates[varName] && opt.google) {
+              fontUrls.push(`family=${opt.google}`);
+            }
+          }
+        }
+      }
+    }
+    if (fontUrls.length === 0) return null;
+    return `@import url('https://fonts.googleapis.com/css2?${fontUrls.join('&')}&display=swap');`;
+  }
+
+  async function saveToStyleCSS() {
+    if (pendingChanges.size === 0) return;
+    const btn = document.getElementById('save-css-btn');
+    const btnText = document.getElementById('save-btn-text');
+    const count = pendingChanges.size;
+    if (btn) btn.style.opacity = '0.6';
+    if (btnText) btnText.textContent = 'Saving...';
+
+    try {
+      const updates = Object.fromEntries(pendingChanges);
+      // Add Google Font import URL if font changed
+      const fontImport = buildGoogleFontImports(updates);
+      if (fontImport) updates['__google_font_imports__'] = fontImport;
+      // Remove --default-font-family from saves (it's auto-derived from --font-sans)
+      delete updates['--default-font-family'];
+      delete updates['--default-mono-font-family'];
+      const res = await fetch('/__save-css', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        pendingChanges.clear();
+        updateSaveButton();
+        if (btnText) btnText.textContent = 'Saved!';
+        showToast('✓', `${count} değişken kaydedildi!`, 'style.css güncellendi. Ana sayfa (localhost:5173) Vite HMR ile otomatik güncellenecek.', false);
+        setTimeout(() => { if (btnText) btnText.textContent = 'Save to style.css'; }, 1500);
+      } else {
+        if (btnText) btnText.textContent = 'Error!';
+        showToast('✗', 'Kaydetme başarısız!', `Sunucu hatası: ${JSON.stringify(data)}`, true);
+      }
+    } catch (e) {
+      console.error('Save failed:', e);
+      if (btnText) btnText.textContent = 'Error!';
+      showToast('✗', 'Kaydetme başarısız!', `Bağlantı hatası: ${e.message}. Vite dev server çalışıyor mu?`, true);
+    }
+    if (btn) btn.style.opacity = '1';
+  }
+
+  // Expose to onclick
+  window.saveToStyleCSS = saveToStyleCSS;
+</script>
+
+</body>
+</html>

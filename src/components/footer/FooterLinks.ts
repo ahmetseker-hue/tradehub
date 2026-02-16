@@ -136,7 +136,7 @@ function renderSocialIcons(): string {
           href="${link.href}"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center w-9 h-9 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-600 transition-all duration-200 hover:scale-110"
+          class="th-footer-social inline-flex items-center justify-center w-9 h-9 rounded-full hover:bg-gray-700 dark:text-gray-500 dark:hover:text-white dark:hover:bg-gray-600 transition-all duration-200 hover:scale-110"
           aria-label="${link.ariaLabel}"
         >
           ${getSocialIcon(link.platform)}
@@ -154,7 +154,7 @@ function renderLink(link: NavLink): string {
     <li>
       <a
         href="${link.href}"
-        class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors duration-200 leading-relaxed"
+        class="th-footer-link transition-colors duration-200 leading-relaxed dark:text-gray-400 dark:hover:text-white"
       >
         ${link.label}
       </a>
@@ -168,7 +168,7 @@ function renderLink(link: NavLink): string {
 function renderColumn(column: FooterColumn): string {
   return `
     <div class="footer-column">
-      <h3 class="text-[13px] font-bold text-gray-800 dark:text-gray-100 uppercase tracking-widest mb-5">
+      <h3 class="text-[13px] font-bold dark:text-gray-100 uppercase tracking-widest mb-5" style="color:var(--footer-heading-color)">
         ${column.title}
       </h3>
       <ul class="space-y-3.5 text-sm">
@@ -188,13 +188,13 @@ function renderColumn(column: FooterColumn): string {
  */
 export function FooterLinks(): string {
   return `
-    <section class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700" aria-label="Footer navigation">
+    <section class="dark:bg-gray-900 dark:border-gray-700 border-t" style="background-color:var(--footer-bg);border-color:var(--footer-border-color)" aria-label="Footer navigation">
       <div class="container-boxed py-12 md:py-16">
         <div class="flex flex-col md:flex-row gap-10 md:gap-16">
           <!-- Left Side: Logo + Description + Social Icons -->
           <div class="flex flex-col items-center md:items-start md:w-56 shrink-0">
             ${renderFooterLogo()}
-            <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-6 text-center md:text-left">Global wholesale trade platform connecting buyers and sellers worldwide.</p>
+            <p class="text-sm dark:text-gray-400 leading-relaxed mb-6 text-center md:text-left" style="color:var(--footer-text-color)">Global wholesale trade platform connecting buyers and sellers worldwide.</p>
             ${renderSocialIcons()}
           </div>
 
