@@ -1,99 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TradeHub Design System</title>
+  <title>TradeHub Tasarım Sistemi</title>
   <script type="module">
     import './src/style.css';
   </script>
   <style>
-    /* Minimal page-specific styles that don't belong in the design system */
-    .ds-sidebar { position: fixed; top: 0; left: 0; width: 240px; height: 100vh; overflow-y: auto; z-index: 40; }
-    .ds-main { margin-left: 240px; }
+    /* Page-specific styles */
     .ds-swatch { cursor: pointer; position: relative; }
     .ds-swatch .ds-copied { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.7); color: #fff; font-size: 11px; font-weight: 600; border-radius: inherit; opacity: 0; transition: opacity 0.15s; pointer-events: none; }
     .ds-swatch.copied .ds-copied { opacity: 1; }
     .ds-spacing-bar { height: 24px; transition: width 0.3s ease; }
     .ds-motion-box { width: 60px; height: 60px; border-radius: 8px; }
     .ds-z-layer { height: 40px; position: relative; border: 1px solid; display: flex; align-items: center; padding-left: 12px; font-size: 13px; font-weight: 500; }
+
+    /* Tab bar: scrollable on mobile */
+    .ds-tab-bar { overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+    .ds-tab-bar::-webkit-scrollbar { display: none; }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Checkerboard pattern for transparent color indication */
+    .ds-checker-bg { background: conic-gradient(#ccc 25%, #fff 25% 50%, #ccc 50% 75%, #fff 75%) 0 0 / 8px 8px; }
+    .ds-checker-bg-sm { background: conic-gradient(#ccc 25%, #fff 25% 50%, #ccc 50% 75%, #fff 75%) 0 0 / 6px 6px; }
+
+    /* Sticky pending changes bar */
+    .ds-pending-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; height: 48px;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d); color: #fff;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; z-index: 999;
+      transform: translateY(100%); transition: transform 0.3s ease;
+      box-shadow: 0 -4px 16px rgba(0,0,0,0.2);
+    }
+    .ds-pending-bar--visible { transform: translateY(0); }
+
+    /* Section heading left border accent */
+    .ds-section-heading { border-left: 4px solid var(--color-primary-400); padding-left: 12px; }
+
     /* Component preview classes — driven by CSS variables */
     .comp-btn {
-      background: var(--btn-bg);
-      color: var(--btn-text);
+      background: var(--btn-bg); color: var(--btn-text);
       border: var(--btn-border-width) solid var(--btn-border-color);
       border-radius: var(--radius-button);
       padding: var(--spacing-button-y) var(--spacing-button-x);
-      font-size: var(--btn-font-size);
-      font-weight: var(--btn-font-weight);
-      box-shadow: var(--btn-shadow);
-      cursor: pointer;
-      line-height: 1.25;
+      font-size: var(--btn-font-size); font-weight: var(--btn-font-weight);
+      box-shadow: var(--btn-shadow); cursor: pointer; line-height: 1.25;
     }
     .comp-btn:hover { filter: brightness(0.9); }
     .comp-btn-sm { padding: calc(var(--spacing-button-y) * 0.65) calc(var(--spacing-button-x) * 0.7); font-size: calc(var(--btn-font-size) * 0.85); }
     .comp-btn-lg { padding: calc(var(--spacing-button-y) * 1.3) calc(var(--spacing-button-x) * 1.3); font-size: calc(var(--btn-font-size) * 1.15); }
     .comp-btn-outline {
-      background: var(--btn-outline-bg);
-      color: var(--btn-outline-text);
+      background: var(--btn-outline-bg); color: var(--btn-outline-text);
       border: var(--btn-outline-border-width) solid var(--btn-outline-border-color);
       border-radius: var(--radius-button);
       padding: var(--spacing-button-y) var(--spacing-button-x);
-      font-size: var(--btn-font-size);
-      font-weight: var(--btn-font-weight);
-      cursor: pointer;
-      line-height: 1.25;
+      font-size: var(--btn-font-size); font-weight: var(--btn-font-weight);
+      cursor: pointer; line-height: 1.25;
     }
     .comp-btn-outline:hover { filter: brightness(0.9); background: rgba(204,153,0,0.05); }
     .comp-card {
       background: var(--card-bg);
       border: var(--card-border-width) solid var(--card-border-color);
-      border-radius: var(--radius-card);
-      padding: var(--spacing-card-padding);
+      border-radius: var(--radius-card); padding: var(--spacing-card-padding);
       box-shadow: var(--shadow-card);
     }
     .comp-card-title { font-size: var(--card-title-size); font-weight: var(--card-title-weight); }
     .comp-input {
-      background: var(--input-bg);
-      color: var(--input-text-color);
+      background: var(--input-bg); color: var(--input-text-color);
       border: var(--input-border-width) solid var(--input-border-color);
       border-radius: var(--radius-input);
       padding: var(--spacing-input-y) var(--spacing-input-x);
-      font-size: var(--input-font-size);
-      outline: none;
-      transition: border-color 0.15s;
+      font-size: var(--input-font-size); outline: none; transition: border-color 0.15s;
     }
     .comp-input:focus { border-color: var(--input-focus-border-color); }
     .comp-badge {
-      display: inline-flex;
-      border-radius: var(--radius-badge);
-      font-size: var(--badge-font-size);
-      font-weight: var(--badge-font-weight);
-      padding: var(--badge-padding-y) var(--badge-padding-x);
-      line-height: 1.25;
+      display: inline-flex; border-radius: var(--radius-badge);
+      font-size: var(--badge-font-size); font-weight: var(--badge-font-weight);
+      padding: var(--badge-padding-y) var(--badge-padding-x); line-height: 1.25;
     }
     .comp-nav-link {
-      font-size: var(--nav-font-size);
-      font-weight: var(--nav-font-weight);
-      color: var(--nav-text-color);
-      text-decoration: none;
-      transition: color 0.15s;
+      font-size: var(--nav-font-size); font-weight: var(--nav-font-weight);
+      color: var(--nav-text-color); text-decoration: none; transition: color 0.15s;
     }
     .comp-nav-link:hover, .comp-nav-active { color: var(--nav-hover-color); }
 
-    @media (max-width: 768px) {
-      .ds-sidebar { display: none; }
-      .ds-main { margin-left: 0; }
-    }
   </style>
 </head>
 <body class="bg-surface text-text-primary">
 
-<!-- Floating Save Button -->
-<button id="save-css-btn" onclick="saveToStyleCSS()" style="display:none; position:fixed; bottom:24px; right:24px; z-index:999; background:linear-gradient(135deg,#f5a623,#e8740c); color:#fff; border:none; padding:12px 24px; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; box-shadow:0 4px 16px rgba(0,0,0,0.2); align-items:center; gap:8px; transition:all 0.2s;">
-  <span id="save-btn-text">Save to style.css</span>
-  <span id="save-count" style="background:rgba(255,255,255,0.3); padding:2px 8px; border-radius:8px; font-size:12px;">0</span>
-</button>
+<!-- Sticky Pending Changes Bar -->
+<div id="pending-bar" class="ds-pending-bar">
+  <span id="pending-bar-text" class="text-sm font-medium">0 değişiklik bekliyor</span>
+  <div class="flex items-center gap-3">
+    <button id="pending-reset-btn" class="px-3 py-1.5 text-xs font-semibold border border-white/30 text-white/80 hover:text-white hover:border-white/60 rounded-md transition-colors">Tümünü Sıfırla</button>
+    <button id="pending-save-btn" onclick="saveToStyleCSS()" class="px-4 py-1.5 text-xs font-bold text-white rounded-md transition-all" style="background:linear-gradient(135deg,#f5a623,#e8740c);">
+      <span id="save-btn-text">style.css'e Kaydet</span>
+    </button>
+  </div>
+</div>
 
 <!-- Toast Notification -->
 <div id="save-toast" style="display:none; position:fixed; top:24px; right:24px; z-index:9999; background:#1a1a1a; color:#fff; padding:16px 24px; border-radius:12px; font-size:14px; box-shadow:0 8px 32px rgba(0,0,0,0.3); max-width:400px; transition:all 0.3s ease; opacity:0; transform:translateY(-8px);">
@@ -104,68 +111,61 @@
   <p id="toast-message" style="margin:0; font-size:13px; color:#ccc;"></p>
 </div>
 
-<!-- Sidebar Navigation -->
-<nav class="ds-sidebar bg-white border-r border-border-default dark:bg-secondary-900 dark:border-secondary-700">
-  <div class="p-5 border-b border-border-default dark:border-secondary-700">
-    <h1 class="text-lg font-bold text-primary-600">TradeHub</h1>
-    <p class="text-xs text-text-secondary mt-1">Design System</p>
-  </div>
-  <ul class="py-3 text-sm">
-    <li><a href="#interactive-controls" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Interactive Controls</a></li>
-    <li><a href="#colors" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Colors</a></li>
-    <li><a href="#typography" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Typography</a></li>
-    <li><a href="#spacing" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Spacing</a></li>
-    <li><a href="#radius" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Border & Radius</a></li>
-    <li><a href="#shadows" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Shadows</a></li>
-    <li><a href="#z-index" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Z-Index</a></li>
-    <li><a href="#motion" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Motion</a></li>
-    <li><a href="#component-controls" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors font-semibold">Bileşen Kontrolleri</a></li>
-    <li class="mt-1 mx-3"><hr class="border-border-default"></li>
-    <li class="px-5 pt-2 pb-1"><span class="text-[10px] font-bold text-text-tertiary uppercase tracking-wider">Sayfa Bölümleri</span></li>
-    <li><a href="#section-header" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Header / TopBar</a></li>
-    <li><a href="#section-subheader" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">SubHeader</a></li>
-    <li><a href="#section-search" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Arama Alanı</a></li>
-    <li><a href="#section-gradient" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Header Gradient</a></li>
-    <li><a href="#section-mega" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">MegaMenu</a></li>
-    <li><a href="#section-hero" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Hero</a></li>
-    <li><a href="#section-footer" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Footer</a></li>
-    <li class="mt-1 mx-3"><hr class="border-border-default"></li>
-    <li><a href="#components" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Components</a></li>
-    <li><a href="#gradient" class="block px-5 py-2 text-text-secondary hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-secondary-800 transition-colors">Gradient Preview</a></li>
-  </ul>
-  <div class="p-5 border-t border-border-default dark:border-secondary-700">
-    <button id="dark-toggle" class="w-full text-sm font-medium px-4 py-2 rounded-md border border-border-default dark:border-secondary-600 hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors">
-      Toggle Dark Mode
-    </button>
-  </div>
-</nav>
-
 <!-- Main Content -->
-<div class="ds-main">
-  <div class="max-w-[1200px] mx-auto px-6 py-8">
+<div class="max-w-[1200px] mx-auto px-6 py-8">
 
-    <!-- Page Header -->
-    <header class="mb-12">
-      <h1 class="text-4xl font-bold tracking-tighter mb-2">Design System</h1>
-      <p class="text-text-secondary text-lg">TradeHub / Tailwind v4 Theme Tokens — Interactive Reference</p>
-    </header>
+  <!-- Page Header -->
+  <header class="mb-6 flex items-center justify-between">
+    <div>
+      <h1 class="text-4xl font-bold tracking-tighter mb-1">Tasarım Sistemi</h1>
+      <p class="text-text-secondary text-base">TradeHub / Tailwind v4 Tema Tokenleri — Etkileşimli Referans</p>
+    </div>
+    <button id="dark-toggle" class="text-sm font-medium px-4 py-2 rounded-md border border-border-default dark:border-secondary-600 hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors flex-shrink-0">
+      Koyu Mod
+    </button>
+  </header>
+
+  <!-- Tab Bar -->
+  <div class="ds-tab-bar flex gap-1 border-b border-border-default bg-white dark:bg-secondary-900 sticky top-0 z-30 -mx-6 px-6 mb-8" id="tab-bar" role="tablist">
+    <button data-tab-trigger="kontroller" role="tab" class="px-4 py-3 text-sm font-semibold whitespace-nowrap cursor-pointer transition-colors border-b-2 text-primary-600 border-primary-500">Kontroller</button>
+    <button data-tab-trigger="renkler" role="tab" class="px-4 py-3 text-sm font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong">Renkler</button>
+    <button data-tab-trigger="tipografi" role="tab" class="px-4 py-3 text-sm font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong">Tipografi</button>
+    <button data-tab-trigger="duzen" role="tab" class="px-4 py-3 text-sm font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong">Düzen</button>
+    <button data-tab-trigger="efektler" role="tab" class="px-4 py-3 text-sm font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong">Efektler</button>
+    <button data-tab-trigger="onizleme" role="tab" class="px-4 py-3 text-sm font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong">Önizleme</button>
+  </div>
+
+  <!-- ══════════ TAB PANEL: Kontroller ══════════ -->
+  <div data-tab-panel="kontroller">
 
     <!-- ═══════════════════════════════════════════════════
          I. INTERACTIVE CONTROLS (auto-generated from ALL @theme vars)
          ═══════════════════════════════════════════════════ -->
-    <section id="interactive-controls" class="mb-16">
+    <section id="interactive-controls" class="mb-20">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-2xl font-bold">Interactive Controls</h2>
-          <p class="text-sm text-text-secondary">Every CSS variable from @theme. Change a value, watch the page update.</p>
+          <h2 class="text-2xl font-bold ds-section-heading">Etkileşimli Kontroller</h2>
+          <p class="text-sm text-text-secondary mt-1">@theme'deki tum CSS degiskenleri. Bir degeri degistirin, sayfanin guncellenmesini izleyin.</p>
         </div>
-        <button id="reset-all-btn" class="px-4 py-2 text-xs font-semibold border border-error-500 text-error-500 hover:bg-error-50 rounded-md transition-colors">Reset All</button>
+        <button id="reset-all-btn" class="px-4 py-2 text-xs font-semibold border border-error-500 text-error-500 hover:bg-error-50 rounded-md transition-colors">Tümünü Sıfırla</button>
       </div>
 
       <!-- ── Theme Presets ── -->
       <div class="mb-6">
-        <p class="text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-2">Hazır Temalar</p>
+        <p class="text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-2">Hazir Temalar</p>
         <div id="preset-tabs" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- ── Token Search/Filter ── -->
+      <div class="mb-4 relative">
+        <div class="flex items-center gap-2">
+          <div class="relative flex-1">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+            <input type="text" id="token-search" placeholder="Token ara... (orn: primary, radius, shadow)" class="w-full pl-9 pr-9 py-2.5 text-sm border border-border-default rounded-lg bg-white dark:bg-secondary-800 dark:border-secondary-600 focus:border-primary-500 focus:outline-none transition-colors" />
+            <button id="token-search-clear" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-secondary-200 dark:bg-secondary-600 text-secondary-600 dark:text-secondary-300 flex items-center justify-center text-xs hover:bg-secondary-300 dark:hover:bg-secondary-500 transition-colors hidden" aria-label="Aramayı temizle">&times;</button>
+          </div>
+          <span id="token-search-count" class="text-xs text-text-tertiary whitespace-nowrap hidden"></span>
+        </div>
       </div>
 
       <div id="controls-container" class="space-y-2"></div>
@@ -174,9 +174,9 @@
     <!-- ═══════════════════════════════════════════════════
          I-B. COMPONENT CONTROLS (Bileşen Kontrolleri)
          ═══════════════════════════════════════════════════ -->
-    <section id="component-controls" class="mb-16">
+    <section id="component-controls" class="mb-20">
       <div class="mb-6">
-        <h2 class="text-2xl font-bold">Bileşen Kontrolleri</h2>
+        <h2 class="text-2xl font-bold ds-section-heading">Bileşen Kontrolleri</h2>
         <p class="text-sm text-text-secondary">Her bileşenin stilini ayrı ayrı düzenleyin. Değişiklikler anında önizlemede görünür ve style.css'e kaydedilebilir.</p>
       </div>
       <div id="component-editors" class="space-y-6"></div>
@@ -185,19 +185,22 @@
     <!-- ═══════════════════════════════════════════════════
          PAGE SECTION CONTROLS
          ═══════════════════════════════════════════════════ -->
-    <section id="section-panels" class="mb-16">
+    <section id="section-panels" class="mb-20">
       <div class="mb-6">
-        <h2 class="text-2xl font-bold">Sayfa Bölümleri</h2>
+        <h2 class="text-2xl font-bold ds-section-heading">Sayfa Bolumleri</h2>
         <p class="text-sm text-text-secondary">Her sayfa bölümünün görünümünü ayrı ayrı kontrol edin. Değişiklikler anında önizlemede görünür.</p>
       </div>
-      <div id="section-editors" class="space-y-6"></div>
+      <div id="section-editors" class="space-y-4"></div>
     </section>
+  </div><!-- /tab-panel: kontroller -->
 
+  <!-- ══════════ TAB PANEL: Renkler ══════════ -->
+  <div data-tab-panel="renkler" style="display:none">
     <!-- ═══════════════════════════════════════════════════
          A. COLOR SYSTEM
          ═══════════════════════════════════════════════════ -->
-    <section id="colors" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Color System</h2>
+    <section id="colors" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Renk Sistemi</h2>
 
       <!-- Primary -->
       <h3 class="text-base font-semibold mb-3 text-text-secondary">Primary (Amber / Gold)</h3>
@@ -212,7 +215,7 @@
       <div class="grid grid-cols-5 sm:grid-cols-11 gap-2 mb-8" id="palette-accent"></div>
 
       <!-- Semantic -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Colors</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Anlamsal Renkler</h3>
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <div>
           <p class="text-xs font-semibold mb-2">Success</p>
@@ -249,7 +252,7 @@
       </div>
 
       <!-- Surface -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Surface Colors</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Yuzey Renkleri</h3>
       <div class="flex flex-wrap gap-3 mb-8">
         <div class="ds-swatch w-20 h-20 rounded-md border border-border-default flex flex-col items-center justify-center" style="background:var(--color-surface)" data-var="--color-surface">
           <span class="text-[10px] font-mono">surface</span><span class="ds-copied">Copied</span>
@@ -266,7 +269,7 @@
       </div>
 
       <!-- Text Colors -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Text Colors</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Yazi Renkleri</h3>
       <div class="flex flex-wrap gap-4 mb-8">
         <div class="ds-swatch px-4 py-2 rounded-md border border-border-default" data-var="--color-text-primary">
           <span style="color:var(--color-text-primary)" class="font-semibold text-sm">Primary</span><span class="ds-copied">Copied</span>
@@ -286,7 +289,7 @@
       </div>
 
       <!-- Border Colors -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Border Colors</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Kenar Renkleri</h3>
       <div class="flex flex-wrap gap-4 mb-4">
         <div class="ds-swatch w-24 h-16 rounded-md flex items-center justify-center" style="border:3px solid var(--color-border-default)" data-var="--color-border-default">
           <span class="text-xs font-mono">default</span><span class="ds-copied">Copied</span>
@@ -302,15 +305,18 @@
         </div>
       </div>
     </section>
+  </div><!-- /tab-panel: renkler -->
 
+  <!-- ══════════ TAB PANEL: Tipografi ══════════ -->
+  <div data-tab-panel="tipografi" style="display:none">
     <!-- ═══════════════════════════════════════════════════
          B. TYPOGRAPHY
          ═══════════════════════════════════════════════════ -->
-    <section id="typography" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Typography</h2>
+    <section id="typography" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Tipografi</h2>
 
       <!-- Font Sizes -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Font Sizes</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Yazı Boyutları</h3>
       <div class="space-y-4 mb-10 border border-border-default rounded-lg p-5 bg-white dark:bg-secondary-900">
         <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">xs (12px)</span><span class="text-xs">The quick brown fox jumps over the lazy dog</span></div>
         <div class="flex items-baseline gap-4"><span class="text-xs text-text-tertiary w-24 flex-shrink-0 font-mono">sm (14px)</span><span class="text-sm">The quick brown fox jumps over the lazy dog</span></div>
@@ -324,7 +330,7 @@
       </div>
 
       <!-- Font Weights -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Font Weights</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Yazı Ağırlıkları</h3>
       <div class="space-y-3 mb-10 border border-border-default rounded-lg p-5 bg-white dark:bg-secondary-900">
         <p class="text-xl font-normal">Normal (400) &mdash; The quick brown fox jumps over the lazy dog</p>
         <p class="text-xl font-medium">Medium (500) &mdash; The quick brown fox jumps over the lazy dog</p>
@@ -334,7 +340,7 @@
       </div>
 
       <!-- Line Heights -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Line Heights</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Satır Yükseklikleri</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
         <div class="border border-border-default rounded-lg p-4 bg-white dark:bg-secondary-900">
           <p class="text-xs font-mono text-text-tertiary mb-2">tight (1.25)</p>
@@ -359,7 +365,7 @@
       </div>
 
       <!-- Letter Spacing -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Letter Spacing</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Harf Aralığı</h3>
       <div class="space-y-3 mb-4 border border-border-default rounded-lg p-5 bg-white dark:bg-secondary-900">
         <p class="text-lg tracking-tighter"><span class="text-xs font-mono text-text-tertiary inline-block w-28">tighter -0.03em</span> The quick brown fox</p>
         <p class="text-lg tracking-tight"><span class="text-xs font-mono text-text-tertiary inline-block w-28">tight -0.015em</span> The quick brown fox</p>
@@ -368,27 +374,30 @@
         <p class="text-lg tracking-wider"><span class="text-xs font-mono text-text-tertiary inline-block w-28">wider 0.05em</span> THE QUICK BROWN FOX</p>
       </div>
     </section>
+  </div><!-- /tab-panel: tipografi -->
 
+  <!-- ══════════ TAB PANEL: Duzen ══════════ -->
+  <div data-tab-panel="duzen" style="display:none">
     <!-- ═══════════════════════════════════════════════════
          C. SPACING & SIZING
          ═══════════════════════════════════════════════════ -->
-    <section id="spacing" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Spacing & Sizing</h2>
+    <section id="spacing" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Boşluk & Boyutlandırma</h2>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Base Scale</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Temel Ölçek</h3>
       <div class="space-y-2 mb-10" id="spacing-bars"></div>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Spacing</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Anlamsal Boşluk</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="semantic-spacing"></div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════
          D. BORDER & RADIUS
          ═══════════════════════════════════════════════════ -->
-    <section id="radius" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Border & Radius</h2>
+    <section id="radius" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Kenar & Radius</h2>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Base Radius</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Temel Radius</h3>
       <div class="flex flex-wrap gap-5 mb-10">
         <div class="flex flex-col items-center gap-2">
           <div class="w-20 h-20 bg-primary-100 border-2 border-primary-400" style="border-radius:var(--radius-none)"></div>
@@ -416,7 +425,7 @@
         </div>
       </div>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Radius</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Anlamsal Radius</h3>
       <div class="flex flex-wrap gap-5">
         <div class="flex flex-col items-center gap-2">
           <div class="w-28 h-10 bg-primary-500 text-white text-xs font-semibold flex items-center justify-center" style="border-radius:var(--radius-button)">Button</div>
@@ -444,14 +453,17 @@
         </div>
       </div>
     </section>
+  </div><!-- /tab-panel: duzen -->
 
+  <!-- ══════════ TAB PANEL: Efektler ══════════ -->
+  <div data-tab-panel="efektler" style="display:none">
     <!-- ═══════════════════════════════════════════════════
          E. SHADOWS
          ═══════════════════════════════════════════════════ -->
-    <section id="shadows" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Shadows & Elevation</h2>
+    <section id="shadows" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Gölgeler & Yükseklik</h2>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Base Shadows</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Temel Gölgeler</h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
         <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32 shadow-sm">
           <span class="text-sm font-semibold">sm</span>
@@ -471,7 +483,7 @@
         </div>
       </div>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Semantic Shadows</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Anlamsal Gölgeler</h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         <div class="bg-white dark:bg-secondary-800 rounded-lg p-6 flex flex-col items-center justify-center h-32" style="box-shadow:var(--shadow-card)">
           <span class="text-sm font-semibold">Card</span>
@@ -495,18 +507,18 @@
     <!-- ═══════════════════════════════════════════════════
          F. Z-INDEX
          ═══════════════════════════════════════════════════ -->
-    <section id="z-index" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Z-Index Scale</h2>
+    <section id="z-index" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Z-Index Ölçeği</h2>
       <div class="space-y-1 max-w-xl" id="z-index-stack"></div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════
          G. MOTION
          ═══════════════════════════════════════════════════ -->
-    <section id="motion" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Motion & Transitions</h2>
+    <section id="motion" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Hareket & Geçişler</h2>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Durations (hover to preview)</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Sureler (onizleme icin uzerine gelin)</h3>
       <div class="flex flex-wrap gap-6 mb-10">
         <div class="flex flex-col items-center gap-2">
           <div class="ds-motion-box bg-primary-200 hover:bg-primary-500 hover:scale-110" style="transition:all var(--duration-fast) var(--ease-default)"></div>
@@ -526,7 +538,7 @@
         </div>
       </div>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Easing Functions (hover to preview)</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Hizlanma Fonksiyonlari (onizleme icin uzerine gelin)</h3>
       <div class="flex flex-wrap gap-6 mb-10">
         <div class="flex flex-col items-center gap-2">
           <div class="ds-motion-box bg-accent-200 hover:bg-accent-500 hover:translate-x-4" style="transition:all 400ms var(--ease-default)"></div>
@@ -542,7 +554,7 @@
         </div>
       </div>
 
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Fade Animations (click to replay)</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Solma Animasyonlari (tekrar icin tiklayin)</h3>
       <div class="flex gap-6">
         <div class="flex flex-col items-center gap-2">
           <div id="fade-in-demo" class="ds-motion-box bg-primary-500 rounded-lg cursor-pointer" style="animation:var(--animate-fade-in)"></div>
@@ -554,15 +566,18 @@
         </div>
       </div>
     </section>
+  </div><!-- /tab-panel: efektler -->
 
+  <!-- ══════════ TAB PANEL: Onizleme ══════════ -->
+  <div data-tab-panel="onizleme" style="display:none">
     <!-- ═══════════════════════════════════════════════════
          H. LIVE COMPONENT PREVIEWS
          ═══════════════════════════════════════════════════ -->
-    <section id="components" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Component Previews</h2>
+    <section id="components" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Bileşen Önizlemeleri</h2>
 
       <!-- Buttons -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Buttons</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Butonlar</h3>
       <div class="flex flex-wrap items-center gap-3 mb-8 p-5 border border-border-default rounded-lg bg-white dark:bg-secondary-900">
         <button class="comp-btn transition-all">Primary</button>
         <button class="comp-btn transition-all" style="background:var(--color-secondary-700)">Secondary</button>
@@ -573,31 +588,120 @@
         <button class="comp-btn transition-all" style="border-radius:var(--radius-full)">Pill Button</button>
       </div>
 
-      <!-- Cards -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Cards</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-        <div class="comp-card overflow-hidden">
-          <div class="w-full h-32 bg-primary-50 dark:bg-primary-950 mb-4" style="border-radius:var(--radius-md)"></div>
-          <h4 class="comp-card-title mb-1">Product Card</h4>
-          <p class="text-xs text-text-secondary mb-3">A sample product card using card tokens.</p>
-          <span class="text-primary-600 font-bold">$29.99</span>
+      <!-- Cards / Ürün Kartları -->
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Ürün Kartları</h3>
+      <div class="grid grid-cols-2 lg:grid-cols-4 mb-8" style="gap:var(--spacing-card-gap)">
+        <!-- Tools -->
+        <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+          <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);">
+            <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(100,116,139,0.3)"></div>
+            <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(100,116,139,0.3)"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#475569"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg>
+            </div>
+            <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+          </div>
+          <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+            <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Professional Cordless Electric Screwdriver Set 48pcs</h4>
+            <div class="mt-1.5" style="height:16px"></div>
+            <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$6.80-9.50</p>
+            <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 5 pieces &nbsp; 2,150 sold</p>
+            <div class="mt-auto pt-2" style="height:18px">
+              <p class="leading-none" style="color:var(--card-supplier-color); font-size:var(--card-supplier-size)">8 yrs &middot; CN</p>
+            </div>
+          </div>
         </div>
-        <div class="comp-card overflow-hidden">
-          <div class="w-full h-32 bg-accent-50 dark:bg-accent-950 mb-4" style="border-radius:var(--radius-md)"></div>
-          <h4 class="comp-card-title mb-1">Feature Card</h4>
-          <p class="text-xs text-text-secondary mb-3">Card padding and radius respond to component controls above.</p>
-          <a href="#" class="text-sm text-primary-600 hover:text-primary-700 font-semibold">Learn more</a>
+        <!-- Jewelry -->
+        <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+          <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #fef9e7 0%, #fdf0c3 100%);">
+            <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(230,178,18,0.3)"></div>
+            <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(230,178,18,0.3)"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#8a6800"><path d="M12 2l2.5 5.5L20 9l-4 4 1 5.5L12 16l-5 2.5 1-5.5-4-4 5.5-1.5Z"/><circle cx="12" cy="10" r="2"/></svg>
+            </div>
+            <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+          </div>
+          <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+            <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Custom Gold Plated Stainless Steel Necklace Pendant</h4>
+            <div class="mt-1.5" style="height:16px">
+              <div class="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 font-semibold leading-none" style="background:var(--card-badge-bg); color:var(--card-badge-text); font-size:var(--card-badge-size); border-radius:var(--card-badge-radius);">
+                <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 16 16" fill="currentColor"><path d="M9 1L3 9h4v6l6-8H9V1Z"/></svg>
+                <span>180-day lowest</span>
+              </div>
+            </div>
+            <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$1.80-2</p>
+            <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 3 pcs &nbsp; 4,056 sold</p>
+            <div class="mt-auto pt-2" style="height:18px">
+              <div class="inline-flex w-fit items-center gap-1 font-medium leading-none" style="color:var(--card-verified-color); font-size:var(--card-verified-size);">
+                <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                <span>Verified</span><span class="opacity-60">&middot;</span><span>5 yrs</span><span class="opacity-60">&middot;</span><span>CN</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="comp-card overflow-hidden">
-          <div class="w-full h-32 bg-secondary-100 dark:bg-secondary-700 mb-4" style="border-radius:var(--radius-md)"></div>
-          <h4 class="comp-card-title mb-1">Info Card</h4>
-          <p class="text-xs text-text-secondary mb-3">Shadows update when you change --shadow-card.</p>
-          <button class="comp-btn text-xs" style="padding:6px 14px">Action</button>
+        <!-- Electronics -->
+        <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+          <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #eef2ff 0%, #dbeafe 100%);">
+            <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(129,140,248,0.3)"></div>
+            <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(129,140,248,0.3)"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#4f5fb3"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4"/><circle cx="12" cy="10" r="2"/></svg>
+            </div>
+            <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+          </div>
+          <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+            <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Smart WiFi Security Camera 1080P Night Vision</h4>
+            <div class="mt-1.5" style="height:16px"></div>
+            <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$8.50-12</p>
+            <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 10 pcs &nbsp; 1,280 sold</p>
+            <div class="mt-auto pt-2" style="height:18px">
+              <div class="inline-flex w-fit items-center gap-1 font-medium leading-none" style="color:var(--card-verified-color); font-size:var(--card-verified-size);">
+                <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                <span>Verified</span><span class="opacity-60">&middot;</span><span>7 yrs</span><span class="opacity-60">&middot;</span><span>CN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Clothing -->
+        <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+          <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%);">
+            <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(244,114,182,0.3)"></div>
+            <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(244,114,182,0.3)"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#a3456e"><path d="M8 3h8l2 6v12H6V9l2-6Z"/><path d="M12 3v8M8 3 6 9M16 3l2 6"/></svg>
+            </div>
+            <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+            </div>
+          </div>
+          <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+            <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Oversized Cotton Vintage Graphic Print T-Shirt Unisex</h4>
+            <div class="mt-1.5" style="height:16px">
+              <div class="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 font-semibold leading-none" style="background:var(--card-badge-bg); color:var(--card-badge-text); font-size:var(--card-badge-size); border-radius:var(--card-badge-radius);">
+                <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 16 16" fill="currentColor"><path d="M9 1L3 9h4v6l6-8H9V1Z"/></svg>
+                <span>180-day lowest</span>
+              </div>
+            </div>
+            <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$3.20-4.50</p>
+            <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 30 pcs &nbsp; 9,450 sold</p>
+            <div class="mt-auto pt-2" style="height:18px">
+              <div class="inline-flex w-fit items-center gap-1 font-medium leading-none" style="color:var(--card-verified-color); font-size:var(--card-verified-size);">
+                <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                <span>Verified</span><span class="opacity-60">&middot;</span><span>4 yrs</span><span class="opacity-60">&middot;</span><span>CN</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <!-- Inputs -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Input Fields</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Giris Alanlari</h3>
       <div class="flex flex-wrap gap-4 mb-8 p-5 border border-border-default rounded-lg bg-white dark:bg-secondary-900">
         <input type="text" placeholder="Text input" class="comp-input w-48" />
         <input type="text" placeholder="Error state" class="comp-input w-48" style="border-color:var(--color-error-500);border-width:2px" />
@@ -610,7 +714,7 @@
       </div>
 
       <!-- Badges -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Badges & Pills</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Rozetler & Etiketler</h3>
       <div class="flex flex-wrap gap-3 mb-8 p-5 border border-border-default rounded-lg bg-white dark:bg-secondary-900">
         <span class="comp-badge" style="background:var(--color-primary-100);color:var(--color-primary-800)">Primary</span>
         <span class="comp-badge" style="background:var(--color-accent-100);color:var(--color-accent-800)">Accent</span>
@@ -622,7 +726,7 @@
       </div>
 
       <!-- Alerts -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Alerts / Notifications</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Uyarilar / Bildirimler</h3>
       <div class="space-y-3 mb-8">
         <div class="flex items-center gap-3 px-4 py-3 bg-success-50 border border-success-500/30 text-success-700 text-sm" style="border-radius:var(--radius-md)">
           <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
@@ -643,7 +747,7 @@
       </div>
 
       <!-- Mini Header Mockup -->
-      <h3 class="text-base font-semibold mb-3 text-text-secondary">Mini Header Mockup</h3>
+      <h3 class="text-base font-semibold mb-3 text-text-secondary">Mini Header Maket</h3>
       <div class="border border-border-default rounded-lg overflow-hidden mb-4">
         <div class="header-gradient px-6 py-3 flex items-center justify-between">
           <span class="font-bold text-lg text-primary-700">TradeHub</span>
@@ -669,16 +773,16 @@
     <!-- ═══════════════════════════════════════════════════
          J. GRADIENT PREVIEW
          ═══════════════════════════════════════════════════ -->
-    <section id="gradient" class="mb-16">
-      <h2 class="text-2xl font-bold mb-6">Gradient Preview</h2>
+    <section id="gradient" class="mb-20">
+      <h2 class="text-2xl font-bold mb-6 ds-section-heading">Gradyan Önizleme</h2>
       <div class="header-gradient rounded-xl h-48 flex items-center justify-center border border-border-default">
         <p class="text-lg font-semibold text-text-secondary">Animated Header Gradient (desktop only, 960px+)</p>
       </div>
       <p class="text-xs text-text-tertiary mt-2">This is the live .header-gradient class with the searchGradientShift keyframe animation (12s infinite).</p>
     </section>
+  </div><!-- /tab-panel: onizleme -->
 
-  </div>
-</div>
+</div><!-- /max-w wrapper -->
 
 <!-- ═══════════════════════════════════════════════════════
      INLINE JAVASCRIPT
@@ -1295,115 +1399,6 @@
         { var: '--breakpoint-xl', type: 'range', default: 1536, min: 1200, max: 2400, step: 8, unit: 'px' },
       ]
     },
-    {
-      name: 'Header / TopBar', collapsed: true, tokens: [
-        { var: '--header-bg', type: 'color', default: '#ffffff' },
-        { var: '--header-height', type: 'range', default: 64, min: 40, max: 100, step: 1, unit: 'px' },
-        { var: '--header-border-color', type: 'color', default: '#e5e5e5' },
-        { var: '--header-text-color', type: 'color', default: '#374151' },
-        { var: '--header-icon-color', type: 'color', default: '#374151' },
-        { var: '--header-icon-hover-color', type: 'color', default: '#cc9900' },
-      ]
-    },
-    {
-      name: 'SubHeader', collapsed: true, tokens: [
-        { var: '--subheader-bg', type: 'text', default: 'transparent' },
-        { var: '--subheader-text-color', type: 'color', default: '#525252' },
-        { var: '--subheader-hover-color', type: 'color', default: '#b38600' },
-        { var: '--subheader-hover-bg', type: 'text', default: 'rgba(255, 255, 255, 0.8)' },
-        { var: '--subheader-active-color', type: 'color', default: '#b38600' },
-        { var: '--subheader-border-color', type: 'color', default: '#e5e5e5' },
-      ]
-    },
-    {
-      name: 'Header Gradient', collapsed: true, tokens: [
-        { var: '--header-gradient-1', type: 'color', default: '#fff7ed' },
-        { var: '--header-gradient-2', type: 'color', default: '#f6f4e8' },
-        { var: '--header-gradient-3', type: 'color', default: '#fff1f2' },
-        { var: '--header-gradient-4', type: 'color', default: '#fbfaf0' },
-        { var: '--header-gradient-5', type: 'color', default: '#fff7ed' },
-      ]
-    },
-    {
-      name: 'Arama Alanı', collapsed: true, tokens: [
-        { var: '--search-bg', type: 'text', default: 'transparent' },
-        { var: '--search-tab-color', type: 'color', default: '#6b7280' },
-        { var: '--search-tab-active-color', type: 'color', default: '#cc9900' },
-        { var: '--search-input-border-color', type: 'color', default: '#cc9900' },
-        { var: '--search-btn-gradient-start', type: 'color', default: '#f5a623' },
-        { var: '--search-btn-gradient-end', type: 'color', default: '#e8740c' },
-      ]
-    },
-    {
-      name: 'MegaMenu', collapsed: true, tokens: [
-        { var: '--mega-bg', type: 'color', default: '#ffffff' },
-        { var: '--mega-sidebar-bg', type: 'color', default: '#f9fafb' },
-        { var: '--mega-sidebar-hover-bg', type: 'color', default: '#ffffff' },
-        { var: '--mega-sidebar-active-bg', type: 'color', default: '#ffffff' },
-        { var: '--mega-border-color', type: 'color', default: '#e5e7eb' },
-        { var: '--mega-text-color', type: 'color', default: '#374151' },
-      ]
-    },
-    {
-      name: 'Hero', collapsed: true, tokens: [
-        { var: '--hero-bg', type: 'color', default: '#ffffff' },
-        { var: '--hero-card-bg', type: 'color', default: '#ffffff' },
-        { var: '--hero-card-border-color', type: 'color', default: '#e5e5e5' },
-        { var: '--hero-title-color', type: 'color', default: '#111827' },
-      ]
-    },
-    {
-      name: 'Footer', collapsed: true, tokens: [
-        { var: '--footer-bg', type: 'color', default: '#111827' },
-        { var: '--footer-text-color', type: 'color', default: '#9ca3af' },
-        { var: '--footer-heading-color', type: 'color', default: '#ffffff' },
-        { var: '--footer-link-color', type: 'color', default: '#9ca3af' },
-        { var: '--footer-link-hover-color', type: 'color', default: '#ffffff' },
-        { var: '--footer-border-color', type: 'color', default: '#1f2937' },
-      ]
-    },
-    {
-      name: 'Buton Bileşeni', collapsed: true, tokens: [
-        { var: '--btn-bg', type: 'color', default: '#cc9900' },
-        { var: '--btn-text', type: 'color', default: '#ffffff' },
-        { var: '--btn-border-width', type: 'range', default: 0, min: 0, max: 8, step: 1, unit: 'px' },
-        { var: '--btn-border-color', type: 'color', default: '#cc9900' },
-        { var: '--btn-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem' },
-        { var: '--btn-font-weight', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '' },
-        { var: '--btn-shadow', type: 'text', default: 'none' },
-        { var: '--btn-outline-bg', type: 'color', default: '#ffffff' },
-        { var: '--btn-outline-text', type: 'color', default: '#cc9900' },
-        { var: '--btn-outline-border-width', type: 'range', default: 2, min: 0, max: 8, step: 1, unit: 'px' },
-        { var: '--btn-outline-border-color', type: 'color', default: '#cc9900' },
-      ]
-    },
-    {
-      name: 'Kart Bileşeni', collapsed: true, tokens: [
-        { var: '--card-bg', type: 'color', default: '#ffffff' },
-        { var: '--card-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px' },
-        { var: '--card-border-color', type: 'color', default: '#e5e5e5' },
-        { var: '--card-title-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem' },
-        { var: '--card-title-weight', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '' },
-      ]
-    },
-    {
-      name: 'Input Bileşeni', collapsed: true, tokens: [
-        { var: '--input-bg', type: 'color', default: '#ffffff' },
-        { var: '--input-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px' },
-        { var: '--input-border-color', type: 'color', default: '#e5e5e5' },
-        { var: '--input-text-color', type: 'color', default: '#0a0a0a' },
-        { var: '--input-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem' },
-        { var: '--input-focus-border-color', type: 'color', default: '#cc9900' },
-      ]
-    },
-    {
-      name: 'Badge Bileşeni', collapsed: true, tokens: [
-        { var: '--badge-font-size', type: 'range', default: 0.75, min: 0.5, max: 1.5, step: 0.0625, unit: 'rem' },
-        { var: '--badge-font-weight', type: 'range', default: 600, min: 100, max: 900, step: 100, unit: '' },
-        { var: '--badge-padding-x', type: 'range', default: 12, min: 0, max: 32, step: 1, unit: 'px' },
-        { var: '--badge-padding-y', type: 'range', default: 4, min: 0, max: 16, step: 1, unit: 'px' },
-      ]
-    },
   ];
 
   // ══════════════════════════════════════════════
@@ -1452,31 +1447,135 @@
         { var: '--radius-card', type: 'range', default: 16, min: 0, max: 64, step: 1, unit: 'px', label: 'Radius' },
         { var: '--card-border-width', type: 'range', default: 1, min: 0, max: 8, step: 1, unit: 'px', label: 'Border Kalınlık' },
         { var: '--card-border-color', type: 'color', default: '#e5e5e5', label: 'Border Rengi' },
-        { var: '--spacing-card-padding', type: 'range', default: 20, min: 0, max: 64, step: 1, unit: 'px', label: 'Padding' },
+        { var: '--spacing-card-padding', type: 'range', default: 24, min: 0, max: 64, step: 1, unit: 'px', label: 'Padding' },
         { var: '--spacing-card-gap', type: 'range', default: 16, min: 0, max: 48, step: 1, unit: 'px', label: 'Gap' },
         { var: '--shadow-card', type: 'text', default: 'var(--shadow-sm)', label: 'Shadow' },
         { var: '--card-title-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Başlık Size' },
         { var: '--card-title-weight', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '', label: 'Başlık Weight' },
+        { var: '--card-price-color', type: 'color', default: '#111827', label: 'Fiyat Rengi' },
+        { var: '--card-price-size', type: 'range', default: 15, min: 10, max: 28, step: 1, unit: 'px', label: 'Fiyat Boyut' },
+        { var: '--card-price-weight', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '', label: 'Fiyat Ağırlık' },
+        { var: '--card-desc-color', type: 'color', default: '#6b7280', label: 'Açıklama Rengi' },
+        { var: '--card-desc-size', type: 'range', default: 12, min: 8, max: 18, step: 1, unit: 'px', label: 'Açıklama Boyut' },
+        { var: '--card-moq-color', type: 'color', default: '#6b7280', label: 'MOQ Rengi' },
+        { var: '--card-moq-size', type: 'range', default: 11, min: 8, max: 16, step: 1, unit: 'px', label: 'MOQ Boyut' },
+        { var: '--card-badge-bg', type: 'color', default: '#FFF3E0', label: 'Badge Arkaplan' },
+        { var: '--card-badge-text', type: 'color', default: '#e65100', label: 'Badge Yazı' },
+        { var: '--card-badge-size', type: 'range', default: 10, min: 8, max: 14, step: 1, unit: 'px', label: 'Badge Boyut' },
+        { var: '--card-badge-radius', type: 'range', default: 4, min: 0, max: 16, step: 1, unit: 'px', label: 'Badge Radius' },
+        { var: '--card-verified-color', type: 'color', default: '#cc9900', label: 'Doğrulanmış Rengi' },
+        { var: '--card-verified-size', type: 'range', default: 11, min: 8, max: 16, step: 1, unit: 'px', label: 'Doğrulanmış Boyut' },
+        { var: '--card-supplier-color', type: 'color', default: '#9ca3af', label: 'Tedarikçi Rengi' },
+        { var: '--card-supplier-size', type: 'range', default: 11, min: 8, max: 16, step: 1, unit: 'px', label: 'Tedarikçi Boyut' },
       ],
       preview: () => `
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="comp-card overflow-hidden">
-            <div class="w-full h-28 bg-primary-50 dark:bg-primary-950 mb-3" style="border-radius:var(--radius-md)"></div>
-            <h4 class="comp-card-title mb-1">Ürün Kartı</h4>
-            <p class="text-xs text-text-secondary mb-2">Örnek ürün açıklaması burada yer alır.</p>
-            <span class="text-primary-600 font-bold text-sm">₺299.99</span>
+        <div class="grid grid-cols-2 lg:grid-cols-4" style="gap:var(--spacing-card-gap)">
+          <!-- Ürün Kartı 1: Tools -->
+          <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+            <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);">
+              <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(100,116,139,0.3)"></div>
+              <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(100,116,139,0.3)"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#475569"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg>
+              </div>
+              <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+              <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Professional Cordless Electric Screwdriver Set 48pcs</h4>
+              <div class="mt-1.5" style="height:16px"></div>
+              <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$6.80-9.50</p>
+              <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 5 pieces &nbsp; 2,150 sold</p>
+              <div class="mt-auto pt-2" style="height:18px">
+                <p class="leading-none" style="color:var(--card-supplier-color); font-size:var(--card-supplier-size)">8 yrs &middot; CN</p>
+              </div>
+            </div>
           </div>
-          <div class="comp-card overflow-hidden">
-            <div class="w-full h-28 bg-accent-50 dark:bg-accent-950 mb-3" style="border-radius:var(--radius-md)"></div>
-            <h4 class="comp-card-title mb-1">Kategori Kartı</h4>
-            <p class="text-xs text-text-secondary mb-2">Kategori kartı önizlemesi.</p>
-            <a href="#" class="text-sm text-primary-600 font-semibold">Devamını gör</a>
+          <!-- Ürün Kartı 2: Jewelry -->
+          <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+            <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #fef9e7 0%, #fdf0c3 100%);">
+              <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(230,178,18,0.3)"></div>
+              <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(230,178,18,0.3)"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#8a6800"><path d="M12 2l2.5 5.5L20 9l-4 4 1 5.5L12 16l-5 2.5 1-5.5-4-4 5.5-1.5Z"/><circle cx="12" cy="10" r="2"/></svg>
+              </div>
+              <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+              <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Custom Gold Plated Stainless Steel Necklace Pendant</h4>
+              <div class="mt-1.5" style="height:16px">
+                <div class="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 font-semibold leading-none" style="background:var(--card-badge-bg); color:var(--card-badge-text); font-size:var(--card-badge-size); border-radius:var(--card-badge-radius);">
+                  <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 16 16" fill="currentColor"><path d="M9 1L3 9h4v6l6-8H9V1Z"/></svg>
+                  <span>180-day lowest</span>
+                </div>
+              </div>
+              <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$1.80-2</p>
+              <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 3 pcs &nbsp; 4,056 sold</p>
+              <div class="mt-auto pt-2" style="height:18px">
+                <div class="inline-flex w-fit items-center gap-1 font-medium leading-none" style="color:var(--card-verified-color); font-size:var(--card-verified-size);">
+                  <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                  <span>Verified</span><span class="opacity-60">&middot;</span><span>5 yrs</span><span class="opacity-60">&middot;</span><span>CN</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="comp-card overflow-hidden">
-            <div class="w-full h-28 bg-secondary-100 dark:bg-secondary-700 mb-3" style="border-radius:var(--radius-md)"></div>
-            <h4 class="comp-card-title mb-1">Bilgi Kartı</h4>
-            <p class="text-xs text-text-secondary mb-2">Shadow ve border kontrollerini test edin.</p>
-            <button class="comp-btn text-xs" style="padding:6px 14px">Aksiyon</button>
+          <!-- Ürün Kartı 3: Electronics -->
+          <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+            <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #eef2ff 0%, #dbeafe 100%);">
+              <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(129,140,248,0.3)"></div>
+              <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(129,140,248,0.3)"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#4f5fb3"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4"/><circle cx="12" cy="10" r="2"/></svg>
+              </div>
+              <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+              <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Smart WiFi Security Camera 1080P Night Vision</h4>
+              <div class="mt-1.5" style="height:16px"></div>
+              <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$8.50-12</p>
+              <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 10 pcs &nbsp; 1,280 sold</p>
+              <div class="mt-auto pt-2" style="height:18px">
+                <div class="inline-flex w-fit items-center gap-1 font-medium leading-none" style="color:var(--card-verified-color); font-size:var(--card-verified-size);">
+                  <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                  <span>Verified</span><span class="opacity-60">&middot;</span><span>7 yrs</span><span class="opacity-60">&middot;</span><span>CN</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Ürün Kartı 4: Clothing -->
+          <div class="comp-card overflow-hidden flex flex-col" style="padding:0">
+            <div class="relative w-full overflow-hidden" style="aspect-ratio:1/1; border-radius:var(--radius-card) var(--radius-card) 0 0; background:linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%);">
+              <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background:rgba(244,114,182,0.3)"></div>
+              <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background:rgba(244,114,182,0.3)"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="h-14 w-14" fill="none" stroke-width="1.4" viewBox="0 0 24 24" style="stroke:#a3456e"><path d="M8 3h8l2 6v12H6V9l2-6Z"/><path d="M12 3v8M8 3 6 9M16 3l2 6"/></svg>
+              </div>
+              <div class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60" style="background:rgba(0,0,0,0.4); color:#fff">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col" style="padding:var(--spacing-card-padding)">
+              <h4 class="comp-card-title line-clamp-2 leading-[1.35]" style="height:2.7em">Oversized Cotton Vintage Graphic Print T-Shirt Unisex</h4>
+              <div class="mt-1.5" style="height:16px">
+                <div class="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 font-semibold leading-none" style="background:var(--card-badge-bg); color:var(--card-badge-text); font-size:var(--card-badge-size); border-radius:var(--card-badge-radius);">
+                  <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 16 16" fill="currentColor"><path d="M9 1L3 9h4v6l6-8H9V1Z"/></svg>
+                  <span>180-day lowest</span>
+                </div>
+              </div>
+              <p class="mt-2 leading-none" style="color:var(--card-price-color); font-size:var(--card-price-size); font-weight:var(--card-price-weight)">$3.20-4.50</p>
+              <p class="mt-1.5 leading-none" style="color:var(--card-moq-color); font-size:var(--card-moq-size)">MOQ: 30 pcs &nbsp; 9,450 sold</p>
+              <div class="mt-auto pt-2" style="height:18px">
+                <div class="inline-flex w-fit items-center gap-1 font-medium leading-none" style="color:var(--card-verified-color); font-size:var(--card-verified-size);">
+                  <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                  <span>Verified</span><span class="opacity-60">&middot;</span><span>4 yrs</span><span class="opacity-60">&middot;</span><span>CN</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       `
@@ -1550,101 +1649,187 @@
     },
   ];
 
-  // ──── Build controls UI ────
+  // ──── Build controls UI — grouped dropdowns with internal tabs ────
   const controlsContainer = document.getElementById('controls-container');
   if (controlsContainer) {
-    let totalTokens = 0;
-    tokenGroups.forEach(g => totalTokens += g.tokens.length);
+    // Category grouping for token groups
+    const tokenCategories = [
+      { name: 'Renkler', icon: '◆', groupNames: ['Primary Colors', 'Secondary Colors', 'Accent Colors', 'Semantic Colors', 'Surface Colors', 'Text Colors', 'Border Colors'] },
+      { name: 'Tipografi', icon: 'Aa', groupNames: ['Font Families', 'Font Sizes', 'Font Weights', 'Line Heights', 'Letter Spacing'] },
+      { name: 'Aralık & Boyut', icon: '↔', groupNames: ['Base Spacing', 'Semantic Spacing', 'Containers / Max-Width', 'Containers — Full', 'Breakpoints'] },
+      { name: 'Görünüm', icon: '◻', groupNames: ['Base Radius', 'Semantic Radius', 'Base Shadows', 'Semantic Shadows'] },
+      { name: 'Animasyon & Sistem', icon: '⚡', groupNames: ['Motion — Durations', 'Motion — Easing', 'Animations', 'Z-Index'] },
+    ];
 
-    tokenGroups.forEach((group, gi) => {
-      const groupId = `ctrl-group-${gi}`;
-      const isCollapsed = group.collapsed;
-
-      const section = document.createElement('div');
-      section.className = 'border border-border-default dark:border-secondary-700 rounded-lg bg-white dark:bg-secondary-900 overflow-hidden';
-      section.innerHTML = `
-        <button type="button" class="ds-accordion-btn w-full flex items-center justify-between px-4 py-3 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors" data-target="${groupId}">
-          <span class="flex items-center gap-2">
-            <svg class="ds-chevron w-4 h-4 text-text-tertiary transition-transform ${isCollapsed ? '' : 'rotate-90'}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
-            <span class="text-sm font-semibold">${group.name}</span>
-            <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${group.tokens.length}</span>
-          </span>
-          <button type="button" class="ds-reset-group text-[10px] font-semibold text-error-500 hover:text-error-700 px-2 py-1 rounded hover:bg-error-50 transition-colors" data-group="${gi}">Reset</button>
-        </button>
-        <div id="${groupId}" class="${isCollapsed ? 'hidden' : ''} px-4 pb-4">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-3 pt-2"></div>
-        </div>
-      `;
-
-      const grid = section.querySelector('.grid');
-      group.tokens.forEach((token, ti) => {
-        const uid = `ctrl-${gi}-${ti}`;
-        const cell = document.createElement('div');
-
-        if (token.type === 'color') {
-          cell.innerHTML = `
-            <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
-            <div class="flex items-center gap-2">
-              <input type="color" id="${uid}" value="${token.default}" class="w-8 h-8 rounded cursor-pointer border-0 p-0 flex-shrink-0" />
-              <span id="${uid}-val" class="text-[11px] font-mono text-text-tertiary">${token.default}</span>
+    // Helper: build a single token cell
+    function buildTokenCell(uid, token) {
+      const cell = document.createElement('div');
+      if (token.type === 'color') {
+        const isTransp = token.default === 'transparent';
+        cell.innerHTML = `
+          <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
+          <div class="flex items-center gap-1.5">
+            <div class="relative flex-shrink-0">
+              <div id="${uid}-swatch" class="w-7 h-7 rounded border border-border-default cursor-pointer ${isTransp ? 'ds-checker-bg-sm' : ''}" style="background-color:${isTransp ? 'transparent' : token.default}"></div>
+              <input type="color" id="${uid}" value="${isTransp ? '#ffffff' : token.default}" class="absolute inset-0 w-7 h-7 opacity-0 cursor-pointer" />
             </div>
-          `;
-        } else if (token.type === 'range') {
-          const dispVal = token.unit ? `${token.default}${token.unit}` : `${token.default}`;
-          cell.innerHTML = `
-            <label class="flex items-baseline justify-between text-[11px] font-mono text-text-secondary mb-1 gap-1">
-              <span class="truncate" title="${token.var}">${token.var}</span>
-              <span id="${uid}-val" class="text-text-tertiary flex-shrink-0">${dispVal}</span>
-            </label>
-            <input type="range" id="${uid}" min="${token.min}" max="${token.max}" step="${token.step}" value="${token.default}" class="w-full accent-primary-500 h-1.5" />
-          `;
-        } else if (token.type === 'font') {
-          const opts = token.options.map(o => `<option value="${o.value}" data-google="${o.google || ''}" style="font-family:${o.value}">${o.label}</option>`).join('');
-          cell.className = 'sm:col-span-2';
-          cell.innerHTML = `
-            <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
-            <select id="${uid}" class="w-full text-sm border border-border-default dark:border-secondary-600 rounded-lg px-3 py-2 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none cursor-pointer">${opts}</select>
-            <p id="${uid}-preview" class="mt-1.5 text-base text-text-primary truncate" style="font-family:${token.default}">AaBbCcDd 0123 - Hızlı kahverengi tilki</p>
-          `;
-        } else {
-          cell.innerHTML = `
-            <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
-            <input type="text" id="${uid}" value="${token.default}" class="w-full text-[11px] font-mono border border-border-default dark:border-secondary-600 rounded px-2 py-1.5 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none" />
-          `;
-        }
-        grid.appendChild(cell);
-      });
+            <input type="text" id="${uid}-text" value="${token.default}" class="flex-1 min-w-0 text-[10px] font-mono border border-border-default dark:border-secondary-600 rounded px-1.5 py-1 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none" />
+            <button type="button" id="${uid}-transp" class="flex-shrink-0 w-6 h-6 rounded border text-[10px] font-bold leading-none flex items-center justify-center transition-colors ${isTransp ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-border-default text-text-tertiary hover:border-primary-400 hover:text-primary-600'}" title="Transparent">T</button>
+          </div>
+        `;
+      } else if (token.type === 'range') {
+        const dispVal = token.unit ? `${token.default}${token.unit}` : `${token.default}`;
+        cell.innerHTML = `
+          <label class="flex items-baseline justify-between text-[11px] font-mono text-text-secondary mb-1 gap-1">
+            <span class="truncate" title="${token.var}">${token.var}</span>
+            <span id="${uid}-val" class="text-text-tertiary flex-shrink-0">${dispVal}</span>
+          </label>
+          <input type="range" id="${uid}" min="${token.min}" max="${token.max}" step="${token.step}" value="${token.default}" class="w-full accent-primary-500 h-1.5" />
+        `;
+      } else if (token.type === 'font') {
+        const opts = token.options.map(o => `<option value="${o.value}" data-google="${o.google || ''}" style="font-family:${o.value}">${o.label}</option>`).join('');
+        cell.className = 'sm:col-span-2';
+        cell.innerHTML = `
+          <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
+          <select id="${uid}" class="w-full text-sm border border-border-default dark:border-secondary-600 rounded-lg px-3 py-2 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none cursor-pointer">${opts}</select>
+          <p id="${uid}-preview" class="mt-1.5 text-base text-text-primary truncate" style="font-family:${token.default}">AaBbCcDd 0123 - Hızlı kahverengi tilki</p>
+        `;
+      } else {
+        cell.innerHTML = `
+          <label class="block text-[11px] font-mono text-text-secondary mb-1 truncate" title="${token.var}">${token.var}</label>
+          <input type="text" id="${uid}" value="${token.default}" class="w-full text-[11px] font-mono border border-border-default dark:border-secondary-600 rounded px-2 py-1.5 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none" />
+        `;
+      }
+      return cell;
+    }
 
-      controlsContainer.appendChild(section);
+    // Render grouped dropdowns
+    tokenCategories.forEach((cat, ci) => {
+      const catGroups = cat.groupNames.map(name => {
+        const gi = tokenGroups.findIndex(g => g.name === name);
+        return gi >= 0 ? { group: tokenGroups[gi], gi } : null;
+      }).filter(Boolean);
+      if (catGroups.length === 0) return;
+
+      const totalTokens = catGroups.reduce((sum, e) => sum + e.group.tokens.length, 0);
+      const isFirst = ci === 0;
+      const hasMultiple = catGroups.length > 1;
+
+      const card = document.createElement('div');
+      card.className = 'border border-border-default dark:border-secondary-700 rounded-xl bg-white dark:bg-secondary-900 overflow-hidden';
+
+      // Category header (toggle)
+      const header = document.createElement('button');
+      header.type = 'button';
+      header.className = 'w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors cursor-pointer';
+      header.innerHTML = `
+        <span class="flex items-center gap-2">
+          <span class="text-lg">${cat.icon}</span>
+          <span class="text-base font-bold">${cat.name}</span>
+          <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${totalTokens} token</span>
+        </span>
+        <svg class="ctrl-cat-chevron w-5 h-5 text-text-tertiary transition-transform ${isFirst ? 'rotate-90' : ''}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+      `;
+      card.appendChild(header);
+
+      // Body (collapsible)
+      const body = document.createElement('div');
+      body.className = isFirst ? '' : 'hidden';
+
+      const catTabs = [];
+      const catPanels = [];
+
+      // Tab bar
+      if (hasMultiple) {
+        const tabBar = document.createElement('div');
+        tabBar.className = 'flex overflow-x-auto scrollbar-hide border-b border-border-default dark:border-secondary-700 px-2';
+        tabBar.setAttribute('role', 'tablist');
+        catGroups.forEach((entry, idx) => {
+          const isFirstTab = idx === 0;
+          const tabKey = `cat${ci}-g${entry.gi}`;
+          const tab = document.createElement('button');
+          tab.type = 'button';
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('data-ctrl-cat-tab', tabKey);
+          tab.className = isFirstTab
+            ? 'flex items-center gap-1.5 px-3 py-2.5 text-xs font-semibold whitespace-nowrap cursor-pointer transition-colors border-b-2 text-primary-600 border-primary-500'
+            : 'flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong';
+          tab.innerHTML = `<span>${entry.group.name}</span><span class="text-[9px] bg-surface-raised dark:bg-secondary-700 text-text-tertiary px-1.5 py-0.5 rounded-full">${entry.group.tokens.length}</span>`;
+          tabBar.appendChild(tab);
+          catTabs.push(tab);
+        });
+        body.appendChild(tabBar);
+      }
+
+      // Panels
+      const panelsWrap = document.createElement('div');
+      catGroups.forEach((entry, idx) => {
+        const isFirstPanel = idx === 0;
+        const panelKey = `cat${ci}-g${entry.gi}`;
+        const panel = document.createElement('div');
+        panel.setAttribute('data-ctrl-cat-panel', panelKey);
+        panel.className = 'px-5 py-4';
+        panel.style.display = isFirstPanel ? 'block' : 'none';
+
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-3';
+        entry.group.tokens.forEach((token, ti) => {
+          grid.appendChild(buildTokenCell(`ctrl-${entry.gi}-${ti}`, token));
+        });
+        panel.appendChild(grid);
+        panelsWrap.appendChild(panel);
+        catPanels.push(panel);
+      });
+      body.appendChild(panelsWrap);
+
+      // Tab switching
+      if (hasMultiple) {
+        catTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-ctrl-cat-tab');
+            catTabs.forEach(t => { t.classList.remove('text-primary-600', 'border-primary-500', 'font-semibold'); t.classList.add('text-text-secondary', 'border-transparent', 'font-medium'); });
+            tab.classList.add('text-primary-600', 'border-primary-500', 'font-semibold');
+            tab.classList.remove('text-text-secondary', 'border-transparent', 'font-medium');
+            catPanels.forEach(p => p.style.display = 'none');
+            const targetPanel = panelsWrap.querySelector(`[data-ctrl-cat-panel="${target}"]`);
+            if (targetPanel) targetPanel.style.display = 'block';
+          });
+        });
+      }
+
+      card.appendChild(body);
+
+      // Toggle collapse
+      const chevron = header.querySelector('.ctrl-cat-chevron');
+      header.addEventListener('click', () => { body.classList.toggle('hidden'); chevron.classList.toggle('rotate-90'); });
+
+      controlsContainer.appendChild(card);
     });
 
     // ──── Initialize controls from ACTUAL computed CSS values ────
-    // This ensures controls show the real file values, not stale hardcoded defaults
     const computed = getComputedStyle(root);
     tokenGroups.forEach((group, gi) => {
       group.tokens.forEach((token, ti) => {
         const uid = `ctrl-${gi}-${ti}`;
         const input = document.getElementById(uid);
         if (!input) return;
-
         const rawVal = computed.getPropertyValue(token.var).trim();
         if (!rawVal) return;
-
         if (token.type === 'color') {
-          // Convert rgb/rgba to hex if needed, color input requires #rrggbb
-          let hex = rawVal;
-          if (rawVal.startsWith('rgb')) {
-            const m = rawVal.match(/\d+/g);
-            if (m && m.length >= 3) {
-              hex = '#' + [m[0], m[1], m[2]].map(c => parseInt(c).toString(16).padStart(2, '0')).join('');
-            }
-          } else if (rawVal.startsWith('#') && rawVal.length === 4) {
-            hex = '#' + rawVal[1]+rawVal[1] + rawVal[2]+rawVal[2] + rawVal[3]+rawVal[3];
+          const classified = classifyColorValue(rawVal, token.default);
+          const textInp = document.getElementById(`${uid}-text`);
+          const swatch = document.getElementById(`${uid}-swatch`);
+          const transpBtn = document.getElementById(`${uid}-transp`);
+          if (textInp) textInp.value = classified.display || rawVal;
+          if (swatch) {
+            if (!classified.isOpaque) { swatch.classList.add('ds-checker-bg-sm'); swatch.style.backgroundColor = 'transparent'; }
+            else { swatch.classList.remove('ds-checker-bg-sm'); swatch.style.backgroundColor = classified.hex || rawVal; }
           }
-          if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-            input.value = hex;
-            const valSpan = document.getElementById(`${uid}-val`);
-            if (valSpan) valSpan.textContent = hex;
+          if (classified.hex) input.value = classified.hex;
+          if (transpBtn) {
+            const isT = (classified.display === 'transparent');
+            transpBtn.className = 'flex-shrink-0 w-6 h-6 rounded border text-[10px] font-bold leading-none flex items-center justify-center transition-colors ' +
+              (isT ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-border-default text-text-tertiary hover:border-primary-400 hover:text-primary-600');
           }
         } else if (token.type === 'range') {
           const num = parseFloat(rawVal);
@@ -1654,16 +1839,10 @@
             if (valSpan) valSpan.textContent = token.unit ? `${num}${token.unit}` : `${num}`;
           }
         } else if (token.type === 'font') {
-          // Match the computed font-family to the closest option
           const normalizedRaw = rawVal.replace(/['"]/g, '').toLowerCase();
-          let matched = false;
           for (const opt of input.options) {
             const normalizedOpt = opt.value.replace(/['"]/g, '').toLowerCase();
-            if (normalizedRaw === normalizedOpt || normalizedRaw.startsWith(normalizedOpt.split(',')[0].trim())) {
-              input.value = opt.value;
-              matched = true;
-              break;
-            }
+            if (normalizedRaw === normalizedOpt || normalizedRaw.startsWith(normalizedOpt.split(',')[0].trim())) { input.value = opt.value; break; }
           }
           const preview = document.getElementById(`${uid}-preview`);
           if (preview) preview.style.fontFamily = rawVal;
@@ -1673,51 +1852,41 @@
       });
     });
 
-    // ──── Accordion toggle ────
-    controlsContainer.querySelectorAll('.ds-accordion-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        if (e.target.closest('.ds-reset-group')) return;
-        const targetId = btn.getAttribute('data-target');
-        const panel = document.getElementById(targetId);
-        const chevron = btn.querySelector('.ds-chevron');
-        if (panel) panel.classList.toggle('hidden');
-        if (chevron) chevron.classList.toggle('rotate-90');
-      });
-    });
-
     // ──── Bind inputs to CSS var updates ────
     tokenGroups.forEach((group, gi) => {
       group.tokens.forEach((token, ti) => {
         const uid = `ctrl-${gi}-${ti}`;
         const input = document.getElementById(uid);
         if (!input) return;
-
         if (token.type === 'font') {
           input.addEventListener('change', () => {
             const value = input.value;
-            // Load Google Font if needed
             const sel = input.options[input.selectedIndex];
             const googleParam = sel?.getAttribute('data-google');
             if (googleParam) loadGoogleFont(googleParam);
-            // Update preview
             const preview = document.getElementById(`${uid}-preview`);
             if (preview) preview.style.fontFamily = value;
             root.style.setProperty(token.var, value);
-            // Also set --default-font-family so Tailwind preflight (* selector) picks it up
-            if (token.var === '--font-sans') {
-              root.style.setProperty('--default-font-family', value);
-            } else if (token.var === '--font-mono') {
-              root.style.setProperty('--default-mono-font-family', value);
+            if (token.var === '--font-sans') root.style.setProperty('--default-font-family', value);
+            else if (token.var === '--font-mono') root.style.setProperty('--default-mono-font-family', value);
+          });
+        } else if (token.type === 'color') {
+          const textInp = document.getElementById(`${uid}-text`);
+          const transpBtn = document.getElementById(`${uid}-transp`);
+          input.addEventListener('input', () => applyColorValue(uid, token, input.value));
+          if (textInp) textInp.addEventListener('change', () => applyColorValue(uid, token, textInp.value.trim()));
+          if (transpBtn) transpBtn.addEventListener('click', () => {
+            const current = textInp ? textInp.value.trim() : '';
+            if (current === 'transparent') {
+              applyColorValue(uid, token, token.default === 'transparent' ? '#ffffff' : token.default);
+            } else {
+              applyColorValue(uid, token, 'transparent');
             }
           });
         } else {
           const handler = () => {
             let value;
-            if (token.type === 'color') {
-              value = input.value;
-              const valSpan = document.getElementById(`${uid}-val`);
-              if (valSpan) valSpan.textContent = value;
-            } else if (token.type === 'range') {
+            if (token.type === 'range') {
               value = token.unit ? `${input.value}${token.unit}` : input.value;
               const valSpan = document.getElementById(`${uid}-val`);
               if (valSpan) valSpan.textContent = value;
@@ -1740,17 +1909,7 @@
       if (!input) return;
 
       if (token.type === 'color') {
-        let hex = value;
-        if (hex.startsWith('rgb')) {
-          const m = hex.match(/\d+/g);
-          if (m && m.length >= 3) hex = '#' + [m[0],m[1],m[2]].map(c => parseInt(c).toString(16).padStart(2,'0')).join('');
-        } else if (hex.startsWith('#') && hex.length === 4) {
-          hex = '#' + hex[1]+hex[1] + hex[2]+hex[2] + hex[3]+hex[3];
-        }
-        if (/^#[0-9a-fA-F]{6}$/.test(hex)) input.value = hex;
-        const valSpan = document.getElementById(`${uid}-val`);
-        if (valSpan) valSpan.textContent = hex;
-        root.style.setProperty(token.var, value);
+        applyColorValue(uid, token, value);
       } else if (token.type === 'range') {
         const num = parseFloat(value);
         if (!isNaN(num)) input.value = num;
@@ -1791,36 +1950,47 @@
       setTokenValue(gi, ti, val);
     }
 
-    // ──── Helper: reset a token to CSS file value (remove inline override) ────
-    function resetTokenToFile(gi, ti) {
-      const token = tokenGroups[gi]?.tokens[ti];
-      if (!token) return;
-      const uid = `ctrl-${gi}-${ti}`;
-      root.style.removeProperty(token.var);
+    // ──── Helper: reset a token to its default value ────
+    // Uses token.default directly (style.css is not loaded, so getComputedStyle has no fallbacks)
+    function resetControl(uid, token) {
+      if (token.default == null) return;
+      const defaultVal = token.type === 'range' && token.unit
+        ? `${token.default}${token.unit}`
+        : `${token.default}`;
+      root.style.setProperty(token.var, defaultVal);
       pendingChanges.delete(token.var);
-      // Read the CSS file's computed value
-      const rawVal = getComputedStyle(root).getPropertyValue(token.var).trim();
-      if (!rawVal) return;
       const input = document.getElementById(uid);
       if (!input) return;
       if (token.type === 'color') {
-        let hex = rawVal;
-        if (hex.startsWith('rgb')) {
-          const m = hex.match(/\d+/g);
-          if (m && m.length >= 3) hex = '#' + [m[0],m[1],m[2]].map(c => parseInt(c).toString(16).padStart(2,'0')).join('');
+        const classified = classifyColorValue(defaultVal, token.default);
+        const cssValue = classified.display || defaultVal;
+        root.style.setProperty(token.var, cssValue);
+        const picker = document.getElementById(`${uid}-picker`);
+        const textInp = document.getElementById(uid);
+        const checker = document.getElementById(`${uid}-checker`);
+        const transpBtn = document.getElementById(`${uid}-transp`);
+        if (textInp) textInp.value = cssValue;
+        if (classified.isOpaque && classified.hex) {
+          if (picker) { picker.value = classified.hex; picker.style.visibility = 'visible'; }
+          if (checker) checker.classList.add('hidden');
+        } else {
+          if (picker) picker.style.visibility = 'hidden';
+          if (checker) checker.classList.remove('hidden');
         }
-        if (/^#[0-9a-fA-F]{6}$/.test(hex)) input.value = hex;
-        const valSpan = document.getElementById(`${uid}-val`);
-        if (valSpan) valSpan.textContent = hex;
+        if (transpBtn) {
+          const isT = cssValue === 'transparent';
+          transpBtn.className = 'flex-shrink-0 w-6 h-6 rounded border text-[10px] font-bold leading-none flex items-center justify-center transition-colors ds-checker-bg-sm ' +
+            (isT ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-border-default text-text-tertiary hover:border-primary-400 hover:text-primary-600');
+        }
       } else if (token.type === 'range') {
-        const num = parseFloat(rawVal);
+        const num = parseFloat(defaultVal);
         if (!isNaN(num)) {
           input.value = num;
           const valSpan = document.getElementById(`${uid}-val`);
           if (valSpan) valSpan.textContent = token.unit ? `${num}${token.unit}` : `${num}`;
         }
       } else if (token.type === 'font') {
-        const normalizedRaw = rawVal.replace(/['"]/g, '').toLowerCase();
+        const normalizedRaw = defaultVal.replace(/['"]/g, '').toLowerCase();
         for (const opt of input.options) {
           const normalizedOpt = opt.value.replace(/['"]/g, '').toLowerCase();
           if (normalizedRaw === normalizedOpt || normalizedRaw.startsWith(normalizedOpt.split(',')[0].trim())) {
@@ -1829,35 +1999,57 @@
           }
         }
         const preview = document.getElementById(`${uid}-preview`);
-        if (preview) preview.style.fontFamily = rawVal;
+        if (preview) preview.style.fontFamily = defaultVal;
+        const sel = input.options[input.selectedIndex];
+        const googleParam = sel?.getAttribute('data-google');
+        if (googleParam) loadGoogleFont(googleParam);
+        if (token.var === '--font-sans') root.style.setProperty('--default-font-family', defaultVal);
+        if (token.var === '--font-mono') root.style.setProperty('--default-mono-font-family', defaultVal);
       } else {
-        input.value = rawVal;
+        input.value = defaultVal;
       }
     }
 
-    // ──── Reset group (back to CSS file values) ────
-    controlsContainer.querySelectorAll('.ds-reset-group').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const gi = parseInt(btn.getAttribute('data-group'));
-        const group = tokenGroups[gi];
-        if (!group) return;
-        group.tokens.forEach((_, ti) => resetTokenToFile(gi, ti));
-        updateSaveButton();
-      });
-    });
+    function resetTokenToFile(gi, ti) {
+      const token = tokenGroups[gi]?.tokens[ti];
+      if (!token) return;
+      resetControl(`ctrl-${gi}-${ti}`, token);
+    }
+
+    // ──── Reset section editor tokens ────
+    function resetSectionToken(si, ti) {
+      const sec = sectionEditors[si];
+      if (!sec) return;
+      const token = sec.tokens[ti];
+      if (!token) return;
+      resetControl(`sec-${si}-${ti}`, token);
+    }
+
+    function resetSection(si) {
+      const sec = sectionEditors[si];
+      if (!sec) return;
+      sec.tokens.forEach((_, ti) => resetSectionToken(si, ti));
+    }
 
     // ──── Reset All (back to CSS file values) ────
     document.getElementById('reset-all-btn')?.addEventListener('click', () => {
       tokenGroups.forEach((group, gi) => {
         group.tokens.forEach((_, ti) => resetTokenToFile(gi, ti));
       });
+      sectionEditors.forEach((_, si) => resetSection(si));
+      componentEditors.forEach((comp, ci) => {
+        comp.tokens.forEach((token, ti) => resetControl(`comp-${ci}-${ti}`, token));
+        if (comp.outlineTokens) {
+          comp.outlineTokens.forEach((token, ti) => resetControl(`comp-${ci}-outline-${ti}`, token));
+        }
+      });
       pendingChanges.clear();
       updateSaveButton();
-      showToast('↺', 'Sıfırlandı', 'Tüm kontroller CSS dosyasındaki değerlere döndürüldü.', false);
+      showToast('↺', 'Sifirlandi', 'Tum kontroller CSS dosyasindaki degerlere donduruldu.', false);
     });
 
     // ──── Build preset tabs ────
+    let activePresetIndex = -1;
     const presetContainer = document.getElementById('preset-tabs');
     if (presetContainer) {
       themePresets.forEach((preset, pi) => {
@@ -1917,17 +2109,18 @@
       updateSaveButton();
 
       // Highlight active tab
+      activePresetIndex = pi;
       document.querySelectorAll('#preset-tabs button').forEach((btn, i) => {
         if (i === pi) {
-          btn.classList.add('bg-primary-100', 'border-primary-500', 'text-primary-700');
+          btn.classList.add('ring-2', 'ring-primary-500', 'bg-primary-50', 'border-primary-400', 'text-primary-700');
           btn.classList.remove('border-border-default');
         } else {
-          btn.classList.remove('bg-primary-100', 'border-primary-500', 'text-primary-700');
+          btn.classList.remove('ring-2', 'ring-primary-500', 'bg-primary-50', 'border-primary-400', 'text-primary-700');
           btn.classList.add('border-border-default');
         }
       });
 
-      showToast(preset.icon, `"${preset.name}" uygulandı`, `${Object.keys(preset.overrides).length || 'Tüm'} değişken ayarlandı. Kaydetmek için Save butonuna tıklayın.`, false);
+      showToast(preset.icon, `"${preset.name}" uygulandi`, `${Object.keys(preset.overrides).length || 'Tum'} degisken ayarlandi. Kaydetmek icin butonuna tiklayin.`, false);
     }
   }
 
@@ -2001,21 +2194,100 @@
     });
   }
 
+  // Classify and normalize a CSS color value
+  // Returns { hex, display, isOpaque }
+  function classifyColorValue(rawVal, fallbackDefault) {
+    if (!rawVal || rawVal === 'initial' || rawVal === 'inherit' || rawVal === 'unset') {
+      return fallbackDefault ? classifyColorValue(fallbackDefault) : { hex: null, display: '', isOpaque: true };
+    }
+    const val = rawVal.trim().toLowerCase();
+    if (val === 'transparent') return { hex: null, display: 'transparent', isOpaque: false };
+    if (val.startsWith('rgba')) {
+      const m = val.match(/[\d.]+/g);
+      if (m && m.length >= 4) {
+        const alpha = parseFloat(m[3]);
+        const hex = '#' + [m[0], m[1], m[2]].map(c => parseInt(c).toString(16).padStart(2, '0')).join('');
+        const validHex = /^#[0-9a-fA-F]{6}$/.test(hex) ? hex : null;
+        return alpha < 1 ? { hex: validHex, display: val, isOpaque: false } : { hex: validHex, display: hex, isOpaque: true };
+      }
+    }
+    if (val.startsWith('rgb')) {
+      const m = val.match(/\d+/g);
+      if (m && m.length >= 3) {
+        const hex = '#' + [m[0], m[1], m[2]].map(c => parseInt(c).toString(16).padStart(2, '0')).join('');
+        return { hex, display: hex, isOpaque: true };
+      }
+    }
+    if (val.startsWith('#') && (val.length === 4 || val.length === 5)) {
+      const hex = `#${val[1]}${val[1]}${val[2]}${val[2]}${val[3]}${val[3]}`;
+      if (val.length === 5) {
+        const alpha = parseInt(val[4] + val[4], 16) / 255;
+        return { hex, display: alpha < 1 ? val : hex, isOpaque: alpha >= 1 };
+      }
+      return { hex, display: hex, isOpaque: true };
+    }
+    if (/^#[0-9a-fA-F]{6}$/.test(val)) return { hex: val, display: val, isOpaque: true };
+    if (/^#[0-9a-fA-F]{8}$/.test(val)) {
+      const hex6 = val.slice(0, 7);
+      const alpha = parseInt(val.slice(7, 9), 16) / 255;
+      return { hex: hex6, display: alpha < 1 ? val : hex6, isOpaque: alpha >= 1 };
+    }
+    return { hex: null, display: val, isOpaque: true };
+  }
+
+  function applyColorValue(uid, token, value) {
+    // Normalize: empty string reverts to default
+    if (!value || value === '') value = token.default;
+    const picker = document.getElementById(`${uid}-picker`);
+    const textInp = document.getElementById(uid);
+    const checker = document.getElementById(`${uid}-checker`);
+    const transpBtn = document.getElementById(`${uid}-transp`);
+    const classified = classifyColorValue(value, token.default);
+    const cssValue = classified.display || value;
+    root.style.setProperty(token.var, cssValue);
+    if (textInp) textInp.value = cssValue;
+    if (classified.isOpaque && classified.hex) {
+      if (picker) { picker.value = classified.hex; picker.style.visibility = 'visible'; }
+      if (checker) checker.classList.add('hidden');
+    } else {
+      if (picker) picker.style.visibility = 'hidden';
+      if (checker) checker.classList.remove('hidden');
+    }
+    // Sync transparent button state
+    if (transpBtn) {
+      const isT = cssValue === 'transparent';
+      transpBtn.className = 'flex-shrink-0 w-6 h-6 rounded border text-[10px] font-bold leading-none flex items-center justify-center transition-colors ds-checker-bg-sm ' +
+        (isT ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-border-default text-text-tertiary hover:border-primary-400 hover:text-primary-600');
+    }
+  }
+
   function buildCompControl(uid, token) {
     const cell = document.createElement('div');
     if (token.type === 'color') {
+      const isTransp = token.default === 'transparent';
       cell.innerHTML = `
         <label class="block text-[11px] font-semibold text-text-secondary mb-1">${token.label}</label>
-        <div class="flex items-center gap-2">
-          <input type="color" id="${uid}" value="${token.default}" class="w-7 h-7 rounded cursor-pointer border-0 p-0 flex-shrink-0" />
-          <span id="${uid}-val" class="text-[10px] font-mono text-text-tertiary">${token.default}</span>
+        <div class="flex items-center gap-1.5">
+          <div class="relative flex-shrink-0">
+            <input type="color" id="${uid}-picker" class="w-7 h-7 rounded cursor-pointer border border-border-default p-0" value="${isTransp ? '#ffffff' : token.default}" style="visibility:${isTransp ? 'hidden' : 'visible'}" />
+            <div id="${uid}-checker" class="absolute inset-0 rounded pointer-events-none ${isTransp ? '' : 'hidden'} ds-checker-bg"></div>
+          </div>
+          <input type="text" id="${uid}" value="${token.default}" class="flex-1 min-w-0 text-[10px] font-mono border border-border-default dark:border-secondary-600 rounded px-1.5 py-1 bg-white dark:bg-secondary-800 focus:border-primary-500 focus:outline-none" />
+          <button type="button" id="${uid}-transp" class="flex-shrink-0 w-6 h-6 rounded border text-[10px] font-bold leading-none flex items-center justify-center transition-colors ds-checker-bg-sm ${isTransp ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-border-default text-text-tertiary hover:border-primary-400 hover:text-primary-600'}" title="Transparent">T</button>
         </div>
       `;
-      const inp = cell.querySelector('input');
-      inp.addEventListener('input', () => {
-        root.style.setProperty(token.var, inp.value);
-        const valSpan = document.getElementById(`${uid}-val`);
-        if (valSpan) valSpan.textContent = inp.value;
+      const picker = cell.querySelector(`#${uid}-picker`);
+      const textInp = cell.querySelector(`#${uid}`);
+      const transpBtn = cell.querySelector(`#${uid}-transp`);
+      picker.addEventListener('input', () => applyColorValue(uid, token, picker.value));
+      textInp.addEventListener('change', () => applyColorValue(uid, token, textInp.value.trim()));
+      transpBtn.addEventListener('click', () => {
+        const current = textInp.value.trim();
+        if (current === 'transparent') {
+          applyColorValue(uid, token, token.default === 'transparent' ? '#ffffff' : token.default);
+        } else {
+          applyColorValue(uid, token, 'transparent');
+        }
       });
     } else if (token.type === 'range') {
       const dispVal = token.unit ? `${token.default}${token.unit}` : `${token.default}`;
@@ -2055,15 +2327,22 @@
       const rawVal = computed.getPropertyValue(token.var).trim();
       if (!rawVal) return;
       if (token.type === 'color') {
-        let hex = rawVal;
-        if (hex.startsWith('rgb')) {
-          const m = hex.match(/\d+/g);
-          if (m && m.length >= 3) hex = '#' + [m[0],m[1],m[2]].map(c => parseInt(c).toString(16).padStart(2,'0')).join('');
+        const classified = classifyColorValue(rawVal, token.default);
+        const picker = document.getElementById(`${uid}-picker`);
+        const checker = document.getElementById(`${uid}-checker`);
+        const transpBtn = document.getElementById(`${uid}-transp`);
+        if (input) input.value = classified.display || rawVal;
+        if (classified.isOpaque && classified.hex) {
+          if (picker) { picker.value = classified.hex; picker.style.visibility = 'visible'; }
+          if (checker) checker.classList.add('hidden');
+        } else {
+          if (picker) picker.style.visibility = 'hidden';
+          if (checker) checker.classList.remove('hidden');
         }
-        if (/^#[0-9a-fA-F]{6}$/.test(hex)) {
-          input.value = hex;
-          const valSpan = document.getElementById(`${uid}-val`);
-          if (valSpan) valSpan.textContent = hex;
+        if (transpBtn) {
+          const isT = (classified.display === 'transparent');
+          transpBtn.className = 'flex-shrink-0 w-6 h-6 rounded border text-[10px] font-bold leading-none flex items-center justify-center transition-colors ds-checker-bg-sm ' +
+            (isT ? 'bg-primary-100 border-primary-400 text-primary-700' : 'border-border-default text-text-tertiary hover:border-primary-400 hover:text-primary-600');
         }
       } else if (token.type === 'range') {
         const num = parseFloat(rawVal);
@@ -2087,25 +2366,41 @@
       name: 'Header / TopBar',
       icon: '▔',
       tokens: [
-        { var: '--header-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--header-bg', type: 'color', default: 'transparent', label: 'Arkaplan' },
+        { var: '--header-scroll-bg', type: 'color', default: '#ffffff', label: 'Scroll Arkaplan' },
+        { var: '--header-scroll-border', type: 'color', default: '#e5e5e5', label: 'Scroll Border' },
         { var: '--header-height', type: 'range', default: 64, min: 40, max: 100, step: 1, unit: 'px', label: 'Yükseklik' },
-        { var: '--header-border-color', type: 'color', default: '#e5e5e5', label: 'Alt Border' },
+        { var: '--header-border-color', type: 'color', default: 'transparent', label: 'Alt Border' },
         { var: '--header-text-color', type: 'color', default: '#374151', label: 'Yazı Rengi' },
         { var: '--header-icon-color', type: 'color', default: '#374151', label: 'İkon Rengi' },
         { var: '--header-icon-hover-color', type: 'color', default: '#cc9900', label: 'İkon Hover' },
       ],
       preview: () => `
-        <div class="rounded-lg overflow-hidden border border-border-default">
-          <div class="flex items-center justify-between px-4" style="background:var(--header-bg); height:var(--header-height); border-bottom:1px solid var(--header-border-color)">
-            <span class="font-bold text-sm" style="color:var(--header-icon-hover-color)">iSTOC</span>
-            <div class="flex items-center gap-3">
-              <span class="text-xs" style="color:var(--header-text-color)">Deliver to: 🇹🇷 TR</span>
-              <span class="text-xs" style="color:var(--header-text-color)">English-USD</span>
+        <div class="space-y-2">
+          <p class="text-[10px] text-text-tertiary font-semibold mb-1">Varsayılan (gradient üzerinde)</p>
+          <div class="rounded-lg overflow-hidden border border-border-default">
+            <div class="flex items-center justify-between px-4" style="background:var(--header-bg); height:var(--header-height); border-bottom:1px solid var(--header-border-color)">
+              <span class="font-bold text-sm" style="color:var(--header-icon-hover-color)">iSTOC</span>
+              <div class="flex items-center gap-3">
+                <span class="text-xs" style="color:var(--header-text-color)">Deliver to: TR</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" style="color:var(--header-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                <span class="comp-btn text-[10px]" style="padding:4px 10px; border-radius:9999px">Join Free</span>
+              </div>
             </div>
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4" style="color:var(--header-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/></svg>
-              <svg class="w-4 h-4" style="color:var(--header-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
-              <span class="comp-btn text-[10px]" style="padding:4px 10px; border-radius:9999px">Join Free</span>
+          </div>
+          <p class="text-[10px] text-text-tertiary font-semibold mb-1">Scroll sonrası</p>
+          <div class="rounded-lg overflow-hidden border border-border-default">
+            <div class="flex items-center justify-between px-4" style="background:var(--header-scroll-bg); height:var(--header-height); border-bottom:1px solid var(--header-scroll-border)">
+              <span class="font-bold text-sm" style="color:var(--header-icon-hover-color)">iSTOC</span>
+              <div class="flex items-center gap-3">
+                <span class="text-xs" style="color:var(--header-text-color)">Deliver to: TR</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" style="color:var(--header-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/></svg>
+                <span class="comp-btn text-[10px]" style="padding:4px 10px; border-radius:9999px">Join Free</span>
+              </div>
             </div>
           </div>
         </div>
@@ -2116,14 +2411,16 @@
       name: 'SubHeader / Navigasyon',
       icon: '≡',
       tokens: [
-        { var: '--subheader-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
-        { var: '--subheader-border-color', type: 'color', default: '#e5e5e5', label: 'Alt Border' },
-        { var: '--nav-font-size', type: 'range', default: 0.875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
-        { var: '--nav-font-weight', type: 'range', default: 500, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
-        { var: '--subheader-text-color', type: 'color', default: '#525252', label: 'Yazı Rengi' },
-        { var: '--subheader-hover-color', type: 'color', default: '#b38600', label: 'Hover Rengi' },
+        { var: '--subheader-bg', type: 'color', default: 'transparent', label: 'Arkaplan' },
+        { var: '--subheader-border-color', type: 'color', default: 'transparent', label: 'Alt Border' },
+        { var: '--nav-font-size', type: 'range', default: 0.8125, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
+        { var: '--nav-font-weight', type: 'range', default: 300, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
+        { var: '--subheader-text-color', type: 'color', default: '#000000', label: 'Yazı Rengi' },
+        { var: '--subheader-hover-color', type: 'color', default: '#a3a3a3', label: 'Hover Rengi' },
         { var: '--subheader-hover-bg', type: 'text', default: 'rgba(255, 255, 255, 0.8)', label: 'Hover Arkaplan' },
-        { var: '--subheader-active-color', type: 'color', default: '#b38600', label: 'Aktif Rengi' },
+        { var: '--subheader-active-color', type: 'color', default: '#000000', label: 'Aktif Rengi' },
+        { var: '--nav-text-color', type: 'color', default: '#000000', label: 'Nav Yazı Rengi' },
+        { var: '--nav-hover-color', type: 'color', default: '#b38600', label: 'Nav Hover Rengi' },
       ],
       preview: () => `
         <div class="rounded-lg overflow-hidden border border-border-default">
@@ -2156,7 +2453,7 @@
       name: 'Arama Alanı',
       icon: '⌕',
       tokens: [
-        { var: '--search-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--search-bg', type: 'color', default: 'transparent', label: 'Arkaplan' },
         { var: '--search-tab-color', type: 'color', default: '#6b7280', label: 'Tab Rengi' },
         { var: '--search-tab-active-color', type: 'color', default: '#cc9900', label: 'Aktif Tab' },
         { var: '--search-input-border-color', type: 'color', default: '#cc9900', label: 'Input Border' },
@@ -2206,26 +2503,65 @@
         { var: '--mega-sidebar-bg', type: 'color', default: '#f9fafb', label: 'Sidebar Arkaplan' },
         { var: '--mega-sidebar-hover-bg', type: 'color', default: '#ffffff', label: 'Sidebar Hover' },
         { var: '--mega-sidebar-active-bg', type: 'color', default: '#ffffff', label: 'Sidebar Aktif' },
+        { var: '--mega-sidebar-active-border', type: 'color', default: '#e1b533', label: 'Sidebar Aktif Border' },
         { var: '--mega-border-color', type: 'color', default: '#e5e7eb', label: 'Border Rengi' },
-        { var: '--mega-text-color', type: 'color', default: '#374151', label: 'Yazı Rengi' },
+        { var: '--mega-text-color', type: 'color', default: '#0a0a0a', label: 'Yazı Rengi' },
+        { var: '--mega-heading-color', type: 'color', default: '#0a0a0a', label: 'Başlık Rengi' },
+        { var: '--mega-body-text', type: 'color', default: '#6b7280', label: 'Gövde Yazı' },
+        { var: '--mega-link-color', type: 'color', default: '#000000', label: 'Link Rengi' },
+        { var: '--mega-link-hover-color', type: 'color', default: '#b38600', label: 'Link Hover' },
+        { var: '--mega-icon-color', type: 'color', default: '#6b7280', label: 'İkon Rengi' },
+        { var: '--mega-icon-bg', type: 'color', default: '#f3f4f6', label: 'İkon Arkaplan' },
+        { var: '--mega-accent-color', type: 'color', default: '#ff0040', label: 'Vurgu Rengi' },
+        { var: '--mega-accent-bg', type: 'color', default: '#37ff00', label: 'Vurgu Arkaplan' },
+        { var: '--mega-card-hover-border', type: 'color', default: '#fcd34d', label: 'Kart Hover Border' },
+        { var: '--mega-font-size', type: 'range', default: 0.8125, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
+        { var: '--mega-font-weight', type: 'range', default: 400, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
       ],
       preview: () => `
         <div class="rounded-lg overflow-hidden border" style="border-color:var(--mega-border-color)">
-          <div class="flex h-40" style="background:var(--mega-bg)">
-            <div class="w-48 flex-shrink-0 py-2 border-r" style="background:var(--mega-sidebar-bg); border-color:var(--mega-border-color)">
-              <div class="px-3 py-1.5 text-[10px] font-semibold" style="background:var(--mega-sidebar-active-bg); color:var(--mega-text-color)">Apparel & Accessories</div>
-              <div class="px-3 py-1.5 text-[10px]" style="color:var(--mega-text-color)">Consumer Electronics</div>
-              <div class="px-3 py-1.5 text-[10px]" style="color:var(--mega-text-color)">Sports & Entertainment</div>
-              <div class="px-3 py-1.5 text-[10px]" style="color:var(--mega-text-color)">Home & Garden</div>
+          <div class="flex" style="background:var(--mega-bg)">
+            <div class="w-44 flex-shrink-0 py-2 border-r" style="background:var(--mega-sidebar-bg); border-color:var(--mega-border-color)">
+              <div class="px-3 py-1.5 border-l-2" style="background:var(--mega-sidebar-active-bg); border-color:var(--mega-sidebar-active-border); font-size:var(--mega-font-size); font-weight:var(--mega-font-weight); color:var(--mega-text-color)">Apparel</div>
+              <div class="px-3 py-1.5" style="font-size:var(--mega-font-size); font-weight:var(--mega-font-weight); color:var(--mega-text-color)">Electronics</div>
+              <div class="px-3 py-1.5" style="background:var(--mega-sidebar-hover-bg); font-size:var(--mega-font-size); font-weight:var(--mega-font-weight); color:var(--mega-text-color)">Home &amp; Garden</div>
             </div>
             <div class="flex-1 p-3">
-              <div class="grid grid-cols-3 gap-2">
-                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Bridesmaid Dresses</div>
-                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Carnival Costume</div>
-                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Rhinestones</div>
-                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Camouflage</div>
-                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Polyester Ties</div>
-                <div class="text-[10px] px-2 py-1 rounded" style="color:var(--mega-text-color)">Ice Hockey</div>
+              <p class="text-[10px] font-semibold mb-1" style="color:var(--mega-heading-color)">Apparel &amp; Accessories</p>
+              <p class="text-[9px] mb-2" style="color:var(--mega-body-text)">Explore top categories and trending products</p>
+              <div class="flex gap-2 mb-2">
+                <div class="flex-1 rounded px-2 py-1.5 border" style="background:var(--mega-bg); border-color:var(--mega-card-hover-border)">
+                  <span class="text-[9px] font-medium" style="color:var(--mega-heading-color)">Featured</span>
+                  <p class="text-[8px]" style="color:var(--mega-body-text)">New arrivals</p>
+                </div>
+                <div class="flex-1 rounded px-2 py-1.5" style="background:var(--mega-accent-bg)">
+                  <span class="text-[9px] font-medium" style="color:var(--mega-accent-color)">Trade Assurance</span>
+                  <p class="text-[8px]" style="color:var(--mega-body-text)">Protected orders</p>
+                </div>
+              </div>
+              <div class="flex gap-3 mb-2">
+                <div class="flex flex-col items-center gap-1">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--mega-icon-bg); box-shadow:0 0 0 2px var(--mega-sidebar-active-border)">
+                    <span class="text-[10px]" style="color:var(--mega-icon-color)">&#128241;</span>
+                  </div>
+                  <span class="text-[8px]" style="color:var(--mega-link-color)">Phones</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--mega-icon-bg)">
+                    <span class="text-[10px]" style="color:var(--mega-icon-color)">&#128187;</span>
+                  </div>
+                  <span class="text-[8px]" style="color:var(--mega-link-color)">Laptops</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--mega-icon-bg)">
+                    <span class="text-[10px]" style="color:var(--mega-icon-color)">&#127911;</span>
+                  </div>
+                  <span class="text-[8px]" style="color:var(--mega-link-color)">Audio</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-[9px]" style="color:var(--mega-link-color)">Browse all &rarr;</span>
+                <span class="text-[9px]" style="color:var(--mega-link-hover-color)">View deals</span>
               </div>
             </div>
           </div>
@@ -2258,6 +2594,285 @@
             </div>
             <div class="flex-1 h-12 rounded-lg flex items-center justify-center" style="background:var(--hero-card-bg); border:1px solid var(--hero-card-border-color)">
               <span class="text-[10px]" style="color:var(--hero-title-color)">Recommendation</span>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-catpopup',
+      name: 'Category Popup',
+      icon: '▦',
+      tokens: [
+        { var: '--catpopup-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--catpopup-border', type: 'color', default: '#e5e7eb', label: 'Border Rengi' },
+        { var: '--catpopup-heading', type: 'color', default: '#111827', label: 'Başlık Rengi' },
+        { var: '--catpopup-text', type: 'color', default: '#4b5563', label: 'Yazı Rengi' },
+        { var: '--catpopup-link', type: 'color', default: '#cc9900', label: 'Link Rengi' },
+        { var: '--catpopup-link-hover', type: 'color', default: '#b38600', label: 'Link Hover' },
+        { var: '--catpopup-icon', type: 'color', default: '#9ca3af', label: 'İkon Rengi' },
+        { var: '--catpopup-product-bg', type: 'color', default: '#f3f4f6', label: 'Ürün Daire Arkaplan' },
+        { var: '--catpopup-close-color', type: 'color', default: '#9ca3af', label: 'Kapat Butonu' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border" style="border-color:var(--catpopup-border)">
+          <div class="flex items-center justify-between px-3 py-2 border-b" style="background:var(--catpopup-bg); border-color:var(--catpopup-border)">
+            <span class="text-[10px] font-bold" style="color:var(--catpopup-heading)">Categories</span>
+            <div class="flex items-center gap-2">
+              <span class="text-[9px]" style="color:var(--catpopup-link)">Browse all <span style="color:var(--catpopup-link-hover)">&rarr;</span></span>
+              <span class="text-[10px] cursor-pointer" style="color:var(--catpopup-close-color)">&times;</span>
+            </div>
+          </div>
+          <div class="flex h-32" style="background:var(--catpopup-bg)">
+            <div class="w-28 flex-shrink-0 py-2 border-r" style="background:var(--catpopup-sidebar-bg); border-color:var(--catpopup-border)">
+              <div class="px-3 py-1.5 text-[10px] border-l-2" style="background:var(--catpopup-sidebar-active-bg); border-color:var(--catpopup-sidebar-active-border); color:var(--catpopup-text)"><span style="color:var(--catpopup-icon)">&#9753;</span> Electronics</div>
+              <div class="px-3 py-1.5 text-[10px]" style="color:var(--catpopup-text)"><span style="color:var(--catpopup-icon)">&#9742;</span> Apparel</div>
+              <div class="px-3 py-1.5 text-[10px]" style="color:var(--catpopup-text)"><span style="color:var(--catpopup-icon)">&#9750;</span> Home</div>
+            </div>
+            <div class="flex-1 p-3">
+              <p class="text-[10px] font-semibold mb-3" style="color:var(--catpopup-heading)">Electronics</p>
+              <div class="flex gap-4">
+                <div class="flex flex-col items-center gap-1">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--catpopup-product-bg); box-shadow:0 0 0 2px var(--catpopup-sidebar-active-border)">
+                    <span class="text-xs" style="color:var(--catpopup-icon)">&#128241;</span>
+                  </div>
+                  <span class="text-[8px]" style="color:var(--catpopup-link)">Phones</span>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                  <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background:var(--catpopup-product-bg)">
+                    <span class="text-xs" style="color:var(--catpopup-icon)">&#128187;</span>
+                  </div>
+                  <span class="text-[8px]" style="color:var(--catpopup-link)">Laptops</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-catbrowse',
+      name: 'Category Browse',
+      icon: '☰',
+      tokens: [
+        { var: '--catpopup-sidebar-bg', type: 'color', default: '#f9fafb', label: 'Arkaplan' },
+        { var: '--catpopup-sidebar-hover-bg', type: 'color', default: '#f3f4f6', label: 'Hover Arkaplan' },
+        { var: '--catpopup-sidebar-active-bg', type: 'color', default: '#ffffff', label: 'Aktif Arkaplan' },
+        { var: '--catpopup-sidebar-active-border', type: 'color', default: '#cc9900', label: 'Aktif Border' },
+        { var: '--catpopup-text', type: 'color', default: '#4b5563', label: 'Yazı Rengi' },
+        { var: '--catpopup-icon', type: 'color', default: '#9ca3af', label: 'İkon Rengi' },
+        { var: '--catpopup-sidebar-font-size', type: 'range', default: 0.6875, min: 0.5, max: 2, step: 0.0625, unit: 'rem', label: 'Font Size' },
+        { var: '--catpopup-sidebar-font-weight', type: 'range', default: 400, min: 100, max: 900, step: 100, unit: '', label: 'Font Weight' },
+        { var: '--catpopup-sidebar-padding-x', type: 'range', default: 0.125, min: 0, max: 3, step: 0.125, unit: 'rem', label: 'Padding X' },
+        { var: '--catpopup-sidebar-padding-y', type: 'range', default: 0.25, min: 0, max: 2, step: 0.125, unit: 'rem', label: 'Padding Y' },
+      ],
+      preview: () => `
+        <div class="rounded-lg overflow-hidden border" style="border-color:var(--catpopup-border); background:var(--catpopup-sidebar-bg)">
+          <div class="py-2">
+            <div class="border-l-2 transition-colors category-browse-item" style="background:var(--catpopup-sidebar-active-bg); border-color:var(--catpopup-sidebar-active-border); color:var(--catpopup-text); font-size:var(--catpopup-sidebar-font-size); font-weight:var(--catpopup-sidebar-font-weight); padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"><span style="color:var(--catpopup-icon)">&#128737;</span>&nbsp; Apparel &amp; Accessories</div>
+            <div class="category-browse-item transition-colors" style="color:var(--catpopup-text); font-size:var(--catpopup-sidebar-font-size); font-weight:var(--catpopup-sidebar-font-weight); padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"><span style="color:var(--catpopup-icon)">&#128187;</span>&nbsp; Consumer Electronics</div>
+            <div class="category-browse-item transition-colors" style="color:var(--catpopup-text); font-size:var(--catpopup-sidebar-font-size); font-weight:var(--catpopup-sidebar-font-weight); padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x); background:var(--catpopup-sidebar-hover-bg)"><span style="color:var(--catpopup-icon)">&#127968;</span>&nbsp; Home &amp; Garden <span class="text-[8px] opacity-50">(hover)</span></div>
+            <div class="category-browse-item transition-colors" style="color:var(--catpopup-text); font-size:var(--catpopup-sidebar-font-size); font-weight:var(--catpopup-sidebar-font-weight); padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"><span style="color:var(--catpopup-icon)">&#9881;</span>&nbsp; Industrial &amp; Scientific</div>
+            <div class="category-browse-item transition-colors" style="color:var(--catpopup-text); font-size:var(--catpopup-sidebar-font-size); font-weight:var(--catpopup-sidebar-font-weight); padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"><span style="color:var(--catpopup-icon)">&#127942;</span>&nbsp; Sports &amp; Entertainment</div>
+            <div class="category-browse-item transition-colors" style="color:var(--catpopup-text); font-size:var(--catpopup-sidebar-font-size); font-weight:var(--catpopup-sidebar-font-weight); padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"><span style="color:var(--catpopup-icon)">&#128663;</span>&nbsp; Vehicles &amp; Accessories</div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-topdeals',
+      name: 'Top Deals',
+      icon: '🏷',
+      tokens: [
+        { var: '--topdeals-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--topdeals-title-color', type: 'color', default: '#111827', label: 'Başlık Rengi' },
+        { var: '--topdeals-subtitle-color', type: 'color', default: '#6b7280', label: 'Alt Başlık' },
+        { var: '--topdeals-link-color', type: 'color', default: '#111827', label: 'Link Rengi' },
+        { var: '--topdeals-card-bg', type: 'color', default: '#ffffff', label: 'Kart Arkaplan' },
+        { var: '--topdeals-card-border', type: 'color', default: '#e5e5e5', label: 'Kart Border' },
+        { var: '--topdeals-price-color', type: 'color', default: '#dc2626', label: 'Fiyat Rengi' },
+        { var: '--topdeals-original-price-color', type: 'color', default: '#9ca3af', label: 'Eski Fiyat' },
+        { var: '--topdeals-moq-color', type: 'color', default: '#6b7280', label: 'MOQ Rengi' },
+        { var: '--topdeals-badge-bg', type: 'color', default: '#dc2626', label: 'Badge Arkaplan' },
+        { var: '--topdeals-badge-text', type: 'color', default: '#ffffff', label: 'Badge Yazı' },
+      ],
+      preview: () => `
+        <div class="rounded-lg p-3" style="background:var(--topdeals-bg)">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <p class="text-[12px] font-bold" style="color:var(--topdeals-title-color)">Top Deals</p>
+              <p class="text-[9px]" style="color:var(--topdeals-subtitle-color)">Save big on trending products</p>
+            </div>
+            <span class="text-[9px] font-semibold" style="color:var(--topdeals-link-color)">View more &gt;</span>
+          </div>
+          <div class="flex gap-2">
+            <div class="rounded-lg border overflow-hidden" style="width:80px; background:var(--topdeals-card-bg); border-color:var(--topdeals-card-border)">
+              <div class="relative h-[50px] bg-gray-100 flex items-center justify-center">
+                <span class="text-[16px]">📱</span>
+                <span class="absolute top-0.5 left-0.5 text-[7px] px-1 rounded" style="background:var(--topdeals-badge-bg); color:var(--topdeals-badge-text)">-30%</span>
+              </div>
+              <div class="p-1.5">
+                <p class="text-[10px] font-bold" style="color:var(--topdeals-price-color)">$31.50</p>
+                <p class="text-[8px] line-through" style="color:var(--topdeals-original-price-color)">$45.00</p>
+                <p class="text-[7px]" style="color:var(--topdeals-moq-color)">MOQ: 2</p>
+              </div>
+            </div>
+            <div class="rounded-lg border overflow-hidden" style="width:80px; background:var(--topdeals-card-bg); border-color:var(--topdeals-card-border)">
+              <div class="relative h-[50px] bg-gray-100 flex items-center justify-center">
+                <span class="text-[16px]">🎧</span>
+                <span class="absolute top-0.5 left-0.5 text-[7px] px-1 rounded" style="background:var(--topdeals-badge-bg); color:var(--topdeals-badge-text)">-25%</span>
+              </div>
+              <div class="p-1.5">
+                <p class="text-[10px] font-bold" style="color:var(--topdeals-price-color)">$3.50</p>
+                <p class="text-[8px] line-through" style="color:var(--topdeals-original-price-color)">$5.00</p>
+                <p class="text-[7px]" style="color:var(--topdeals-moq-color)">MOQ: 5</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-topranking',
+      name: 'Top Ranking',
+      icon: '🏆',
+      tokens: [
+        { var: '--topranking-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--topranking-title-color', type: 'color', default: '#111827', label: 'Başlık Rengi' },
+        { var: '--topranking-subtitle-color', type: 'color', default: '#6b7280', label: 'Alt Başlık' },
+        { var: '--topranking-link-color', type: 'color', default: '#111827', label: 'Link Rengi' },
+        { var: '--topranking-card-bg', type: 'color', default: '#f3f4f6', label: 'Kart Arkaplan' },
+        { var: '--topranking-card-border', type: 'color', default: '#e5e5e5', label: 'Kart Border' },
+        { var: '--topranking-badge-bg', type: 'color', default: '#111827', label: 'Badge Arkaplan' },
+        { var: '--topranking-badge-text', type: 'color', default: '#ffffff', label: 'Badge Yazı' },
+        { var: '--topranking-name-color', type: 'color', default: '#222222', label: 'İsim Rengi' },
+        { var: '--topranking-label-color', type: 'color', default: '#666666', label: 'Etiket Rengi' },
+      ],
+      preview: () => `
+        <div class="rounded-lg p-3" style="background:var(--topranking-bg)">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <p class="text-[12px] font-bold" style="color:var(--topranking-title-color)">Top Ranking</p>
+              <p class="text-[9px]" style="color:var(--topranking-subtitle-color)">Navigate trends with data-driven rankings</p>
+            </div>
+            <span class="text-[9px] font-semibold" style="color:var(--topranking-link-color)">View more &gt;</span>
+          </div>
+          <div class="flex gap-1.5">
+            <div class="rounded-lg border overflow-hidden" style="width:70px; background:var(--topranking-card-bg); border-color:var(--topranking-card-border); padding:6px 6px 8px;">
+              <div class="relative h-[45px] rounded bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center mb-1">
+                <span class="text-[14px]">📱</span>
+                <span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 text-[7px] font-black px-1 rounded" style="background:var(--topranking-badge-bg); color:var(--topranking-badge-text)">TOP</span>
+              </div>
+              <p class="text-[8px] font-semibold truncate" style="color:var(--topranking-name-color)">Electronics</p>
+              <p class="text-[7px]" style="color:var(--topranking-label-color)">Hot selling</p>
+            </div>
+            <div class="rounded-lg border overflow-hidden" style="width:70px; background:var(--topranking-card-bg); border-color:var(--topranking-card-border); padding:6px 6px 8px;">
+              <div class="relative h-[45px] rounded bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center mb-1">
+                <span class="text-[14px]">👗</span>
+                <span class="absolute bottom-0.5 left-1/2 -translate-x-1/2 text-[7px] font-black px-1 rounded" style="background:var(--topranking-badge-bg); color:var(--topranking-badge-text)">TOP</span>
+              </div>
+              <p class="text-[8px] font-semibold truncate" style="color:var(--topranking-name-color)">Fashion</p>
+              <p class="text-[7px]" style="color:var(--topranking-label-color)">Rising trend</p>
+            </div>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-tailored',
+      name: 'Tailored Selections',
+      icon: '✦',
+      tokens: [
+        { var: '--tailored-bg', type: 'color', default: '#ffffff', label: 'Arkaplan' },
+        { var: '--tailored-title-color', type: 'color', default: '#111827', label: 'Başlık Rengi' },
+        { var: '--tailored-link-color', type: 'color', default: '#111827', label: 'Link Rengi' },
+        { var: '--tailored-card-bg', type: 'color', default: '#ffffff', label: 'Kart Arkaplan' },
+        { var: '--tailored-card-border', type: 'color', default: '#e5e5e5', label: 'Kart Border' },
+        { var: '--tailored-collection-title-color', type: 'color', default: '#111827', label: 'Koleksiyon Başlığı' },
+        { var: '--tailored-views-color', type: 'color', default: '#6b7280', label: 'Görüntülenme' },
+        { var: '--tailored-price-color', type: 'color', default: '#111827', label: 'Fiyat Rengi' },
+      ],
+      preview: () => `
+        <div class="rounded-lg p-3" style="background:var(--tailored-bg)">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-[12px] font-bold" style="color:var(--tailored-title-color)">Tailored Selections</p>
+            <span class="text-[9px] font-semibold" style="color:var(--tailored-link-color)">View more &gt;</span>
+          </div>
+          <div class="rounded-lg border p-2" style="background:var(--tailored-card-bg); border-color:var(--tailored-card-border)">
+            <p class="text-[9px] font-semibold mb-1" style="color:var(--tailored-collection-title-color)">Spring Collection 2025</p>
+            <p class="text-[7px] mb-1.5" style="color:var(--tailored-views-color)">2.4K views</p>
+            <div class="flex gap-1">
+              <div class="h-[30px] w-[30px] rounded bg-gray-100 flex items-center justify-center text-[10px]">👕</div>
+              <div class="h-[30px] w-[30px] rounded bg-gray-100 flex items-center justify-center text-[10px]">👖</div>
+              <div class="h-[30px] w-[30px] rounded bg-gray-100 flex items-center justify-center text-[10px]">👟</div>
+            </div>
+            <p class="text-[8px] mt-1" style="color:var(--tailored-price-color)">$5.20 - $45.00</p>
+          </div>
+        </div>
+      `
+    },
+    {
+      id: 'section-productgrid',
+      name: 'Product Grid',
+      icon: '▦',
+      tokens: [
+        { var: '--product-bg', type: 'color', default: '#F8F8F8', label: 'Arkaplan' },
+        { var: '--product-card-bg', type: 'color', default: '#ffffff', label: 'Kart Arkaplan' },
+        { var: '--product-card-border', type: 'color', default: '#e5e5e5', label: 'Kart Border Rengi' },
+        { var: '--product-card-radius', type: 'range', default: 12, min: 0, max: 32, step: 1, unit: 'px', label: 'Kart Radius' },
+        { var: '--product-card-padding', type: 'range', default: 12, min: 4, max: 32, step: 1, unit: 'px', label: 'Kart Padding' },
+        { var: '--product-card-border-width', type: 'range', default: 1, min: 0, max: 4, step: 1, unit: 'px', label: 'Border Kalınlık' },
+        { var: '--product-grid-gap', type: 'range', default: 12, min: 4, max: 32, step: 1, unit: 'px', label: 'Grid Boşluk' },
+        { var: '--product-title-color', type: 'color', default: '#111827', label: 'Başlık Rengi' },
+        { var: '--product-title-size', type: 'range', default: 13, min: 10, max: 20, step: 1, unit: 'px', label: 'Başlık Boyut' },
+        { var: '--product-title-weight', type: 'range', default: 500, min: 100, max: 900, step: 100, unit: '', label: 'Başlık Ağırlık' },
+        { var: '--product-price-color', type: 'color', default: '#111827', label: 'Fiyat Rengi' },
+        { var: '--product-price-size', type: 'range', default: 16, min: 12, max: 24, step: 1, unit: 'px', label: 'Fiyat Boyut' },
+        { var: '--product-price-weight', type: 'range', default: 700, min: 100, max: 900, step: 100, unit: '', label: 'Fiyat Ağırlık' },
+        { var: '--product-moq-color', type: 'color', default: '#6b7280', label: 'MOQ Rengi' },
+        { var: '--product-moq-size', type: 'range', default: 11, min: 8, max: 16, step: 1, unit: 'px', label: 'MOQ Boyut' },
+        { var: '--product-badge-bg', type: 'color', default: '#FFF3E0', label: 'Badge Arkaplan' },
+        { var: '--product-badge-text', type: 'color', default: '#e65100', label: 'Badge Yazı' },
+        { var: '--product-badge-size', type: 'range', default: 10, min: 8, max: 14, step: 1, unit: 'px', label: 'Badge Boyut' },
+        { var: '--product-badge-radius', type: 'range', default: 2, min: 0, max: 16, step: 1, unit: 'px', label: 'Badge Radius' },
+        { var: '--product-verified-color', type: 'color', default: '#cc9900', label: 'Doğrulanmış Rengi' },
+        { var: '--product-verified-size', type: 'range', default: 11, min: 8, max: 16, step: 1, unit: 'px', label: 'Doğrulanmış Boyut' },
+        { var: '--product-supplier-color', type: 'color', default: '#9ca3af', label: 'Tedarikçi Rengi' },
+        { var: '--product-supplier-size', type: 'range', default: 10, min: 8, max: 14, step: 1, unit: 'px', label: 'Tedarikçi Boyut' },
+      ],
+      preview: () => `
+        <div class="rounded-lg p-3" style="background:var(--product-bg)">
+          <div class="flex gap-2">
+            <div class="overflow-hidden" style="width:90px; background:var(--product-card-bg); border:var(--product-card-border-width) solid var(--product-card-border); border-radius:var(--product-card-radius);">
+              <div class="h-[60px] bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center relative">
+                <span class="text-[16px]">💎</span>
+                <div class="absolute top-1 left-1 h-3.5 w-3.5 rounded-full bg-black/40 flex items-center justify-center">
+                  <svg class="h-2 w-2 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>
+                </div>
+              </div>
+              <div style="padding:var(--product-card-padding)">
+                <p class="line-clamp-2 leading-tight" style="color:var(--product-title-color); font-size:var(--product-title-size); font-weight:var(--product-title-weight)">Gold Plated Necklace Pendant</p>
+                <div class="mt-1 px-1 py-0.5 inline-flex items-center gap-0.5" style="background:var(--product-badge-bg); color:var(--product-badge-text); font-size:var(--product-badge-size); border-radius:var(--product-badge-radius);">
+                  <span>⚡</span><span>180-day lowest</span>
+                </div>
+                <p class="mt-1 leading-none" style="color:var(--product-price-color); font-size:var(--product-price-size); font-weight:var(--product-price-weight)">$1.80-2</p>
+                <p class="mt-0.5 leading-none" style="color:var(--product-moq-color); font-size:var(--product-moq-size)">MOQ: 3 pcs</p>
+                <div class="mt-1 flex items-center gap-0.5" style="color:var(--product-verified-color); font-size:var(--product-verified-size);">
+                  <svg class="h-2.5 w-2.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd"/></svg>
+                  <span>Verified · 5 yrs</span>
+                </div>
+              </div>
+            </div>
+            <div class="overflow-hidden" style="width:90px; background:var(--product-card-bg); border:var(--product-card-border-width) solid var(--product-card-border); border-radius:var(--product-card-radius);">
+              <div class="h-[60px] bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center">
+                <span class="text-[16px]">📱</span>
+              </div>
+              <div style="padding:var(--product-card-padding)">
+                <p class="line-clamp-2 leading-tight" style="color:var(--product-title-color); font-size:var(--product-title-size); font-weight:var(--product-title-weight)">WiFi Security Camera 1080P</p>
+                <p class="mt-1 leading-none" style="color:var(--product-price-color); font-size:var(--product-price-size); font-weight:var(--product-price-weight)">$8.50-12</p>
+                <p class="mt-0.5 leading-none" style="color:var(--product-moq-color); font-size:var(--product-moq-size)">MOQ: 10 pcs</p>
+                <p class="mt-1 leading-none" style="color:var(--product-supplier-color); font-size:var(--product-supplier-size)">7 yrs · CN</p>
+              </div>
             </div>
           </div>
         </div>
@@ -2307,55 +2922,164 @@
     },
   ];
 
-  // Build section editors UI (reusing component editor pattern)
+  // Section groups config
+  const sectionGroups = [
+    { name: 'Header', icon: '▤', sectionIds: ['section-header', 'section-subheader', 'section-search', 'section-gradient'] },
+    { name: 'İçerik / Sections', icon: '▦', sectionIds: ['section-mega', 'section-hero', 'section-catpopup', 'section-catbrowse', 'section-topdeals', 'section-topranking', 'section-tailored', 'section-productgrid'] },
+    { name: 'Footer', icon: '▁', sectionIds: ['section-footer'] },
+  ];
+
+  // Build section editors UI — grouped dropdowns with internal tabs
   const sectionEditorsContainer = document.getElementById('section-editors');
   if (sectionEditorsContainer) {
-    sectionEditors.forEach((sec, si) => {
+    sectionGroups.forEach((group, gi) => {
+      const isFirstGroup = gi === 0;
+      const groupSections = group.sectionIds.map(id => {
+        const si = sectionEditors.findIndex(s => s.id === id);
+        return si >= 0 ? { sec: sectionEditors[si], si } : null;
+      }).filter(Boolean);
+      const totalTokens = groupSections.reduce((sum, s) => sum + s.sec.tokens.length, 0);
+      const hasMultiple = groupSections.length > 1;
+
+      // Collapsible card
       const card = document.createElement('div');
-      card.id = sec.id;
       card.className = 'border border-border-default dark:border-secondary-700 rounded-xl bg-white dark:bg-secondary-900 overflow-hidden';
-      card.innerHTML = `
-        <button type="button" class="sec-editor-toggle w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors">
-          <span class="flex items-center gap-2">
-            <span class="text-lg">${sec.icon}</span>
-            <span class="text-base font-bold">${sec.name}</span>
-            <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${sec.tokens.length} kontrol</span>
-          </span>
-          <svg class="sec-chevron w-5 h-5 text-text-tertiary transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
-        </button>
-        <div class="sec-editor-body hidden px-5 pb-5">
+
+      // Group header (toggle)
+      const header = document.createElement('button');
+      header.type = 'button';
+      header.className = 'w-full flex items-center justify-between px-5 py-4 text-left hover:bg-surface-raised dark:hover:bg-secondary-800 transition-colors cursor-pointer';
+      header.innerHTML = `
+        <span class="flex items-center gap-2">
+          <span class="text-lg">${group.icon}</span>
+          <span class="text-base font-bold">${group.name}</span>
+          <span class="text-[10px] text-text-tertiary bg-surface-raised dark:bg-secondary-700 px-2 py-0.5 rounded-full">${totalTokens} kontrol</span>
+        </span>
+        <svg class="sec-grp-chevron w-5 h-5 text-text-tertiary transition-transform ${isFirstGroup ? 'rotate-90' : ''}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7"/></svg>
+      `;
+      card.appendChild(header);
+
+      // Group body (collapsible)
+      const body = document.createElement('div');
+      body.className = `sec-group-body${isFirstGroup ? '' : ' hidden'}`;
+
+      // Tab bar (only if >1 section in group)
+      const grpTabs = [];
+      const grpPanels = [];
+
+      if (hasMultiple) {
+        const tabBar = document.createElement('div');
+        tabBar.className = 'flex overflow-x-auto scrollbar-hide border-b border-border-default dark:border-secondary-700 px-2';
+        tabBar.setAttribute('role', 'tablist');
+
+        groupSections.forEach((entry, idx) => {
+          const isFirstTab = idx === 0;
+          const tabKey = `g${gi}-${entry.sec.id}`;
+          const tab = document.createElement('button');
+          tab.type = 'button';
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('data-sec-grp-tab', tabKey);
+          tab.className = isFirstTab
+            ? 'flex items-center gap-1.5 px-4 py-3 text-sm font-semibold whitespace-nowrap cursor-pointer transition-colors border-b-2 text-primary-600 border-primary-500'
+            : 'flex items-center gap-1.5 px-4 py-3 text-sm font-medium whitespace-nowrap cursor-pointer transition-colors border-b-2 border-transparent text-text-secondary hover:text-text-primary hover:border-border-strong';
+          tab.innerHTML = `
+            <span class="text-sm">${entry.sec.icon}</span>
+            <span class="text-xs font-medium">${entry.sec.name}</span>
+            <span class="text-[9px] bg-surface-raised dark:bg-secondary-700 text-text-tertiary px-1.5 py-0.5 rounded-full">${entry.sec.tokens.length}</span>
+          `;
+          tabBar.appendChild(tab);
+          grpTabs.push(tab);
+        });
+
+        body.appendChild(tabBar);
+      }
+
+      // Panels container
+      const panelsWrap = document.createElement('div');
+
+      groupSections.forEach((entry, idx) => {
+        const isFirstPanel = idx === 0;
+        const panelKey = `g${gi}-${entry.sec.id}`;
+        const panel = document.createElement('div');
+        panel.setAttribute('data-sec-grp-panel', panelKey);
+        panel.id = entry.sec.id;
+        panel.className = 'px-5 py-5';
+        panel.style.display = isFirstPanel ? 'block' : 'none';
+        panel.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-[11px] font-semibold text-text-secondary">${entry.sec.name}</p>
+            <button type="button" class="sec-reset-btn text-[10px] text-text-tertiary hover:text-error-500 transition-colors px-2 py-1 rounded hover:bg-error-50" data-sec-idx="${entry.si}">↺ Sıfırla</button>
+          </div>
           <div class="sec-controls grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-4 gap-y-3 mb-5"></div>
           <div class="border border-dashed border-border-default rounded-lg p-4 bg-surface-muted dark:bg-secondary-800">
             <p class="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-3">Önizleme</p>
             <div class="sec-preview-area"></div>
           </div>
-        </div>
-      `;
+        `;
 
-      // Toggle
-      const toggleBtn = card.querySelector('.sec-editor-toggle');
-      const body = card.querySelector('.sec-editor-body');
-      const chevron = card.querySelector('.sec-chevron');
-      toggleBtn.addEventListener('click', () => {
+        // Build controls using GLOBAL si index
+        const controlsGrid = panel.querySelector('.sec-controls');
+        entry.sec.tokens.forEach((token, ti) => {
+          const uid = `sec-${entry.si}-${ti}`;
+          controlsGrid.appendChild(buildCompControl(uid, token));
+        });
+
+        // Preview
+        const previewArea = panel.querySelector('.sec-preview-area');
+        previewArea.innerHTML = entry.sec.preview();
+
+        panelsWrap.appendChild(panel);
+        grpPanels.push(panel);
+      });
+
+      body.appendChild(panelsWrap);
+
+      // Tab switching scoped per group
+      if (hasMultiple) {
+        grpTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-sec-grp-tab');
+            // Deactivate all tabs in this group
+            grpTabs.forEach(t => {
+              t.classList.remove('text-primary-600', 'border-primary-500', 'font-semibold');
+              t.classList.add('text-text-secondary', 'border-transparent', 'font-medium');
+            });
+            // Activate clicked tab
+            tab.classList.add('text-primary-600', 'border-primary-500', 'font-semibold');
+            tab.classList.remove('text-text-secondary', 'border-transparent', 'font-medium');
+            // Hide all panels in this group, show target
+            grpPanels.forEach(p => p.style.display = 'none');
+            const targetPanel = panelsWrap.querySelector(`[data-sec-grp-panel="${target}"]`);
+            if (targetPanel) targetPanel.style.display = 'block';
+          });
+        });
+      }
+
+      card.appendChild(body);
+
+      // Toggle collapse
+      const chevron = header.querySelector('.sec-grp-chevron');
+      header.addEventListener('click', () => {
         body.classList.toggle('hidden');
         chevron.classList.toggle('rotate-90');
       });
 
-      // Build controls
-      const controlsGrid = card.querySelector('.sec-controls');
-      sec.tokens.forEach((token, ti) => {
-        const uid = `sec-${si}-${ti}`;
-        controlsGrid.appendChild(buildCompControl(uid, token));
-      });
-
-      // Preview
-      const previewArea = card.querySelector('.sec-preview-area');
-      previewArea.innerHTML = sec.preview();
-
       sectionEditorsContainer.appendChild(card);
+    });
 
-      // Init from computed
+    // Init controls from computed styles (all sections, using global index)
+    sectionEditors.forEach((sec, si) => {
       initCompControls(si, sec.tokens, 'sec');
+    });
+
+    // Wire up per-section reset buttons
+    sectionEditorsContainer.querySelectorAll('.sec-reset-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const si = parseInt(btn.getAttribute('data-sec-idx'));
+        resetSection(si);
+        updateSaveButton();
+      });
     });
   }
 
@@ -2392,11 +3116,16 @@
   };
 
   function updateSaveButton() {
-    const btn = document.getElementById('save-css-btn');
-    const count = document.getElementById('save-count');
-    if (btn && count) {
-      count.textContent = pendingChanges.size.toString();
-      btn.style.display = pendingChanges.size > 0 ? 'flex' : 'none';
+    const bar = document.getElementById('pending-bar');
+    const barText = document.getElementById('pending-bar-text');
+    if (bar && barText) {
+      const count = pendingChanges.size;
+      barText.textContent = `${count} değişiklik bekliyor`;
+      if (count > 0) {
+        bar.classList.add('ds-pending-bar--visible');
+      } else {
+        bar.classList.remove('ds-pending-bar--visible');
+      }
     }
   }
 
@@ -2446,11 +3175,11 @@
 
   async function saveToStyleCSS() {
     if (pendingChanges.size === 0) return;
-    const btn = document.getElementById('save-css-btn');
+    const btn = document.getElementById('pending-save-btn');
     const btnText = document.getElementById('save-btn-text');
     const count = pendingChanges.size;
     if (btn) btn.style.opacity = '0.6';
-    if (btnText) btnText.textContent = 'Saving...';
+    if (btnText) btnText.textContent = 'Kaydediliyor...';
 
     try {
       const updates = Object.fromEntries(pendingChanges);
@@ -2469,23 +3198,122 @@
       if (data.ok) {
         pendingChanges.clear();
         updateSaveButton();
-        if (btnText) btnText.textContent = 'Saved!';
-        showToast('✓', `${count} değişken kaydedildi!`, 'style.css güncellendi. Ana sayfa (localhost:5173) Vite HMR ile otomatik güncellenecek.', false);
-        setTimeout(() => { if (btnText) btnText.textContent = 'Save to style.css'; }, 1500);
+        if (btnText) btnText.textContent = 'Kaydedildi!';
+        showToast('✓', `${count} degisken kaydedildi!`, 'style.css guncellendi. Ana sayfa (localhost:5173) Vite HMR ile otomatik guncellenecek.', false);
+        setTimeout(() => { if (btnText) btnText.textContent = "style.css'e Kaydet"; }, 1500);
       } else {
-        if (btnText) btnText.textContent = 'Error!';
-        showToast('✗', 'Kaydetme başarısız!', `Sunucu hatası: ${JSON.stringify(data)}`, true);
+        if (btnText) btnText.textContent = 'Hata!';
+        showToast('✗', 'Kaydetme basarisiz!', `Sunucu hatasi: ${JSON.stringify(data)}`, true);
       }
     } catch (e) {
       console.error('Save failed:', e);
-      if (btnText) btnText.textContent = 'Error!';
-      showToast('✗', 'Kaydetme başarısız!', `Bağlantı hatası: ${e.message}. Vite dev server çalışıyor mu?`, true);
+      if (btnText) btnText.textContent = 'Hata!';
+      showToast('✗', 'Kaydetme basarisiz!', `Baglanti hatasi: ${e.message}. Vite dev server calisiyor mu?`, true);
     }
     if (btn) btn.style.opacity = '1';
   }
 
   // Expose to onclick
   window.saveToStyleCSS = saveToStyleCSS;
+
+  // ══════════════════════════════════════════════
+  // TAB SWITCHING
+  // ══════════════════════════════════════════════
+  function initTabs() {
+    const triggers = document.querySelectorAll('[data-tab-trigger]');
+    const panels = document.querySelectorAll('[data-tab-panel]');
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const target = trigger.dataset.tabTrigger;
+        // Update active tab
+        triggers.forEach(t => {
+          t.classList.remove('text-primary-600', 'border-primary-500', 'font-semibold');
+          t.classList.add('text-text-secondary', 'border-transparent', 'font-medium');
+          t.setAttribute('aria-selected', 'false');
+        });
+        trigger.classList.add('text-primary-600', 'border-primary-500', 'font-semibold');
+        trigger.classList.remove('text-text-secondary', 'border-transparent', 'font-medium');
+        trigger.setAttribute('aria-selected', 'true');
+        // Show target panel
+        panels.forEach(p => p.style.display = 'none');
+        const panel = document.querySelector(`[data-tab-panel="${target}"]`);
+        if (panel) panel.style.display = 'block';
+        // Scroll to top
+        window.scrollTo({ top: 0 });
+      });
+    });
+
+    // Show first tab by default
+    triggers[0]?.click();
+  }
+  initTabs();
+
+  // ══════════════════════════════════════════════
+  // TOKEN SEARCH / FILTER
+  // ══════════════════════════════════════════════
+  const tokenSearchInput = document.getElementById('token-search');
+  const tokenSearchClear = document.getElementById('token-search-clear');
+  const tokenSearchCount = document.getElementById('token-search-count');
+
+  if (tokenSearchInput && controlsContainer) {
+    const catCards = controlsContainer.querySelectorAll(':scope > div');
+
+    tokenSearchInput.addEventListener('input', () => {
+      const query = tokenSearchInput.value.toLowerCase().trim();
+      if (tokenSearchClear) tokenSearchClear.classList.toggle('hidden', query.length === 0);
+
+      if (query.length === 0) {
+        catCards.forEach(card => { card.style.display = ''; });
+        if (tokenSearchCount) tokenSearchCount.classList.add('hidden');
+        return;
+      }
+
+      let totalMatches = 0;
+      catCards.forEach(card => {
+        // Search all token labels within this category card
+        const labels = card.querySelectorAll('label');
+        let matchCount = 0;
+        labels.forEach(label => {
+          const text = (label.title || label.textContent || '').toLowerCase();
+          if (text.includes(query)) matchCount++;
+        });
+        const hasMatch = matchCount > 0;
+        card.style.display = hasMatch ? '' : 'none';
+        if (hasMatch) {
+          totalMatches += matchCount;
+          // Auto-expand the card
+          const body = card.querySelector(':scope > div:last-child');
+          const chevron = card.querySelector('.ctrl-cat-chevron');
+          if (body) body.classList.remove('hidden');
+          if (chevron) chevron.classList.add('rotate-90');
+        }
+      });
+
+      if (tokenSearchCount) {
+        tokenSearchCount.textContent = `${totalMatches} sonuc bulundu`;
+        tokenSearchCount.classList.remove('hidden');
+      }
+    });
+
+    if (tokenSearchClear) {
+      tokenSearchClear.addEventListener('click', () => {
+        tokenSearchInput.value = '';
+        tokenSearchInput.dispatchEvent(new Event('input'));
+        tokenSearchInput.focus();
+      });
+    }
+  }
+
+  // ══════════════════════════════════════════════
+  // PENDING BAR — Reset All button
+  // ══════════════════════════════════════════════
+  const pendingResetBtn = document.getElementById('pending-reset-btn');
+  if (pendingResetBtn) {
+    pendingResetBtn.addEventListener('click', () => {
+      document.getElementById('reset-all-btn')?.click();
+    });
+  }
 </script>
 
 </body>

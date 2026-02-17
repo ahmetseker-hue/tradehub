@@ -102,20 +102,21 @@ function renderCategoryPopup(): string {
 
 export function CategoryBrowse(): string {
   return `
-        <div class="th-card relative h-[300px] w-full flex-shrink-0 overflow-hidden group/panel lg:w-[300px] dark:bg-gray-800 dark:border-gray-700" style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color)">
+        <div class="th-card relative h-[300px] w-full flex-shrink-0 overflow-hidden group/panel lg:w-[300px] dark:bg-gray-800 dark:border-gray-700" style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color);border-radius:var(--hero-card-radius)">
           <!-- Category List -->
           <ul class="h-full overflow-y-auto pb-12">
             ${megaCategories.map(cat => `
               <li>
                 <button
                   type="button"
-                  class="th-nav-link category-browse-item flex items-center gap-3.5 w-full px-5 py-3.5 hover:bg-gray-50 transition-colors group text-left dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
+                  class="category-browse-item flex items-center gap-3.5 w-full transition-colors group text-left dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
+                  style="color:var(--catpopup-text);font-size:var(--catpopup-sidebar-font-size);font-weight:var(--catpopup-sidebar-font-weight);padding:var(--catpopup-sidebar-padding-y) var(--catpopup-sidebar-padding-x)"
                   data-category-id="${cat.id}"
                 >
                   <span class="flex-shrink-0 transition-colors" style="color:var(--catpopup-icon)">
                     ${getCategoryIcon(cat.icon)}
                   </span>
-                  <span class="flex-1 font-medium">${cat.name}</span>
+                  <span class="flex-1">${cat.name}</span>
                   <svg class="w-4 h-4 flex-shrink-0 transition-colors" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
                   </svg>

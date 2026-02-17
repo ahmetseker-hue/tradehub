@@ -9,8 +9,7 @@ export { TopBar, MobileSearchTabs, initMobileDrawer } from './TopBar';
 // SubHeader component - secondary navigation with categories trigger, nav links
 export { SubHeader } from './SubHeader';
 
-// SearchArea component - search input with tabs, deep search, camera button
-export { SearchArea, initSearchArea } from './SearchArea';
+// StickyHeaderSearch — compact search expand/collapse behavior
 export { initStickyHeaderSearch } from './StickyHeaderSearch';
 
 // MegaMenu component - full-width category dropdown

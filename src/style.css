@@ -277,7 +277,7 @@
     /* --- Semantic Radius --- */
     --radius-button: 8px;
     /* 8px */
-    --radius-card: 16px;
+    --radius-card: 8px;
     /* 16px */
     --radius-input: 8px;
     /* 8px */
@@ -350,6 +350,21 @@
     --card-border-color: #e5e5e5;
     --card-title-size: 0.875rem;
     --card-title-weight: 700;
+    --card-price-color: #111827;
+    --card-price-size: 15px;
+    --card-price-weight: 700;
+    --card-desc-color: #6b7280;
+    --card-desc-size: 12px;
+    --card-moq-color: #6b7280;
+    --card-moq-size: 11px;
+    --card-badge-bg: #FFF3E0;
+    --card-badge-text: #e65100;
+    --card-badge-size: 10px;
+    --card-badge-radius: 4px;
+    --card-verified-color: #cc9900;
+    --card-verified-size: 11px;
+    --card-supplier-color: #9ca3af;
+    --card-supplier-size: 11px;
 
     /* --- Input / Search --- */
     --input-bg: #ffffff;
@@ -368,8 +383,8 @@
     /* --- Navigation Link --- */
     --nav-font-size: 0.8125rem;
     --nav-font-weight: 300;
-    --nav-text-color: #525252;
-    --nav-hover-color: #a6ff00;
+    --nav-text-color: #000000;
+    --nav-hover-color: #b38600;
 
 
     /* ==========================================================
@@ -378,19 +393,21 @@
 
     /* --- Header / TopBar --- */
     --header-bg: #ffffff;
+    --header-scroll-bg: #ffffff;
+    --header-scroll-border: #e5e5e5;
     --header-height: 64px;
-    --header-border-color: #e5e5e5;
+    --header-border-color: transparent;
     --header-text-color: #374151;
     --header-icon-color: #374151;
     --header-icon-hover-color: #cc9900;
 
     /* --- SubHeader --- */
-    --subheader-bg: transparent;
-    --subheader-text-color: #525252;
-    --subheader-hover-color: #b38600;
+    --subheader-bg: #ffffff;
+    --subheader-text-color: #000000;
+    --subheader-hover-color: #a3a3a3;
     --subheader-hover-bg: rgba(255, 255, 255, 0.8);
-    --subheader-active-color: #b38600;
-    --subheader-border-color: #e5e5e5;
+    --subheader-active-color: #000000;
+    --subheader-border-color: transparent;
 
     /* --- Header Gradient --- */
     --header-gradient-1: #fff7ed;
@@ -427,16 +444,17 @@
     --mega-sidebar-hover-bg: #ffffff;
     --mega-sidebar-active-bg: #ffffff;
     --mega-border-color: #e5e7eb;
-    --mega-text-color: #374151;
-    --mega-heading-color: #111827;
+    --mega-text-color: #0a0a0a;
+    --mega-heading-color: #0a0a0a;
     --mega-body-text: #6b7280;
-    --mega-link-color: #cc9900;
+    --mega-link-color: #000000;
     --mega-link-hover-color: #b38600;
     --mega-icon-color: #6b7280;
     --mega-icon-bg: #f3f4f6;
-    --mega-accent-color: #cc9900;
-    --mega-accent-bg: #fef3c7;
+    --mega-accent-color: #b38600;
+    --mega-accent-bg: #fcd34d;
     --mega-card-hover-border: #fcd34d;
+    --mega-sidebar-active-border: #e1b533;
     --mega-font-size: 0.8125rem;
     --mega-font-weight: 400;
 
@@ -444,6 +462,7 @@
     --hero-bg: #ffffff;
     --hero-card-bg: #ffffff;
     --hero-card-border-color: #e5e5e5;
+    --hero-card-radius: 16px;
     --hero-title-color: #111827;
 
     /* --- Category Popup --- */
@@ -454,11 +473,78 @@
     --catpopup-link: #cc9900;
     --catpopup-link-hover: #b38600;
     --catpopup-sidebar-bg: #f9fafb;
+    --catpopup-sidebar-hover-bg: #f3f4f6;
     --catpopup-sidebar-active-bg: #ffffff;
     --catpopup-sidebar-active-border: #cc9900;
+    --catpopup-sidebar-font-size: 0.6875rem;
+    --catpopup-sidebar-font-weight: 400;
+    --catpopup-sidebar-padding-x: 0.125rem;
+    --catpopup-sidebar-padding-y: 0.25rem;
     --catpopup-icon: #9ca3af;
     --catpopup-product-bg: #f3f4f6;
     --catpopup-close-color: #9ca3af;
+
+    /* --- Top Deals Section --- */
+    --topdeals-bg: #F8F8F8;
+    --topdeals-title-color: #111827;
+    --topdeals-subtitle-color: #6b7280;
+    --topdeals-link-color: #111827;
+    --topdeals-card-bg: #ffffff;
+    --topdeals-card-border: #e5e5e5;
+    --topdeals-price-color: #dc2626;
+    --topdeals-original-price-color: #9ca3af;
+    --topdeals-moq-color: #222222;
+    --topdeals-badge-bg: #DE0505;
+    --topdeals-price-bg: #FFEDED;
+    --topdeals-badge-text: #ffffff;
+
+    /* --- Top Ranking Section --- */
+    --topranking-bg: #F5F5F5;
+    --topranking-title-color: #111827;
+    --topranking-subtitle-color: #6b7280;
+    --topranking-link-color: #111827;
+    --topranking-card-bg: #ffffff;
+    --topranking-card-border: #e5e7eb;
+    --topranking-badge-bg: #111827;
+    --topranking-badge-text: #ffffff;
+    --topranking-name-color: #111827;
+    --topranking-label-color: #6b7280;
+
+    /* --- Tailored Selections Section --- */
+    --tailored-bg: #F5F5F5;
+    --tailored-title-color: #111827;
+    --tailored-link-color: #111827;
+    --tailored-card-bg: #ffffff;
+    --tailored-card-border: #e5e5e5;
+    --tailored-collection-title-color: #111827;
+    --tailored-views-color: #6b7280;
+    --tailored-price-color: #111827;
+
+    /* --- Product Grid Section --- */
+    /* Card tokens flow into product grid via var() references */
+    --product-bg: #F8F8F8;
+    --product-card-bg: var(--card-bg);
+    --product-card-border: var(--card-border-color);
+    --product-card-radius: var(--radius-card);
+    --product-card-padding: var(--spacing-card-padding);
+    --product-card-border-width: var(--card-border-width);
+    --product-grid-gap: var(--spacing-card-gap);
+    --product-title-color: #111827;
+    --product-title-size: var(--card-title-size);
+    --product-title-weight: var(--card-title-weight);
+    --product-price-color: var(--card-price-color);
+    --product-price-size: var(--card-price-size);
+    --product-price-weight: var(--card-price-weight);
+    --product-moq-color: var(--card-moq-color);
+    --product-moq-size: var(--card-moq-size);
+    --product-badge-bg: var(--card-badge-bg);
+    --product-badge-text: var(--card-badge-text);
+    --product-badge-size: var(--card-badge-size);
+    --product-badge-radius: var(--card-badge-radius);
+    --product-verified-color: var(--card-verified-color);
+    --product-verified-size: var(--card-verified-size);
+    --product-supplier-color: var(--card-supplier-color);
+    --product-supplier-size: var(--card-supplier-size);
 
     /* --- Footer --- */
     --footer-bg: #111827;
@@ -827,7 +913,7 @@
         background-color: var(--mega-sidebar-active-bg);
         color: var(--mega-text-color);
         font-weight: 500;
-        border-left: 2px solid var(--color-primary-500);
+        border-left: 2px solid var(--mega-sidebar-active-border);
     }
 
     /* --- Mega Menu content elements --- */
@@ -874,6 +960,12 @@
         border-color: var(--mega-card-hover-border);
     }
 
+    /* --- Category Browse sidebar item --- */
+    .category-browse-item:hover {
+        background-color: var(--catpopup-sidebar-hover-bg);
+        color: var(--catpopup-heading);
+    }
+
     /* --- Category Popup sidebar item --- */
     .th-catpopup-sidebar-item {
         color: var(--catpopup-text);
@@ -905,6 +997,26 @@
         color: var(--catpopup-text);
         transition: color 0.15s ease;
     }
+
+    /* --- Top Deals Section --- */
+    .th-topdeals-link {
+        color: var(--topdeals-link-color);
+        transition: color 0.15s ease;
+    }
+
+
+    /* --- Top Ranking Section --- */
+    .th-topranking-link {
+        color: var(--topranking-link-color);
+        transition: color 0.15s ease;
+    }
+
+    /* --- Tailored Selections Section --- */
+    .th-tailored-link {
+        color: var(--tailored-link-color);
+        transition: color 0.15s ease;
+    }
+
 }
 
 
@@ -965,6 +1077,36 @@
     .subheader-link--active::after {
         width: 100%;
         left: 0;
+    }
+
+    /* --- Product Grid: responsive columns, uniform row height --- */
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-auto-rows: 1fr;
+    }
+
+    @media (width >= 480px) {
+        .product-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (width >= 768px) {
+        .product-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media (width >= 1024px) {
+        .product-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+    }
+
+    @media (width >= 1280px) {
+        .product-grid {
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+        }
     }
 }
 

@@ -660,13 +660,13 @@ export function initMegaMenu(): void {
         overlay.style.opacity = '1';
         overlay.style.pointerEvents = 'auto';
       }
-      // White header while mega menu is open (remove gradient)
+      // Solid header while mega menu is open (remove gradient)
       const sh = document.getElementById('sticky-header');
       const go = document.getElementById('gradient-overlay');
       if (sh) {
         if (go) go.style.display = 'none';
-        sh.style.backgroundColor = 'var(--header-bg)';
-        sh.style.borderBottom = `1px solid var(--header-border-color)`;
+        sh.style.backgroundColor = 'var(--header-scroll-bg)';
+        sh.style.borderBottom = `1px solid var(--header-scroll-border)`;
       }
     }
 

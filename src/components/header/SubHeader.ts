@@ -59,7 +59,7 @@ function renderNavigationLinks(): string {
  */
 function renderUtilityLinks(): string {
   return `
-    <div class="hidden md:flex items-center gap-1">
+    <div class="hidden lg:flex items-center gap-1">
       <button
         class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
@@ -98,7 +98,7 @@ function renderUtilityLinks(): string {
  */
 export function SubHeader(): string {
   return `
-    <nav class="hidden md:block dark:bg-gray-900 dark:border-gray-700" style="background-color:var(--subheader-bg);border-bottom:1px solid var(--subheader-border-color)" aria-label="Secondary navigation">
+    <nav class="hidden lg:block dark:bg-gray-900 dark:border-gray-700" style="background-color:var(--subheader-bg);border-bottom:1px solid var(--subheader-border-color)" aria-label="Secondary navigation">
       <div class="container-boxed">
         <div class="flex items-center justify-between">
           <!-- Left Side: Categories Trigger + Navigation Links -->

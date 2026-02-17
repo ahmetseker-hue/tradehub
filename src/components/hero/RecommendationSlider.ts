@@ -224,7 +224,7 @@ function renderCard(card: RecommendationCard): string {
         aria-label="${cardAriaLabel}"
         title="${card.imageAlt}"
         class="th-card group/card mx-auto flex h-full w-full flex-col transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-1 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-primary-400"
-        style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color)"
+        style="background-color:var(--hero-card-bg);border-color:var(--hero-card-border-color);border-radius:var(--hero-card-radius)"
       >
         <div class="mb-2">
           <h3 class="text-[16px] font-bold leading-tight dark:text-white" style="color:var(--hero-title-color)">${card.title}</h3>

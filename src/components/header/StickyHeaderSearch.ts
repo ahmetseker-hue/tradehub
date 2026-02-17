@@ -1,6 +1,7 @@
 /**
  * StickyHeaderSearch
- * Shows compact header search after hero search area is scrolled past.
+ * Handles expand/collapse behavior for the compact header search bar.
+ * The compact search is always visible on desktop (md+).
  */
 
 function setInteractiveState(elements: HTMLElement[], isEnabled: boolean): void {
@@ -16,9 +17,6 @@ function setInteractiveState(elements: HTMLElement[], isEnabled: boolean): void 
 export function initStickyHeaderSearch(): void {
   if (typeof document === 'undefined' || typeof window === 'undefined') return;
 
-  const stickyHeader = document.getElementById('sticky-header');
-  const heroSearchArea = document.getElementById('hero-search-area');
-  const heroSearchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const compactShell = document.getElementById('topbar-compact-search-shell') as HTMLElement | null;
   const compactSearch = document.getElementById('topbar-compact-search') as HTMLFormElement | null;
   const compactInput = document.getElementById('topbar-compact-search-input') as HTMLInputElement | null;
@@ -29,9 +27,7 @@ export function initStickyHeaderSearch(): void {
   const compactDropdown = document.getElementById('topbar-compact-dropdown') as HTMLElement | null;
 
   if (
-    !stickyHeader
-    || !heroSearchArea
-    || !compactShell
+    !compactShell
     || !compactSearch
     || !compactInput
     || !compactImageSearch
@@ -41,16 +37,16 @@ export function initStickyHeaderSearch(): void {
     || !compactDropdown
   ) return;
 
-  const desktopQuery = window.matchMedia('(min-width: 960px)');
-  const baseInteractiveElements: HTMLElement[] = [compactInput, compactImageSearch, compactSubmit];
   const expandedInteractiveElements = Array.from(
     compactShell.querySelectorAll<HTMLElement>('[data-compact-expanded-interactive="true"]'),
   );
   const valuePickers = Array.from(
     compactShell.querySelectorAll<HTMLButtonElement>('[data-search-value]'),
   );
-  let isCompactVisible = false;
   let isExpanded = false;
+
+  // Mark as visible and interactive (always visible on desktop now)
+  compactSearch.setAttribute('aria-hidden', 'false');
 
   const syncDropdownOffset = (): void => {
     const dropdownTop = compactSearch.offsetHeight + 8;
@@ -58,7 +54,7 @@ export function initStickyHeaderSearch(): void {
   };
 
   const openExpanded = (): void => {
-    if (!isCompactVisible || isExpanded) return;
+    if (isExpanded) return;
     isExpanded = true;
 
     compactSearch.setAttribute('aria-expanded', 'true');
@@ -98,6 +94,7 @@ export function initStickyHeaderSearch(): void {
   };
 
   const closeExpanded = (): void => {
+    if (!isExpanded) return;
     isExpanded = false;
     compactSearch.setAttribute('aria-expanded', 'false');
     compactInput.setAttribute('aria-expanded', 'false');
@@ -135,72 +132,21 @@ export function initStickyHeaderSearch(): void {
     setInteractiveState(expandedInteractiveElements, false);
   };
 
-  const showCompactSearch = (): void => {
-    if (isCompactVisible) return;
-    isCompactVisible = true;
-    compactShell.classList.remove('hidden');
-    compactSearch.setAttribute('aria-hidden', 'false');
-    setInteractiveState(baseInteractiveElements, true);
-    closeExpanded();
-  };
-
-  const hideCompactSearch = (): void => {
-    if (!isCompactVisible) return;
-    isCompactVisible = false;
-    closeExpanded();
-    compactShell.classList.add('hidden');
-    compactSearch.setAttribute('aria-hidden', 'true');
-    setInteractiveState(baseInteractiveElements, false);
-  };
-
-  const updateVisibility = (): void => {
-    if (!desktopQuery.matches) {
-      hideCompactSearch();
-      return;
-    }
-
-    const heroBottom = heroSearchArea.getBoundingClientRect().bottom;
-    const stickyHeight = stickyHeader.offsetHeight;
-    if (heroBottom <= stickyHeight) {
-      showCompactSearch();
-      return;
-    }
-    hideCompactSearch();
-  };
-
-  const syncHeroToCompact = (): void => {
-    if (!heroSearchInput) return;
-    if (compactInput.value === heroSearchInput.value) return;
-    compactInput.value = heroSearchInput.value;
-  };
-
-  const syncCompactToHero = (): void => {
-    if (!heroSearchInput) return;
-    if (heroSearchInput.value === compactInput.value) return;
-    heroSearchInput.value = compactInput.value;
-  };
-
-  if (heroSearchInput) {
-    compactInput.value = heroSearchInput.value;
-    heroSearchInput.addEventListener('input', syncHeroToCompact);
-    compactInput.addEventListener('input', syncCompactToHero);
-  }
-
+  // Click / focus → expand
   compactSearch.addEventListener('click', openExpanded);
   compactInput.addEventListener('focus', openExpanded);
 
+  // Value pickers fill the input
   valuePickers.forEach((picker) => {
     picker.addEventListener('click', () => {
       const value = picker.dataset.searchValue;
       if (!value) return;
       compactInput.value = value;
-      if (heroSearchInput) {
-        heroSearchInput.value = value;
-      }
       compactInput.focus();
     });
   });
 
+  // Click outside → collapse
   document.addEventListener('mousedown', (event: MouseEvent) => {
     if (!isExpanded) return;
     const target = event.target as Node;
@@ -208,24 +154,13 @@ export function initStickyHeaderSearch(): void {
     closeExpanded();
   });
 
-  const handleResize = (): void => {
-    updateVisibility();
+  // Sync dropdown offset on resize
+  window.addEventListener('resize', () => {
     if (isExpanded) {
       syncDropdownOffset();
     }
-  };
+  }, { passive: true });
 
-  window.addEventListener('scroll', updateVisibility, { passive: true });
-  window.addEventListener('resize', handleResize, { passive: true });
-  if (typeof desktopQuery.addEventListener === 'function') {
-    desktopQuery.addEventListener('change', updateVisibility);
-  } else {
-    desktopQuery.addListener(updateVisibility);
-  }
-
-  setInteractiveState(baseInteractiveElements, false);
+  // Initial state: collapsed
   setInteractiveState(expandedInteractiveElements, false);
-  closeExpanded();
-  hideCompactSearch();
-  updateVisibility();
 }

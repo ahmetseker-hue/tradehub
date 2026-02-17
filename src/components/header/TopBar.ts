@@ -65,7 +65,7 @@ function renderLogo(): string {
  */
 function renderCompactStickySearch(): string {
   return `
-    <div id="topbar-compact-search-shell" class="hidden relative min-w-0 flex-1 self-center h-[46px] md:mx-4">
+    <div id="topbar-compact-search-shell" class="hidden lg:flex relative min-w-0 flex-1 self-center h-[46px] lg:mx-4">
       <form
         id="topbar-compact-search"
         action="/search"
@@ -78,18 +78,20 @@ function renderCompactStickySearch(): string {
         class="absolute left-0 right-0 top-0 z-[var(--z-popover)] w-full rounded-full border border-gray-300 bg-white shadow-sm transition-all duration-200 dark:border-gray-600 dark:bg-gray-800"
       >
         <div id="topbar-compact-primary-row" class="flex items-center gap-2 px-3 py-1.5">
-          <input
-            id="topbar-compact-search-input"
-            name="search"
-            type="text"
-            tabindex="-1"
-            placeholder="Search products"
-            autocomplete="off"
-            aria-label="Search products from sticky header"
-            aria-expanded="false"
-            aria-controls="topbar-compact-dropdown"
-            class="min-w-0 flex-1 border-0 bg-transparent px-2 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 dark:text-white dark:placeholder:text-gray-400"
-          />
+          <div class="relative min-w-0 flex-1">
+            <input
+              id="topbar-compact-search-input"
+              name="search"
+              type="text"
+              tabindex="-1"
+              placeholder="Search products"
+              autocomplete="off"
+              aria-label="Search products from sticky header"
+              aria-expanded="false"
+              aria-controls="topbar-compact-dropdown"
+              class="w-full border-0 bg-transparent px-2 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 dark:text-white dark:placeholder:text-gray-400"
+            />
+          </div>
 
           <a
             id="topbar-compact-image-search"
@@ -370,7 +372,7 @@ function renderOrdersButton(): string {
     <button
       data-popover-target="popover-orders"
       data-popover-placement="bottom"
-      class="th-header-icon hidden md:flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
+      class="th-header-icon hidden lg:flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       type="button"
       aria-label="Orders"
       title="Orders"
@@ -895,7 +897,7 @@ export function initMobileDrawer(): void {
  */
 export function MobileSearchTabs(): string {
   return `
-    <div class="md:hidden flex items-center gap-6 px-3 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
+    <div class="lg:hidden flex items-center gap-6 px-3 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
       <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full" data-search-tab="products">Products</button>
       <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="manufacturers">Manufacturers</button>
       <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="worldwide">Worldwide</button>
@@ -919,14 +921,14 @@ export function TopBar(): string {
     <div class="relative z-30 dark:bg-gray-900" style="background-color:var(--header-bg);border-bottom:1px solid var(--header-border-color)">
       <div class="container-boxed">
         <!-- Row 1: Logo + Search (mobile) + Icons -->
-        <div class="flex items-center h-16 gap-2 md:gap-0">
+        <div class="flex items-center h-16 gap-2 lg:gap-0">
           <!-- Logo -->
           <div class="flex-shrink-0">
             ${renderLogo()}
           </div>
 
           <!-- Mobile Inline Search (between logo and icons) -->
-          <div class="flex-1 min-w-0 mx-2 md:hidden">
+          <div class="flex-1 min-w-0 mx-2 lg:hidden">
             <form id="mobile-search-form" action="/search" method="GET" role="search">
               <input type="hidden" id="mobile-search-type" name="searchType" value="products" />
               <div class="flex">
@@ -962,24 +964,24 @@ export function TopBar(): string {
           ${renderCompactStickySearch()}
 
           <!-- Right Side: Selectors + Icons + Cart + Auth -->
-          <div class="ml-auto flex items-center gap-2 md:gap-4 flex-shrink-0">
+          <div class="ml-auto flex items-center gap-2 lg:gap-4 flex-shrink-0">
             <!-- Country Selector (hidden on mobile) -->
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
               ${renderCountrySelector()}
             </div>
 
             <!-- Language/Currency Selector (hidden on mobile) -->
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
               ${renderLanguageCurrencySelector()}
             </div>
 
             <!-- Messages Button (hidden on mobile) -->
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
               ${renderMessagesButton()}
             </div>
 
             <!-- Orders Button (hidden on mobile) -->
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
               ${renderOrdersButton()}
             </div>
 
@@ -987,7 +989,7 @@ export function TopBar(): string {
             ${renderCartButton(3)}
 
             <!-- Auth Buttons (hidden on mobile) -->
-            <div class="hidden md:block">
+            <div class="hidden lg:block">
               ${renderAuthButtons()}
             </div>
 
@@ -995,7 +997,7 @@ export function TopBar(): string {
             <button
               data-drawer-target="mobile-menu-drawer"
               data-drawer-toggle="mobile-menu-drawer"
-              class="th-header-icon inline-flex items-center p-2 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              class="th-header-icon inline-flex items-center p-2 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               type="button"
               aria-controls="mobile-menu-drawer"
               aria-label="Open main menu"
