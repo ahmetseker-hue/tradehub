@@ -455,6 +455,7 @@ function renderCartButton(itemCount: number = 0): string {
 
   return `
     <button
+      id="header-cart-btn"
       data-popover-target="popover-cart"
       data-popover-placement="bottom"
       class="th-header-icon relative flex items-center justify-center p-2 rounded-full hover:bg-gray-100 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
@@ -464,23 +465,20 @@ function renderCartButton(itemCount: number = 0): string {
       <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
       </svg>
-      ${showBadge ? `
-        <span class="th-badge absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold" style="background:var(--btn-bg);color:var(--btn-text)">
-          ${badgeText}
-        </span>
-      ` : ''}
+      <span id="header-cart-badge" class="th-badge absolute -top-1 -right-1 flex items-center justify-center min-w-5 h-5 px-1 text-xs font-bold${showBadge ? '' : ' hidden'}" style="background:var(--btn-bg);color:var(--btn-text)">
+        ${badgeText}
+      </span>
     </button>
 
     <!-- Cart Popover -->
     <div data-popover id="popover-cart" role="tooltip"
-      class="absolute z-50 invisible inline-block w-80 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Shopping cart</h3>
+      <div class="p-5" id="header-cart-body">
+        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3">Alışveriş Sepeti</h3>
 
         <!-- Empty Cart State -->
-        <div class="flex flex-col items-center py-4">
-          <!-- Cart Illustration -->
+        <div id="header-cart-empty" class="flex flex-col items-center py-4">
           <div class="mb-4">
             <svg class="w-20 h-20 text-gray-300" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="20" y="28" width="56" height="44" rx="4" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="2"/>
@@ -491,12 +489,21 @@ function renderCartButton(itemCount: number = 0): string {
               <path d="M40 48h16M48 44v8" stroke="#D1D5DB" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Your cart is empty</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Sepetiniz boş</p>
+        </div>
+
+        <!-- Cart Items (hidden initially) -->
+        <div id="header-cart-items" class="hidden"></div>
+
+        <!-- Subtotal (hidden initially) -->
+        <div id="header-cart-subtotal" style="display:none" class="flex items-center justify-between pt-3 mt-1 border-t border-gray-200 dark:border-gray-700">
+          <span class="text-sm text-gray-600 dark:text-gray-400">Ara Toplam</span>
+          <span id="header-cart-subtotal-price" class="text-base font-bold text-gray-900 dark:text-white">$0.00</span>
         </div>
 
         <!-- Go to Cart Button -->
-        <a href="/cart" class="block w-full px-4 py-2.5 text-sm font-medium text-center text-gray-700 border border-gray-300 rounded-full hover:bg-gray-50 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors">
-          Go to cart
+        <a href="/cart" class="block w-full mt-3 px-4 py-2.5 text-sm font-medium text-center rounded-full transition-colors" style="background:var(--btn-bg);color:var(--btn-text)">
+          Sepete Git
         </a>
       </div>
       <div data-popper-arrow></div>
@@ -986,7 +993,7 @@ export function TopBar(): string {
             </div>
 
             <!-- Cart Button -->
-            ${renderCartButton(3)}
+            ${renderCartButton(0)}
 
             <!-- Auth Buttons (hidden on mobile) -->
             <div class="hidden lg:block">
@@ -1014,4 +1021,79 @@ export function TopBar(): string {
       ${renderMobileDrawer()}
     </div>
   `;
+}
+
+/**
+ * Initializes header cart popover — listens for cart-add events and updates badge + popover.
+ */
+export function initHeaderCart(): void {
+  document.addEventListener('cart-add', ((e: CustomEvent) => {
+    const { productTitle, supplierName, unitPrice, quantity, grandTotal, colorItems } = e.detail;
+
+    // Update badge
+    const badge = document.getElementById('header-cart-badge');
+    if (badge) {
+      badge.textContent = quantity > 99 ? '99+' : String(quantity);
+      badge.classList.remove('hidden');
+    }
+
+    // Hide empty state
+    const emptyState = document.getElementById('header-cart-empty');
+    if (emptyState) emptyState.style.display = 'none';
+
+    // Update items — each color × variant as a separate line item (Alibaba style)
+    const itemsContainer = document.getElementById('header-cart-items');
+    if (itemsContainer) {
+      let html = `<p class="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">${supplierName}</p>`;
+      html += `<p class="text-sm text-gray-900 dark:text-white mb-2 leading-tight" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${productTitle}</p>`;
+      html += '<div class="max-h-52 overflow-y-auto">';
+
+      const items = colorItems && colorItems.length > 0 ? colorItems : null;
+
+      if (items) {
+        for (const ci of items) {
+          const thumbHtml = ci.colorThumb
+            ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">`
+            : `<div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:${ci.colorValue || '#e5e7eb'}"></div>`;
+
+          for (const vi of ci.variants) {
+            const desc = [vi.label, ci.colorLabel].filter(Boolean).join(', ');
+            html += `
+              <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                ${thumbHtml}
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs text-gray-500 dark:text-gray-400">${desc}</p>
+                  <div class="flex items-center justify-between mt-0.5">
+                    <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>
+                    <span class="text-xs text-gray-500">x ${vi.qty}</span>
+                  </div>
+                </div>
+              </div>`;
+          }
+        }
+      } else {
+        // Fallback: no items selected
+        html += `
+          <div class="flex items-center gap-3 py-2">
+            <div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:#e5e7eb"></div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between mt-0.5">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>
+                <span class="text-xs text-gray-500">x ${quantity}</span>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      html += '</div>';
+      itemsContainer.innerHTML = html;
+      itemsContainer.classList.remove('hidden');
+    }
+
+    // Update subtotal
+    const subtotalContainer = document.getElementById('header-cart-subtotal');
+    const subtotalPrice = document.getElementById('header-cart-subtotal-price');
+    if (subtotalContainer) subtotalContainer.style.display = 'flex';
+    if (subtotalPrice) subtotalPrice.textContent = `$${grandTotal.toFixed(2)}`;
+  }) as EventListener);
 }

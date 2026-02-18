@@ -64,6 +64,7 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, 'index.html'),
                 'style-test': resolve(__dirname, 'style-test.html'),
+                'product-detail': resolve(__dirname, 'product-detail.html'),
             },
         },
     },
