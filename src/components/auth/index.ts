@@ -67,3 +67,15 @@ export {
   type AccountSetupFormState,
   type PasswordRequirements
 } from './AccountSetupForm';
+
+// Register Page
+export {
+  RegisterPage,
+  initRegisterPage,
+  getCurrentStep,
+  navigateToStep,
+  type RegisterStep,
+  type RegisterPageOptions,
+  type RegisterPageData,
+  type RegisterPageState
+} from './RegisterPage';
