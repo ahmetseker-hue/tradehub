@@ -26,3 +26,12 @@ export {
   initLoginPage,
   type LoginPageOptions
 } from './LoginPage';
+
+// Account Type Selector
+export {
+  AccountTypeSelector,
+  initAccountTypeSelector,
+  getSelectedAccountType,
+  type AccountType,
+  type AccountTypeSelectorOptions
+} from './AccountTypeSelector';
