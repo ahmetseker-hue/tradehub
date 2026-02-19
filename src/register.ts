@@ -7,7 +7,7 @@ import './style.css'
 import { initFlowbite } from 'flowbite'
 
 // Auth components
-import { AuthLayout, initAuthLayout, RegisterPage, initRegisterPage } from './components/auth'
+import { AuthLayout, initAuthLayout, RegisterPage, initRegisterPage, getBaseUrl } from './components/auth'
 
 /* ── App Setup ───────────────────────────────────────── */
 
@@ -26,4 +26,10 @@ initFlowbite()
 initAuthLayout()
 
 // Initialize register page interactivity (multi-step flow, form validation)
-initRegisterPage()
+initRegisterPage({
+  onComplete: (_data) => {
+    // In production, this would send data to the backend
+    // For now, redirect to homepage after successful registration
+    window.location.href = getBaseUrl();
+  }
+})
