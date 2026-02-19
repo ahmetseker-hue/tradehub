@@ -8,6 +8,13 @@
 import { mockProduct } from '../../data/mockProduct';
 import type { ProductVariant } from '../../types/product';
 
+/* ── Exported cart drawer opener (for MobileLayout) ──── */
+let _openCartDrawer: (() => void) | null = null;
+
+export function openCartDrawer(): void {
+  _openCartDrawer?.();
+}
+
 /* ── Variant renderers ───────────────────────────────── */
 
 function renderVariantSection(variant: ProductVariant, unitPrice: number): string {
@@ -204,6 +211,7 @@ export function initCartDrawer(): void {
     drawer!.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
+  _openCartDrawer = openDrawer;
 
   function closeDrawer(): void {
     overlay!.classList.remove('open');
@@ -225,6 +233,34 @@ export function initCartDrawer(): void {
       mobileAddBtn.addEventListener('click', openDrawer);
     }
   }
+
+  // "Numune Al" buttons (desktop + mobile) → add 1 sample directly
+  function addSample(): void {
+    const samplePrice = p.samplePrice ?? 30;
+    document.dispatchEvent(new CustomEvent('cart-add', {
+      detail: {
+        productTitle: p.title,
+        supplierName: p.supplier.name,
+        unitPrice: samplePrice,
+        quantity: 1,
+        itemTotal: samplePrice,
+        grandTotal: samplePrice,
+        isSample: true,
+        colorItems: [],
+      }
+    }));
+
+    // Visual feedback — briefly flash the button
+    const btn = document.querySelector('.pdm-sample-btn') || document.querySelector('.pd-sample-btn');
+    if (btn) {
+      const original = btn.textContent;
+      btn.textContent = 'Eklendi ✓';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    }
+  }
+
+  document.querySelector('.pdm-sample-btn')?.addEventListener('click', addSample);
+  document.querySelector('.pd-sample-btn')?.addEventListener('click', addSample);
 
   // Close button
   if (closeBtn) {

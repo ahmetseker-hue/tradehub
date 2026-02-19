@@ -38,7 +38,7 @@ interface ProductVisual {
 const productCards: ProductCard[] = [
   {
     name: 'Custom Gold Plated Stainless Steel Necklace Pendant',
-    href: '/product/necklace-pendant',
+    href: '/product-detail.html',
     price: '$1.80-2',
     moq: '3 pieces',
     stats: '4,056 sold',
@@ -50,7 +50,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Smart WiFi Security Camera 1080P Night Vision',
-    href: '/product/wifi-camera',
+    href: '/product-detail.html',
     price: '$8.50-12',
     moq: '10 pieces',
     stats: '1,280 sold',
@@ -61,7 +61,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Custom Printed Waterproof Vinyl Sticker Label Roll',
-    href: '/product/vinyl-label',
+    href: '/product-detail.html',
     price: '$0.02-0.05',
     moq: '1000 pieces',
     stats: '15,200 sold',
@@ -73,7 +73,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Handmade Dried Flower Resin Phone Case Mold Kit',
-    href: '/product/resin-mold',
+    href: '/product-detail.html',
     price: '$2.40-3.80',
     moq: '20 pieces',
     stats: '890 sold',
@@ -84,7 +84,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Leather Minimalist Card Holder Wallet RFID Blocking',
-    href: '/product/card-holder',
+    href: '/product-detail.html',
     price: '$1.50-2.20',
     moq: '50 pieces',
     stats: '6,730 sold',
@@ -95,7 +95,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Oversized Cotton Vintage Graphic Print T-Shirt Unisex',
-    href: '/product/graphic-tshirt',
+    href: '/product-detail.html',
     price: '$3.20-4.50',
     moq: '30 pieces',
     stats: '9,450 sold',
@@ -107,7 +107,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Professional Cordless Electric Screwdriver Set 48pcs',
-    href: '/product/screwdriver-set',
+    href: '/product-detail.html',
     price: '$6.80-9.50',
     moq: '5 pieces',
     stats: '2,150 sold',
@@ -118,7 +118,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Kraft Paper Gift Box Custom Logo Packaging Wholesale',
-    href: '/product/gift-box',
+    href: '/product-detail.html',
     price: '$0.15-0.40',
     moq: '500 pieces',
     stats: '74 views',
@@ -129,7 +129,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Titanium Steel Cuban Link Chain Bracelet for Men',
-    href: '/product/chain-bracelet',
+    href: '/product-detail.html',
     price: '$2.10-3.60',
     moq: '10 pieces',
     stats: '3,580 sold',
@@ -140,7 +140,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Portable Mini Bluetooth Speaker Waterproof IPX7',
-    href: '/product/mini-speaker',
+    href: '/product-detail.html',
     price: '$4.20-6',
     moq: '20 pieces',
     stats: '5,610 sold',
@@ -152,7 +152,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Eco-Friendly Bamboo Fiber Cotton Tote Bag Custom Print',
-    href: '/product/tote-bag',
+    href: '/product-detail.html',
     price: '$0.80-1.50',
     moq: '200 pieces',
     stats: '11,340 sold',
@@ -163,7 +163,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Diamond Painting Kit Full Drill 5D DIY Craft Set',
-    href: '/product/diamond-painting',
+    href: '/product-detail.html',
     price: '$1.20-2.80',
     moq: '10 pieces',
     stats: '7,890 sold',
@@ -174,7 +174,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Industrial Heat Resistant Silicone Rubber Gasket Seal',
-    href: '/product/rubber-gasket',
+    href: '/product-detail.html',
     price: '$0.05-0.12',
     moq: '5000 pieces',
     stats: '320 sold',
@@ -185,7 +185,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Smart LED Desk Lamp USB Rechargeable Touch Control',
-    href: '/product/desk-lamp',
+    href: '/product-detail.html',
     price: '$5.60-8.20',
     moq: '10 pieces',
     stats: '2,670 sold',
@@ -196,7 +196,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Custom Woven Clothing Label Tags Satin Fabric Brand',
-    href: '/product/clothing-label',
+    href: '/product-detail.html',
     price: '$0.01-0.03',
     moq: '2000 pieces',
     stats: '28,900 sold',
@@ -207,7 +207,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Vintage Genuine Leather Belt Men Automatic Buckle',
-    href: '/product/leather-belt',
+    href: '/product-detail.html',
     price: '$2.80-4.20',
     moq: '30 pieces',
     stats: '5,120 sold',
@@ -219,7 +219,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Women Summer Floral Print Maxi Dress V-Neck Casual',
-    href: '/product/maxi-dress',
+    href: '/product-detail.html',
     price: '$6.50-9',
     moq: '5 pieces',
     stats: '3,240 sold',
@@ -230,7 +230,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Corrugated Mailer Box Custom Shipping Package Brown',
-    href: '/product/mailer-box',
+    href: '/product-detail.html',
     price: '$0.25-0.60',
     moq: '500 pieces',
     stats: '18,700 sold',
@@ -242,7 +242,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Sterling Silver Cubic Zirconia Stud Earrings Women',
-    href: '/product/stud-earrings',
+    href: '/product-detail.html',
     price: '$0.90-1.60',
     moq: '20 pieces',
     stats: '8,950 sold',
@@ -253,7 +253,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Adjustable Torque Wrench Set Chrome Vanadium Steel',
-    href: '/product/torque-wrench',
+    href: '/product-detail.html',
     price: '$7.80-11',
     moq: '3 pieces',
     stats: '1,430 sold',
@@ -264,7 +264,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Macrame Handwoven Wall Hanging Boho Home Decor',
-    href: '/product/macrame-wall',
+    href: '/product-detail.html',
     price: '$3.50-5.80',
     moq: '10 pieces',
     stats: '2,340 sold',
@@ -275,7 +275,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Wireless Noise Cancelling Over-Ear Headphones ANC',
-    href: '/product/anc-headphones',
+    href: '/product-detail.html',
     price: '$9.80-15',
     moq: '5 pieces',
     stats: '6,180 sold',
@@ -287,7 +287,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Unisex Polarized UV400 Aviator Sunglasses Metal Frame',
-    href: '/product/aviator-sunglasses',
+    href: '/product-detail.html',
     price: '$1.20-2.40',
     moq: '50 pieces',
     stats: '14,200 sold',
@@ -298,7 +298,7 @@ const productCards: ProductCard[] = [
   },
   {
     name: 'Holographic Laser Self-Adhesive Label Sticker Sheet',
-    href: '/product/holographic-label',
+    href: '/product-detail.html',
     price: '$0.03-0.08',
     moq: '3000 pieces',
     stats: '9,100 sold',

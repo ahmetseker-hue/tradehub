@@ -7,7 +7,7 @@ import './style.css'
 import { initFlowbite } from 'flowbite'
 
 // Header components (reuse from main page)
-import { TopBar, MobileSearchTabs, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from './components/header'
+import { TopBar, initMobileDrawer, SubHeader, initStickyHeaderSearch, MegaMenu, initMegaMenu, initHeaderCart } from './components/header'
 
 // Footer components
 import { FooterLinks } from './components/footer'
@@ -37,6 +37,8 @@ import {
   initCartDrawer,
   ShippingModal,
   initShippingModal,
+  MobileProductLayout,
+  initMobileLayout,
 } from './components/product'
 
 // Utilities
@@ -51,30 +53,36 @@ appEl.innerHTML = `
     ${SubHeader()}
   </div>
 
-  ${MobileSearchTabs()}
   ${MegaMenu()}
 
   <!-- Main Content -->
   <main>
-    <!-- Product Hero + Tabs (grid keeps sticky card spanning both) -->
-    <section style="background: var(--pd-bg, #ffffff);">
-      <div class="container-boxed">
-        <div id="pd-hero-grid">
-          <div id="pd-hero-left">
-            ${Breadcrumb()}
-            ${ProductTitleBar()}
-            <div id="pd-hero-gallery">
-              ${ProductImageGallery()}
+    <!-- DESKTOP LAYOUT (hidden on mobile via CSS) -->
+    <div id="pd-desktop-layout">
+      <section style="background: var(--pd-bg, #ffffff);">
+        <div class="container-boxed">
+          <div id="pd-hero-grid">
+            <div id="pd-hero-left">
+              ${Breadcrumb()}
+              ${ProductTitleBar()}
+              <div id="pd-hero-gallery">
+                ${ProductImageGallery()}
+              </div>
+              ${RelatedProducts()}
+              ${ProductTabs()}
             </div>
-            ${RelatedProducts()}
-            ${ProductTabs()}
-          </div>
-          <div id="pd-hero-info">
-            ${ProductInfo()}
+            <div id="pd-hero-info">
+              ${ProductInfo()}
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
+
+    <!-- MOBILE LAYOUT (hidden on desktop via CSS) -->
+    <div id="pd-mobile-layout">
+      ${MobileProductLayout()}
+    </div>
   </main>
 
   <!-- Footer -->
@@ -91,14 +99,13 @@ appEl.innerHTML = `
   ${CartDrawer()}
   ${ShippingModal()}
 
-  <!-- Mobile Sticky Bottom Bar -->
+  <!-- Mobile Sticky Bottom Bar (Alibaba 3-button style) -->
   <div id="pd-mobile-bar">
-    <button type="button" class="th-btn flex-1 text-sm py-3">
-      Sepete Ekle
+    <button type="button" id="pdm-bar-chat" class="pdm-bar-chat-btn" aria-label="Sohbet">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
     </button>
-    <button type="button" class="th-btn-outline flex-1 text-sm py-3">
-      Sohbet Başlat
-    </button>
+    <button type="button" id="pdm-bar-cart" class="pdm-bar-cart-btn">Sepete Ekle</button>
+    <button type="button" id="pdm-bar-order" class="pdm-bar-order-btn">Sipariş Başlat</button>
   </div>
 `;
 
@@ -122,3 +129,4 @@ initReviewsModal();
 initShippingModal();
 initCartDrawer();
 initRelatedProducts();
+initMobileLayout();
