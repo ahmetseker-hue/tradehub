@@ -35,3 +35,16 @@ export {
   type AccountType,
   type AccountTypeSelectorOptions
 } from './AccountTypeSelector';
+
+// Email Verification
+export {
+  EmailVerification,
+  initEmailVerification,
+  showOTPError,
+  clearOTPInputs,
+  getOTPValue,
+  updateVerificationEmail,
+  cleanupEmailVerification,
+  type EmailVerificationOptions,
+  type EmailVerificationState
+} from './EmailVerification';
