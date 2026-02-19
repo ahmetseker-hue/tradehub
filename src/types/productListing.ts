@@ -246,6 +246,26 @@ export interface ProductListingState {
 }
 
 /**
+ * Price tier for cart drawer quantity brackets
+ */
+export interface ListingPriceTier {
+  minQty: number;
+  maxQty: number | null;  // null = unlimited
+  price: number;
+  originalPrice?: number;
+}
+
+/**
+ * Color variant for cart drawer color rows
+ */
+export interface ListingColorVariant {
+  id: string;
+  label: string;
+  hex: string;
+  imageKind: ProductImageKind;
+}
+
+/**
  * View mode for product grid
  */
 export type ViewMode = 'grid' | 'list';
