@@ -19,3 +19,10 @@ export {
   getBaseUrl,
   type AuthLayoutOptions
 } from './AuthLayout';
+
+// Login Page
+export {
+  LoginPage,
+  initLoginPage,
+  type LoginPageOptions
+} from './LoginPage';
