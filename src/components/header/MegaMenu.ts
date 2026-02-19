@@ -26,13 +26,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Apparel & Accessories',
     icon: 'shirt',
     products: [
-      { name: 'Bridesmaid Dresses', href: '/search?q=bridesmaid+dresses' },
-      { name: 'Carnival Costume', href: '/search?q=carnival+costume' },
-      { name: 'Rhinestones', href: '/search?q=rhinestones' },
-      { name: 'Camouflage', href: '/search?q=camouflage' },
-      { name: 'Polyester Ties', href: '/search?q=polyester+ties' },
-      { name: 'Ice Hockey', href: '/search?q=ice+hockey' },
-      { name: 'Mittens', href: '/search?q=mittens' },
+      { name: 'Bridesmaid Dresses', href: 'products.html?q=bridesmaid+dresses' },
+      { name: 'Carnival Costume', href: 'products.html?q=carnival+costume' },
+      { name: 'Rhinestones', href: 'products.html?q=rhinestones' },
+      { name: 'Camouflage', href: 'products.html?q=camouflage' },
+      { name: 'Polyester Ties', href: 'products.html?q=polyester+ties' },
+      { name: 'Ice Hockey', href: 'products.html?q=ice+hockey' },
+      { name: 'Mittens', href: 'products.html?q=mittens' },
     ],
   },
   {
@@ -40,13 +40,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Consumer Electronics',
     icon: 'chip',
     products: [
-      { name: 'Smart Watches', href: '/search?q=smart+watches' },
-      { name: 'Wireless Earbuds', href: '/search?q=wireless+earbuds' },
-      { name: 'Bluetooth Speakers', href: '/search?q=bluetooth+speakers' },
-      { name: 'Action Cameras', href: '/search?q=action+cameras' },
-      { name: 'LED Monitors', href: '/search?q=led+monitors' },
-      { name: 'Drone', href: '/search?q=drone' },
-      { name: 'VR Headset', href: '/search?q=vr+headset' },
+      { name: 'Smart Watches', href: 'products.html?q=smart+watches' },
+      { name: 'Wireless Earbuds', href: 'products.html?q=wireless+earbuds' },
+      { name: 'Bluetooth Speakers', href: 'products.html?q=bluetooth+speakers' },
+      { name: 'Action Cameras', href: 'products.html?q=action+cameras' },
+      { name: 'LED Monitors', href: 'products.html?q=led+monitors' },
+      { name: 'Drone', href: 'products.html?q=drone' },
+      { name: 'VR Headset', href: 'products.html?q=vr+headset' },
     ],
   },
   {
@@ -54,13 +54,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Sports & Entertainment',
     icon: 'trophy',
     products: [
-      { name: 'Fitness Equipment', href: '/search?q=fitness+equipment' },
-      { name: 'Yoga Mats', href: '/search?q=yoga+mats' },
-      { name: 'Boxing Gloves', href: '/search?q=boxing+gloves' },
-      { name: 'Camping Tents', href: '/search?q=camping+tents' },
-      { name: 'Fishing Rods', href: '/search?q=fishing+rods' },
-      { name: 'Skateboard', href: '/search?q=skateboard' },
-      { name: 'Golf Clubs', href: '/search?q=golf+clubs' },
+      { name: 'Fitness Equipment', href: 'products.html?q=fitness+equipment' },
+      { name: 'Yoga Mats', href: 'products.html?q=yoga+mats' },
+      { name: 'Boxing Gloves', href: 'products.html?q=boxing+gloves' },
+      { name: 'Camping Tents', href: 'products.html?q=camping+tents' },
+      { name: 'Fishing Rods', href: 'products.html?q=fishing+rods' },
+      { name: 'Skateboard', href: 'products.html?q=skateboard' },
+      { name: 'Golf Clubs', href: 'products.html?q=golf+clubs' },
     ],
   },
   {
@@ -68,13 +68,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Sportswear & Outdoor Apparel',
     icon: 'running',
     products: [
-      { name: 'Running Shoes', href: '/search?q=running+shoes' },
-      { name: 'Track Suits', href: '/search?q=track+suits' },
-      { name: 'Hiking Boots', href: '/search?q=hiking+boots' },
-      { name: 'Windbreakers', href: '/search?q=windbreakers' },
-      { name: 'Ski Jackets', href: '/search?q=ski+jackets' },
-      { name: 'Cycling Wear', href: '/search?q=cycling+wear' },
-      { name: 'Sports Bras', href: '/search?q=sports+bras' },
+      { name: 'Running Shoes', href: 'products.html?q=running+shoes' },
+      { name: 'Track Suits', href: 'products.html?q=track+suits' },
+      { name: 'Hiking Boots', href: 'products.html?q=hiking+boots' },
+      { name: 'Windbreakers', href: 'products.html?q=windbreakers' },
+      { name: 'Ski Jackets', href: 'products.html?q=ski+jackets' },
+      { name: 'Cycling Wear', href: 'products.html?q=cycling+wear' },
+      { name: 'Sports Bras', href: 'products.html?q=sports+bras' },
     ],
   },
   {
@@ -82,13 +82,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Shoes & Accessories',
     icon: 'shoe',
     products: [
-      { name: 'Sneakers', href: '/search?q=sneakers' },
-      { name: 'Leather Boots', href: '/search?q=leather+boots' },
-      { name: 'Sandals', href: '/search?q=sandals' },
-      { name: 'High Heels', href: '/search?q=high+heels' },
-      { name: 'Belts', href: '/search?q=belts' },
-      { name: 'Sunglasses', href: '/search?q=sunglasses' },
-      { name: 'Wallets', href: '/search?q=wallets' },
+      { name: 'Sneakers', href: 'products.html?q=sneakers' },
+      { name: 'Leather Boots', href: 'products.html?q=leather+boots' },
+      { name: 'Sandals', href: 'products.html?q=sandals' },
+      { name: 'High Heels', href: 'products.html?q=high+heels' },
+      { name: 'Belts', href: 'products.html?q=belts' },
+      { name: 'Sunglasses', href: 'products.html?q=sunglasses' },
+      { name: 'Wallets', href: 'products.html?q=wallets' },
     ],
   },
   {
@@ -96,13 +96,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Home & Garden',
     icon: 'home',
     products: [
-      { name: 'Garden Furniture', href: '/search?q=garden+furniture' },
-      { name: 'Kitchen Appliances', href: '/search?q=kitchen+appliances' },
-      { name: 'Bed Sheets', href: '/search?q=bed+sheets' },
-      { name: 'LED Lights', href: '/search?q=led+lights' },
-      { name: 'Curtains', href: '/search?q=curtains' },
-      { name: 'Storage Boxes', href: '/search?q=storage+boxes' },
-      { name: 'Wall Decor', href: '/search?q=wall+decor' },
+      { name: 'Garden Furniture', href: 'products.html?q=garden+furniture' },
+      { name: 'Kitchen Appliances', href: 'products.html?q=kitchen+appliances' },
+      { name: 'Bed Sheets', href: 'products.html?q=bed+sheets' },
+      { name: 'LED Lights', href: 'products.html?q=led+lights' },
+      { name: 'Curtains', href: 'products.html?q=curtains' },
+      { name: 'Storage Boxes', href: 'products.html?q=storage+boxes' },
+      { name: 'Wall Decor', href: 'products.html?q=wall+decor' },
     ],
   },
   {
@@ -110,13 +110,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Beauty',
     icon: 'sparkles',
     products: [
-      { name: 'Skincare Set', href: '/search?q=skincare+set' },
-      { name: 'Hair Extensions', href: '/search?q=hair+extensions' },
-      { name: 'Makeup Brushes', href: '/search?q=makeup+brushes' },
-      { name: 'Perfume', href: '/search?q=perfume' },
-      { name: 'Nail Art', href: '/search?q=nail+art' },
-      { name: 'Face Masks', href: '/search?q=face+masks' },
-      { name: 'Hair Dryers', href: '/search?q=hair+dryers' },
+      { name: 'Skincare Set', href: 'products.html?q=skincare+set' },
+      { name: 'Hair Extensions', href: 'products.html?q=hair+extensions' },
+      { name: 'Makeup Brushes', href: 'products.html?q=makeup+brushes' },
+      { name: 'Perfume', href: 'products.html?q=perfume' },
+      { name: 'Nail Art', href: 'products.html?q=nail+art' },
+      { name: 'Face Masks', href: 'products.html?q=face+masks' },
+      { name: 'Hair Dryers', href: 'products.html?q=hair+dryers' },
     ],
   },
   {
@@ -124,13 +124,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Jewelry, Eyewear & Watches',
     icon: 'diamond',
     products: [
-      { name: 'Fashion Rings', href: '/search?q=fashion+rings' },
-      { name: 'Necklaces', href: '/search?q=necklaces' },
-      { name: 'Wrist Watches', href: '/search?q=wrist+watches' },
-      { name: 'Earrings', href: '/search?q=earrings' },
-      { name: 'Bracelets', href: '/search?q=bracelets' },
-      { name: 'Reading Glasses', href: '/search?q=reading+glasses' },
-      { name: 'Pendants', href: '/search?q=pendants' },
+      { name: 'Fashion Rings', href: 'products.html?q=fashion+rings' },
+      { name: 'Necklaces', href: 'products.html?q=necklaces' },
+      { name: 'Wrist Watches', href: 'products.html?q=wrist+watches' },
+      { name: 'Earrings', href: 'products.html?q=earrings' },
+      { name: 'Bracelets', href: 'products.html?q=bracelets' },
+      { name: 'Reading Glasses', href: 'products.html?q=reading+glasses' },
+      { name: 'Pendants', href: 'products.html?q=pendants' },
     ],
   },
   {
@@ -138,13 +138,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Luggage, Bags & Cases',
     icon: 'bag',
     products: [
-      { name: 'Travel Suitcase', href: '/search?q=travel+suitcase' },
-      { name: 'Backpacks', href: '/search?q=backpacks' },
-      { name: 'Laptop Bags', href: '/search?q=laptop+bags' },
-      { name: 'Cosmetic Bags', href: '/search?q=cosmetic+bags' },
-      { name: 'Messenger Bags', href: '/search?q=messenger+bags' },
-      { name: 'Phone Cases', href: '/search?q=phone+cases' },
-      { name: 'Wallets', href: '/search?q=wallets' },
+      { name: 'Travel Suitcase', href: 'products.html?q=travel+suitcase' },
+      { name: 'Backpacks', href: 'products.html?q=backpacks' },
+      { name: 'Laptop Bags', href: 'products.html?q=laptop+bags' },
+      { name: 'Cosmetic Bags', href: 'products.html?q=cosmetic+bags' },
+      { name: 'Messenger Bags', href: 'products.html?q=messenger+bags' },
+      { name: 'Phone Cases', href: 'products.html?q=phone+cases' },
+      { name: 'Wallets', href: 'products.html?q=wallets' },
     ],
   },
   {
@@ -152,13 +152,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Packaging & Printing',
     icon: 'box',
     products: [
-      { name: 'Gift Boxes', href: '/search?q=gift+boxes' },
-      { name: 'Paper Bags', href: '/search?q=paper+bags' },
-      { name: 'Labels', href: '/search?q=labels' },
-      { name: 'Bubble Wrap', href: '/search?q=bubble+wrap' },
-      { name: 'Stickers', href: '/search?q=stickers' },
-      { name: 'Tape', href: '/search?q=packaging+tape' },
-      { name: 'Tissue Paper', href: '/search?q=tissue+paper' },
+      { name: 'Gift Boxes', href: 'products.html?q=gift+boxes' },
+      { name: 'Paper Bags', href: 'products.html?q=paper+bags' },
+      { name: 'Labels', href: 'products.html?q=labels' },
+      { name: 'Bubble Wrap', href: 'products.html?q=bubble+wrap' },
+      { name: 'Stickers', href: 'products.html?q=stickers' },
+      { name: 'Tape', href: 'products.html?q=packaging+tape' },
+      { name: 'Tissue Paper', href: 'products.html?q=tissue+paper' },
     ],
   },
   {
@@ -166,13 +166,13 @@ export const megaCategories: MegaMenuCategory[] = [
     name: 'Parents, Kids & Toys',
     icon: 'baby',
     products: [
-      { name: 'Building Blocks', href: '/search?q=building+blocks' },
-      { name: 'Strollers', href: '/search?q=strollers' },
-      { name: 'Plush Toys', href: '/search?q=plush+toys' },
-      { name: 'Diapers', href: '/search?q=diapers' },
-      { name: 'Baby Clothes', href: '/search?q=baby+clothes' },
-      { name: 'RC Cars', href: '/search?q=rc+cars' },
-      { name: 'Puzzles', href: '/search?q=puzzles' },
+      { name: 'Building Blocks', href: 'products.html?q=building+blocks' },
+      { name: 'Strollers', href: 'products.html?q=strollers' },
+      { name: 'Plush Toys', href: 'products.html?q=plush+toys' },
+      { name: 'Diapers', href: 'products.html?q=diapers' },
+      { name: 'Baby Clothes', href: 'products.html?q=baby+clothes' },
+      { name: 'RC Cars', href: 'products.html?q=rc+cars' },
+      { name: 'Puzzles', href: 'products.html?q=puzzles' },
     ],
   },
 ];
@@ -283,7 +283,7 @@ function renderCategoriesView(): string {
             ${megaCategories.map((cat, index) => `
               <li>
                 <a
-                  href="/category/${cat.id}"
+                  href="products.html?category=${cat.id}"
                   class="th-mega-sidebar-item mega-cat-btn flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left transition-colors border-l-2 border-transparent ${index === 0 ? 'th-mega-sidebar-item--active' : ''}"
                   data-category="${cat.id}"
                 >
@@ -301,7 +301,7 @@ function renderCategoriesView(): string {
             <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
               <div class="flex items-center justify-between mb-5">
                 <h3 class="text-base font-bold dark:text-white" style="color:var(--mega-text-color)">${cat.name}</h3>
-                <a href="/category/${cat.id}" class="th-nav-link hover:underline dark:text-primary-400 dark:hover:text-primary-300" style="color:var(--nav-hover-color)">
+                <a href="products.html?category=${cat.id}" class="th-nav-link hover:underline dark:text-primary-400 dark:hover:text-primary-300" style="color:var(--nav-hover-color)">
                   Browse all &rarr;
                 </a>
               </div>

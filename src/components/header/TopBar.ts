@@ -1025,15 +1025,19 @@ export function TopBar(): string {
 
 /**
  * Initializes header cart popover — listens for cart-add events and updates badge + popover.
+ * Supports two rendering modes:
+ *   1. groupedItems (multi-supplier) — products listing page sends grouped cart items by supplier
+ *   2. Legacy single-product — product detail page sends single product with colorItems
  */
 export function initHeaderCart(): void {
   document.addEventListener('cart-add', ((e: CustomEvent) => {
-    const { productTitle, supplierName, unitPrice, quantity, grandTotal, colorItems } = e.detail;
+    const { quantity, grandTotal, groupedItems } = e.detail;
 
     // Update badge
     const badge = document.getElementById('header-cart-badge');
     if (badge) {
-      badge.textContent = quantity > 99 ? '99+' : String(quantity);
+      const totalQty = quantity || 0;
+      badge.textContent = totalQty > 99 ? '99+' : String(totalQty);
       badge.classList.remove('hidden');
     }
 
@@ -1041,51 +1045,81 @@ export function initHeaderCart(): void {
     const emptyState = document.getElementById('header-cart-empty');
     if (emptyState) emptyState.style.display = 'none';
 
-    // Update items — each color × variant as a separate line item (Alibaba style)
+    // Update items
     const itemsContainer = document.getElementById('header-cart-items');
     if (itemsContainer) {
-      let html = `<p class="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">${supplierName}</p>`;
-      html += `<p class="text-sm text-gray-900 dark:text-white mb-2 leading-tight" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${productTitle}</p>`;
-      html += '<div class="max-h-52 overflow-y-auto">';
+      let html = '';
 
-      const items = colorItems && colorItems.length > 0 ? colorItems : null;
+      if (groupedItems && groupedItems.length > 0) {
+        // Multi-supplier mode (products listing page)
+        html += '<div class="max-h-72 overflow-y-auto">';
+        for (const group of groupedItems) {
+          html += `
+            <div class="mb-3 last:mb-0">
+              <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5 truncate">${group.supplierName || 'Supplier'}</p>
+              <p class="text-[13px] font-medium text-gray-900 dark:text-white mb-2 leading-tight" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${group.productTitle}</p>`;
 
-      if (items) {
-        for (const ci of items) {
-          const thumbHtml = ci.colorThumb
-            ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">`
-            : `<div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:${ci.colorValue || '#e5e7eb'}"></div>`;
-
-          for (const vi of ci.variants) {
-            const desc = [vi.label, ci.colorLabel].filter(Boolean).join(', ');
+          for (const item of group.items) {
             html += `
-              <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
-                ${thumbHtml}
+              <div class="flex items-center gap-3 py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                <div class="w-10 h-10 rounded-lg flex-shrink-0" style="background:${item.colorValue || '#e5e7eb'}"></div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-xs text-gray-500 dark:text-gray-400">${desc}</p>
+                  <p class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${item.label}</p>
                   <div class="flex items-center justify-between mt-0.5">
-                    <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>
-                    <span class="text-xs text-gray-500">x ${vi.qty}</span>
+                    <span class="text-[13px] font-semibold text-gray-900 dark:text-white">$${item.unitPrice.toFixed(2)}</span>
+                    <span class="text-xs text-gray-500">x ${item.qty}</span>
                   </div>
                 </div>
               </div>`;
           }
+
+          html += '</div>';
         }
+        html += '</div>';
       } else {
-        // Fallback: no items selected
-        html += `
-          <div class="flex items-center gap-3 py-2">
-            <div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:#e5e7eb"></div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between mt-0.5">
-                <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>
-                <span class="text-xs text-gray-500">x ${quantity}</span>
+        // Legacy single-product mode (product detail page)
+        const { productTitle, supplierName, unitPrice, colorItems } = e.detail;
+        html += `<p class="text-xs text-gray-500 dark:text-gray-400 mb-1 truncate">${supplierName}</p>`;
+        html += `<p class="text-sm text-gray-900 dark:text-white mb-2 leading-tight" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${productTitle}</p>`;
+        html += '<div class="max-h-52 overflow-y-auto">';
+
+        const items = colorItems && colorItems.length > 0 ? colorItems : null;
+        if (items) {
+          for (const ci of items) {
+            const thumbHtml = ci.colorThumb
+              ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">`
+              : `<div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:${ci.colorValue || '#e5e7eb'}"></div>`;
+
+            for (const vi of ci.variants) {
+              const desc = [vi.label, ci.colorLabel].filter(Boolean).join(', ');
+              html += `
+                <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                  ${thumbHtml}
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs text-gray-500 dark:text-gray-400">${desc}</p>
+                    <div class="flex items-center justify-between mt-0.5">
+                      <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>
+                      <span class="text-xs text-gray-500">x ${vi.qty}</span>
+                    </div>
+                  </div>
+                </div>`;
+            }
+          }
+        } else {
+          html += `
+            <div class="flex items-center gap-3 py-2">
+              <div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:#e5e7eb"></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between mt-0.5">
+                  <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>
+                  <span class="text-xs text-gray-500">x ${quantity}</span>
+                </div>
               </div>
-            </div>
-          </div>`;
+            </div>`;
+        }
+        html += '</div>';
       }
 
-      html += '</div>';
       itemsContainer.innerHTML = html;
       itemsContainer.classList.remove('hidden');
     }

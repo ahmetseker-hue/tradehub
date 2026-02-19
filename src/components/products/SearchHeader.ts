@@ -181,9 +181,10 @@ function renderMobileFilterToggle(): string {
  * @returns HTML string for the search header
  */
 export function SearchHeader(
-  info: SearchHeaderInfo = defaultSearchHeaderInfo,
+  infoOverrides: Partial<SearchHeaderInfo> = {},
   viewMode: ViewMode = 'grid'
 ): string {
+  const info = { ...defaultSearchHeaderInfo, ...infoOverrides };
   const { keyword, totalProducts, freeShippingAvailable, sortOptions, selectedSort } = info;
 
   return `

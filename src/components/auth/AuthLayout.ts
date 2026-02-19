@@ -151,39 +151,28 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
         </div>
 
         <!-- Right: Form Content Area -->
-        <div class="flex-1 lg:w-[55%] xl:w-[50%] relative flex items-center justify-center bg-white dark:bg-gray-900">
+        <div class="flex-1 lg:w-[55%] xl:w-[50%] relative bg-white dark:bg-gray-900">
 
-          <!-- Mobile: Full-height orange background (positioned behind content) -->
+          <!-- Mobile: Full-height orange background -->
           <div class="lg:hidden absolute inset-0 bg-[#FF6600]"></div>
 
-          <!-- Mobile: Spacer + Promo Header -->
-          <div class="lg:hidden relative z-10 w-full">
-            <!-- Spacer for fixed header -->
-            <div class="h-14"></div>
-            <!-- Mobile promo content (condensed) -->
-            <div class="px-6 pt-6 pb-8 text-white text-center">
-              <h2 class="text-xl font-bold mb-1">Global B2B sourcing</h2>
-              <p class="text-sm opacity-90">Order protection and great savings</p>
+          <!-- Responsive content wrapper -->
+          <div class="relative z-10 w-full min-h-screen flex flex-col lg:items-center lg:justify-center">
+            <!-- Mobile-only: header spacer + promo text -->
+            <div class="lg:hidden">
+              <div class="h-14"></div>
+              <div class="px-6 pt-6 pb-8 text-white text-center">
+                <h2 class="text-xl font-bold mb-1">Global B2B sourcing</h2>
+                <p class="text-sm opacity-90">Order protection and great savings</p>
+              </div>
             </div>
-            
-             <!-- Content Area: Mobile Card -->
-            <div class="
-              relative z-10
-              bg-white dark:bg-gray-900
-              mx-4 mb-8
-              px-6 py-8
-              rounded-xl
-              shadow-lg
-            ">
+
+            <!-- Single content area (mobile: white card, desktop: transparent) -->
+            <div class="bg-white dark:bg-gray-900 mx-4 mb-8 px-6 py-8 rounded-xl shadow-lg lg:bg-transparent lg:dark:bg-transparent lg:mx-0 lg:mb-0 lg:px-8 lg:py-0 lg:rounded-none lg:shadow-none">
               <div class="w-full max-w-md mx-auto">
                 ${content}
               </div>
             </div>
-          </div>
-
-          <!-- Desktop Content Area -->
-          <div class="hidden lg:block w-full max-w-md px-8">
-             ${content}
           </div>
 
         </div>

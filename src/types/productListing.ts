@@ -29,6 +29,8 @@ export interface ProductListingCard {
   moq: string;
   stats: string;
   imageKind: ProductImageKind;
+  /** Additional images for card slider (uses imageKind variants for placeholders) */
+  images?: ProductImageKind[];
   imageSrc?: string;
   promo?: string;
   verified?: boolean;
@@ -36,6 +38,14 @@ export interface ProductListingCard {
   supplierCountry?: string;
   rating?: number;
   reviewCount?: number;
+  /** Original price for strikethrough display, e.g. "$1.99-4.31" */
+  originalPrice?: string;
+  /** Discount label, e.g. "5% off" */
+  discount?: string;
+  /** Supplier company name */
+  supplierName?: string;
+  /** Reorder rate percentage, e.g. 16 */
+  reorderRate?: number;
 }
 
 /**

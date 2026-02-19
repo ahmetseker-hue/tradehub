@@ -22,12 +22,57 @@ import {
   initFilterSidebar,
   ProductListingGrid,
   initProductListingGrid,
+  initProductSliders,
+  ListingCartDrawer,
+  initListingCartDrawer,
   SearchHeader,
   initSearchHeader,
+  updateSearchHeader,
+  rerenderProductGrid,
+  initFilterEngine,
+  updateFilterChips,
+  initFilterChips,
 } from './components/products'
+
+import { mockProductListingCards } from './data/mockProductListing'
+
+// Category data for ID → name mapping
+import { megaCategories } from './components/header'
 
 // Utilities
 import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
+
+/* ── Helpers ── */
+
+/** HTML-encode user input to prevent XSS when inserted via innerHTML */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ── Read URL parameters ── */
+const urlParams = new URLSearchParams(window.location.search);
+const categoryParam = urlParams.get('category');
+const queryParam = urlParams.get('q');
+
+/** Resolve display keyword from URL params */
+function resolveKeyword(): string {
+  if (categoryParam) {
+    const cat = megaCategories.find(c => c.id === categoryParam);
+    // Category names from megaCategories are safe (hardcoded), but fallback ID needs escaping
+    return cat ? cat.name : escapeHtml(categoryParam);
+  }
+  if (queryParam) {
+    return escapeHtml(queryParam.replace(/\+/g, ' '));
+  }
+  return 'laptop backpack';
+}
+
+const searchKeyword = resolveKeyword();
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -45,7 +90,10 @@ appEl.innerHTML = `
     <section class="py-4 lg:py-6" style="background: var(--products-bg, #f9fafb);">
       <div class="container-boxed">
         <!-- Search Header (keyword, product count, sorting, view toggle) -->
-        ${SearchHeader()}
+        ${SearchHeader({ keyword: searchKeyword })}
+
+        <!-- Active Filter Chips -->
+        <div id="active-filter-chips" class="flex flex-wrap gap-2 mb-3 empty:hidden"></div>
 
         <!-- Main layout: Filter Sidebar + Product Grid -->
         <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
@@ -96,7 +144,7 @@ appEl.innerHTML = `
       </button>
     </div>
     <div class="p-4">
-      ${FilterSidebar()}
+      ${FilterSidebar(undefined, 'mobile')}
     </div>
   </div>
 
@@ -105,6 +153,9 @@ appEl.innerHTML = `
     data-drawer-backdrop="filter-sidebar-drawer"
     class="hidden bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40"
   ></div>
+
+  <!-- Cart Drawer for product listing -->
+  ${ListingCartDrawer()}
 `;
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
@@ -125,4 +176,22 @@ initFloatingPanel();
 // Initialize products page components
 initFilterSidebar();
 initProductListingGrid();
+initProductSliders();
 initSearchHeader();
+
+// Initialize cart drawer for listing page
+initListingCartDrawer(mockProductListingCards);
+
+// Initialize filter chips removal handler (event delegation)
+initFilterChips();
+
+// Initialize filter engine: connects filters + sorting to product grid
+let engine: ReturnType<typeof initFilterEngine> | null = null;
+engine = initFilterEngine({
+  products: mockProductListingCards,
+  onUpdate: (filtered, count) => {
+    rerenderProductGrid(filtered);
+    updateSearchHeader({ totalProducts: count });
+    if (engine) updateFilterChips(engine.getState());
+  },
+});

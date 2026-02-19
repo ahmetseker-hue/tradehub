@@ -52,6 +52,9 @@ const icons = {
   starEmpty: `<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
   </svg>`,
+  certBadge: `<svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" style="color: #6b7280;">
+    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+  </svg>`,
 };
 
 /**
@@ -181,11 +184,12 @@ const defaultFilterSections: FilterSection[] = [
     title: 'Management certifications',
     type: 'searchable-checkbox',
     collapsible: true,
-    collapsed: true,
-    searchPlaceholder: 'Search certification',
+    collapsed: false,
+    searchPlaceholder: 'Search',
     options: [
       { id: 'cert-iso9001', label: 'ISO 9001', value: 'ISO9001', count: 4520 },
       { id: 'cert-iso14001', label: 'ISO 14001', value: 'ISO14001', count: 2180 },
+      { id: 'cert-iecq', label: 'IECQ QC080000', value: 'IECQ', count: 1120 },
       { id: 'cert-bsci', label: 'BSCI', value: 'BSCI', count: 1650 },
       { id: 'cert-sedex', label: 'SEDEX', value: 'SEDEX', count: 980 },
       { id: 'cert-sa8000', label: 'SA8000', value: 'SA8000', count: 720 },
@@ -196,11 +200,12 @@ const defaultFilterSections: FilterSection[] = [
     title: 'Product certifications',
     type: 'searchable-checkbox',
     collapsible: true,
-    collapsed: true,
-    searchPlaceholder: 'Search certification',
+    collapsed: false,
+    searchPlaceholder: 'Search',
     options: [
       { id: 'pcert-ce', label: 'CE', value: 'CE', count: 8900 },
       { id: 'pcert-rohs', label: 'ROHS', value: 'ROHS', count: 5420 },
+      { id: 'pcert-ip68', label: 'IP68', value: 'IP68', count: 1890 },
       { id: 'pcert-fcc', label: 'FCC', value: 'FCC', count: 3180 },
       { id: 'pcert-ul', label: 'UL', value: 'UL', count: 2450 },
       { id: 'pcert-gots', label: 'GOTS', value: 'GOTS', count: 890 },
@@ -211,14 +216,14 @@ const defaultFilterSections: FilterSection[] = [
 /**
  * Renders a checkbox input
  */
-function renderCheckbox(option: FilterOption, sectionId: string): string {
-  const checkboxId = `filter-${sectionId}-${option.id}`;
+function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ''): string {
+  const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${option.id}`;
   return `
     <label
       for="${checkboxId}"
       class="flex items-center gap-2 cursor-pointer group py-1"
     >
-      <div class="relative flex items-center justify-center">
+      <div class="relative flex items-center justify-center w-4 h-4">
         <input
           type="checkbox"
           id="${checkboxId}"
@@ -230,15 +235,14 @@ function renderCheckbox(option: FilterOption, sectionId: string): string {
           data-filter-value="${option.value}"
         />
         <div
-          class="w-4 h-4 border rounded transition-colors duration-150 flex items-center justify-center
+          class="absolute inset-0 border rounded transition-colors duration-150
                  peer-checked:bg-orange-500 peer-checked:border-orange-500
                  peer-focus:ring-2 peer-focus:ring-orange-200"
           style="border-color: var(--filter-checkbox-border, #d1d5db);"
-        >
-          <span class="text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
-            ${icons.check}
-          </span>
-        </div>
+        ></div>
+        <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
+          ${icons.check}
+        </span>
       </div>
       <span
         class="text-[13px] leading-tight group-hover:text-orange-600 transition-colors duration-150"
@@ -257,8 +261,8 @@ function renderCheckbox(option: FilterOption, sectionId: string): string {
 /**
  * Renders a radio button for store reviews
  */
-function renderRadioOption(option: StoreReviewFilter, sectionId: string): string {
-  const radioId = `filter-${sectionId}-${option.id}`;
+function renderRadioOption(option: StoreReviewFilter, sectionId: string, idPrefix = ''): string {
+  const radioId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${option.id}`;
   const stars = Math.floor(option.minRating);
   const hasHalf = option.minRating % 1 !== 0;
 
@@ -267,7 +271,7 @@ function renderRadioOption(option: StoreReviewFilter, sectionId: string): string
       for="${radioId}"
       class="flex items-center gap-2 cursor-pointer group py-1"
     >
-      <div class="relative flex items-center justify-center">
+      <div class="relative flex items-center justify-center w-4 h-4">
         <input
           type="radio"
           id="${radioId}"
@@ -279,12 +283,11 @@ function renderRadioOption(option: StoreReviewFilter, sectionId: string): string
           data-filter-value="${option.minRating}"
         />
         <div
-          class="w-4 h-4 border rounded-full transition-colors duration-150 flex items-center justify-center
+          class="absolute inset-0 border rounded-full transition-colors duration-150
                  peer-checked:border-orange-500"
           style="border-color: var(--filter-checkbox-border, #d1d5db);"
-        >
-          <div class="w-2 h-2 rounded-full bg-orange-500 opacity-0 peer-checked:opacity-100 transition-opacity duration-150"></div>
-        </div>
+        ></div>
+        <div class="w-2 h-2 rounded-full bg-orange-500 opacity-0 peer-checked:opacity-100 transition-opacity duration-150"></div>
       </div>
       <div class="flex items-center gap-1" style="color: #f59e0b;">
         ${Array.from({ length: stars }, () => icons.star).join('')}
@@ -389,7 +392,9 @@ function renderMinOrder(section: MinOrderFilterSection): string {
 /**
  * Renders a searchable checkbox section
  */
-function renderSearchableCheckbox(section: SearchableCheckboxFilterSection): string {
+function renderSearchableCheckbox(section: SearchableCheckboxFilterSection, idPrefix = ''): string {
+  const isCertSection = section.id === 'management-certifications' || section.id === 'product-certifications';
+
   return `
     <div class="space-y-2">
       <!-- Search input -->
@@ -408,8 +413,69 @@ function renderSearchableCheckbox(section: SearchableCheckboxFilterSection): str
       </div>
       <!-- Options list -->
       <div class="space-y-0.5 max-h-[180px] overflow-y-auto">
-        ${section.options.map(opt => renderCheckbox(opt, section.id)).join('')}
+        ${section.options.map(opt => isCertSection
+          ? renderCertCheckbox(opt, section.id, idPrefix)
+          : renderCheckbox(opt, section.id, idPrefix)
+        ).join('')}
       </div>
+      ${isCertSection ? renderCertDisclaimer() : ''}
+    </div>
+  `;
+}
+
+/**
+ * Renders a certification checkbox with badge icon
+ */
+function renderCertCheckbox(option: FilterOption, sectionId: string, idPrefix = ''): string {
+  const checkboxId = `filter-${idPrefix ? idPrefix + '-' : ''}${sectionId}-${option.id}`;
+  return `
+    <label
+      for="${checkboxId}"
+      class="flex items-center gap-2 cursor-pointer group py-1"
+    >
+      <div class="relative flex items-center justify-center w-4 h-4">
+        <input
+          type="checkbox"
+          id="${checkboxId}"
+          name="${sectionId}"
+          value="${option.value}"
+          ${option.checked ? 'checked' : ''}
+          class="peer sr-only"
+          data-filter-section="${sectionId}"
+          data-filter-value="${option.value}"
+        />
+        <div
+          class="absolute inset-0 border rounded transition-colors duration-150
+                 peer-checked:bg-orange-500 peer-checked:border-orange-500
+                 peer-focus:ring-2 peer-focus:ring-orange-200"
+          style="border-color: var(--filter-checkbox-border, #d1d5db);"
+        ></div>
+        <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
+          ${icons.check}
+        </span>
+      </div>
+      ${icons.certBadge}
+      <span
+        class="text-[13px] leading-tight group-hover:text-orange-600 transition-colors duration-150"
+        style="color: var(--filter-text-color, #374151);"
+      >${option.label}</span>
+    </label>
+  `;
+}
+
+/**
+ * Renders the certification disclaimer text
+ */
+function renderCertDisclaimer(): string {
+  return `
+    <div class="mt-2 pt-2 border-t" style="border-color: var(--filter-divider-color, #e5e7eb);">
+      <p class="text-[10px] leading-relaxed" style="color: var(--filter-count-color, #9ca3af);">
+        *Certification Disclaimer: Any assessment, certification, inspection and/or related examination related to any authenticity of certificates are provided or conducted by independent third parties with no involvement from iSTOC.
+      </p>
+      <a
+        href="#"
+        class="inline-block mt-1 text-[12px] font-medium text-gray-700 hover:text-orange-600 hover:underline transition-colors dark:text-gray-300"
+      >Learn More</a>
     </div>
   `;
 }
@@ -446,13 +512,13 @@ function renderSectionHeader(section: FilterSection): string {
 /**
  * Renders the content of a filter section based on its type
  */
-function renderSectionContent(section: FilterSection): string {
+function renderSectionContent(section: FilterSection, idPrefix = ''): string {
   switch (section.type) {
     case 'checkbox': {
       const checkboxSection = section as CheckboxFilterSection;
       return `
         <div class="space-y-0.5">
-          ${checkboxSection.options.map(opt => renderCheckbox(opt, section.id)).join('')}
+          ${checkboxSection.options.map(opt => renderCheckbox(opt, section.id, idPrefix)).join('')}
         </div>
       `;
     }
@@ -460,7 +526,7 @@ function renderSectionContent(section: FilterSection): string {
       const radioSection = section as RadioFilterSection;
       return `
         <div class="space-y-0.5">
-          ${radioSection.options.map(opt => renderRadioOption(opt, section.id)).join('')}
+          ${radioSection.options.map(opt => renderRadioOption(opt, section.id, idPrefix)).join('')}
         </div>
       `;
     }
@@ -489,7 +555,7 @@ function renderSectionContent(section: FilterSection): string {
     case 'min-order':
       return renderMinOrder(section as MinOrderFilterSection);
     case 'searchable-checkbox':
-      return renderSearchableCheckbox(section as SearchableCheckboxFilterSection);
+      return renderSearchableCheckbox(section as SearchableCheckboxFilterSection, idPrefix);
     default:
       return '';
   }
@@ -498,7 +564,7 @@ function renderSectionContent(section: FilterSection): string {
 /**
  * Renders a complete filter section
  */
-function renderFilterSection(section: FilterSection): string {
+function renderFilterSection(section: FilterSection, idPrefix = ''): string {
   const isCollapsed = section.collapsed === true;
 
   return `
@@ -512,7 +578,7 @@ function renderFilterSection(section: FilterSection): string {
         class="overflow-hidden transition-all duration-200 ${isCollapsed ? 'max-h-0 opacity-0' : 'max-h-[500px] opacity-100'}"
         data-filter-content="${section.id}"
       >
-        ${renderSectionContent(section)}
+        ${renderSectionContent(section, idPrefix)}
       </div>
     </div>
   `;
@@ -521,20 +587,21 @@ function renderFilterSection(section: FilterSection): string {
 /**
  * Renders the Trade Assurance section with shield icon
  */
-function renderTradeAssuranceSection(): string {
+function renderTradeAssuranceSection(idPrefix = ''): string {
+  const taId = `filter-${idPrefix ? idPrefix + '-' : ''}trade-assurance`;
   return `
     <div
       class="border-b py-3"
       style="border-color: var(--filter-divider-color, #e5e7eb);"
     >
       <label
-        for="filter-trade-assurance"
+        for="${taId}"
         class="flex items-center gap-2 cursor-pointer group"
       >
-        <div class="relative flex items-center justify-center">
+        <div class="relative flex items-center justify-center w-4 h-4">
           <input
             type="checkbox"
-            id="filter-trade-assurance"
+            id="${taId}"
             name="trade-assurance"
             value="trade-assurance"
             class="peer sr-only"
@@ -542,15 +609,14 @@ function renderTradeAssuranceSection(): string {
             data-filter-value="enabled"
           />
           <div
-            class="w-4 h-4 border rounded transition-colors duration-150 flex items-center justify-center
+            class="absolute inset-0 border rounded transition-colors duration-150
                    peer-checked:bg-orange-500 peer-checked:border-orange-500
                    peer-focus:ring-2 peer-focus:ring-orange-200"
             style="border-color: var(--filter-checkbox-border, #d1d5db);"
-          >
-            <span class="text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
-              ${icons.check}
-            </span>
-          </div>
+          ></div>
+          <span class="relative z-10 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-150">
+            ${icons.check}
+          </span>
         </div>
         <span class="text-orange-500">${icons.shield}</span>
         <span
@@ -566,7 +632,7 @@ function renderTradeAssuranceSection(): string {
  * FilterSidebar Component
  * Renders the complete filter sidebar with all filter sections
  */
-export function FilterSidebar(sections?: FilterSection[]): string {
+export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string {
   const filterSections = sections || defaultFilterSections;
 
   // Separate Trade Assurance from other sections
@@ -589,10 +655,10 @@ export function FilterSidebar(sections?: FilterSection[]): string {
         >Filters</h2>
 
         <!-- Trade Assurance (special section with icon) -->
-        ${tradeAssurance ? renderTradeAssuranceSection() : ''}
+        ${tradeAssurance ? renderTradeAssuranceSection(idPrefix) : ''}
 
         <!-- Other filter sections -->
-        ${otherSections.map(section => renderFilterSection(section)).join('')}
+        ${otherSections.map(section => renderFilterSection(section, idPrefix)).join('')}
 
         <!-- Clear All Filters Button -->
         <button
@@ -636,11 +702,60 @@ export function initFilterSidebar(): void {
     });
   });
 
+  // Radio button deselect: track last selected value per group so clicking again unchecks it
+  const lastRadioValue: Record<string, string | null> = {};
+  document.querySelectorAll<HTMLInputElement>('[data-filter-section][type="radio"]').forEach(radio => {
+    const section = radio.dataset.filterSection ?? '';
+    // Initialise tracker with currently-checked value (if any)
+    if (radio.checked) lastRadioValue[section] = radio.value;
+    else if (!(section in lastRadioValue)) lastRadioValue[section] = null;
+
+    radio.addEventListener('click', () => {
+      if (lastRadioValue[section] === radio.value) {
+        // Same radio clicked again — deselect it
+        radio.checked = false;
+        lastRadioValue[section] = null;
+      } else {
+        lastRadioValue[section] = radio.value;
+      }
+      document.dispatchEvent(new CustomEvent('filter-change'));
+    });
+  });
+
+  // Dispatch filter-change on checkbox changes
+  document.querySelectorAll<HTMLInputElement>('[data-filter-section][type="checkbox"]').forEach(input => {
+    input.addEventListener('change', () => {
+      document.dispatchEvent(new CustomEvent('filter-change'));
+    });
+  });
+
+  // Dispatch filter-change on OK button clicks (price range, min order)
+  document.querySelectorAll('[data-filter-action="apply"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('filter-change'));
+    });
+  });
+
+  // Searchable filter: hide/show options based on search text
+  document.querySelectorAll<HTMLInputElement>('[data-filter-type="search"]').forEach(searchInput => {
+    searchInput.addEventListener('input', () => {
+      const sectionId = searchInput.dataset.filterSection;
+      if (!sectionId) return;
+      const query = searchInput.value.toLowerCase();
+      const wrapper = searchInput.closest('[data-filter-section-wrapper]') || searchInput.parentElement?.parentElement;
+      if (!wrapper) return;
+      wrapper.querySelectorAll<HTMLLabelElement>(`label[for^="filter-${sectionId}-"]`).forEach(label => {
+        const text = label.textContent?.toLowerCase() || '';
+        label.style.display = text.includes(query) ? '' : 'none';
+      });
+    });
+  });
+
   // Clear all filters
-  const clearAllBtn = document.querySelector('[data-filter-action="clear-all"]');
-  if (clearAllBtn) {
+  const clearAllBtns = document.querySelectorAll('[data-filter-action="clear-all"]');
+  clearAllBtns.forEach(clearAllBtn => {
     clearAllBtn.addEventListener('click', () => {
-      // Clear all checkboxes
+      // Clear all checkboxes and inputs
       document.querySelectorAll<HTMLInputElement>('[data-filter-section]').forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
           input.checked = false;
@@ -648,8 +763,12 @@ export function initFilterSidebar(): void {
           input.value = '';
         }
       });
+      // Reset radio deselect tracker
+      for (const key in lastRadioValue) lastRadioValue[key] = null;
+      // Notify filter engine
+      document.dispatchEvent(new CustomEvent('filter-change'));
     });
-  }
+  });
 }
 
 /**

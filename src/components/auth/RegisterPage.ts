@@ -14,6 +14,18 @@ import { EmailVerification, initEmailVerification, cleanupEmailVerification, typ
 import { AccountSetupForm, initAccountSetupForm, type AccountSetupFormData } from './AccountSetupForm';
 import { getBaseUrl } from './AuthLayout';
 
+/* ── Helpers ────────────────────────────────────────── */
+
+/** HTML-encode user input to prevent XSS when inserted via innerHTML */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 /* ── Types ──────────────────────────────────────────── */
 
 /** Registration flow steps */
@@ -416,7 +428,7 @@ function goToStep(state: RegisterPageState, step: RegisterStep, options: Registe
 
   if (registerPage && stepContainer) {
     registerPage.setAttribute('data-current-step', step);
-    stepContainer.innerHTML = renderStep(step, state.email);
+    stepContainer.innerHTML = renderStep(step, escapeHtml(state.email));
   }
 
   // Initialize new step
