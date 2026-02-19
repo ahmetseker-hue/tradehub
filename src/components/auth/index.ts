@@ -48,3 +48,22 @@ export {
   type EmailVerificationOptions,
   type EmailVerificationState
 } from './EmailVerification';
+
+// Account Setup Form
+export {
+  AccountSetupForm,
+  initAccountSetupForm,
+  getAccountSetupFormData,
+  resetAccountSetupForm,
+  setFieldError,
+  clearFieldError,
+  validatePassword,
+  isPasswordValid,
+  getCountryByCode,
+  countryOptions,
+  type CountryOption,
+  type AccountSetupFormOptions,
+  type AccountSetupFormData,
+  type AccountSetupFormState,
+  type PasswordRequirements
+} from './AccountSetupForm';
