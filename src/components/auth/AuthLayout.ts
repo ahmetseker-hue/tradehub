@@ -73,49 +73,54 @@ function renderMobileHeader(options: AuthLayoutOptions = {}): string {
  */
 function renderPromoBanner(): string {
   return `
-    <div class="auth-promo-banner flex flex-col items-center justify-center px-8 py-12 text-center text-white">
-      <!-- Tagline -->
-      <h1 class="text-2xl lg:text-3xl font-bold mb-4 leading-tight">
-        Küresel ticareti<br/>basitleştiriyoruz
-      </h1>
-      <p class="text-sm lg:text-base opacity-90 mb-8 max-w-xs">
-        Dünya genelinde güvenilir tedarikçilerle bağlantı kurun
-      </p>
-
-      <!-- Illustration placeholder - globe with packages -->
-      <div class="relative w-48 h-48 lg:w-64 lg:h-64">
-        <div class="absolute inset-0 flex items-center justify-center">
-          <svg class="w-32 h-32 lg:w-40 lg:h-40 text-white/30" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-          </svg>
-        </div>
-        <!-- Decorative elements -->
-        <div class="absolute top-4 right-4 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-white/20 flex items-center justify-center">
-          <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-          </svg>
-        </div>
-        <div class="absolute bottom-4 left-4 w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-white/20 flex items-center justify-center">
-          <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-        </div>
+    <div class="auth-promo-banner flex flex-col items-center justify-center px-12 py-12 text-center text-white h-full relative overflow-hidden bg-[#FF6600]">
+      <!-- Background Pattern/Effect -->
+      <div class="absolute inset-0 opacity-10">
+         <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+           <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+         </svg>
       </div>
 
-      <!-- Trust badges -->
-      <div class="mt-8 flex items-center gap-4 text-xs opacity-80">
-        <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-          </svg>
-          Güvenli Ödeme
-        </span>
-        <span class="flex items-center gap-1.5">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Dünya Çapında
-        </span>
+      <!-- Content -->
+      <div class="relative z-10 w-full max-w-lg">
+        <h1 class="text-3xl lg:text-4xl font-bold mb-6 leading-tight">
+          Global B2B sourcing with<br/>
+          <span class="text-orange-100">order protection and great savings</span>
+        </h1>
+        
+        <!-- Illustration Area -->
+        <div class="mt-12 relative w-full aspect-square max-w-sm mx-auto">
+           <!-- Placeholder for the globe/illustration from the screenshot -->
+           <div class="absolute inset-0 flex items-center justify-center">
+             <!-- Globe -->
+             <div class="w-48 h-48 rounded-full bg-orange-400/30 backdrop-blur-sm border border-white/20 flex items-center justify-center relative">
+               <div class="w-40 h-40 rounded-full bg-orange-300/30 border border-white/20 flex items-center justify-center">
+                 <svg class="w-24 h-24 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                 </svg>
+               </div>
+               <!-- Pin Location -->
+               <div class="absolute -top-6 right-8 text-red-500 drop-shadow-lg animate-bounce">
+                  <svg class="w-12 h-12 fill-current" viewBox="0 0 24 24">
+                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                  </svg>
+               </div>
+               <!-- Box -->
+               <div class="absolute -bottom-2 -left-4 bg-orange-600 p-2 rounded shadow-lg transform rotate-12">
+                   <svg class="w-8 h-8 text-yellow-300" viewBox="0 0 24 24" fill="currentColor">
+                       <path d="M21 16.532l-9-5.195-9 5.195v-7.15l9-5.196 9 5.196v7.15zm-9-12.87l-10 5.772v8.667l10 5.773 10-5.773v-8.667l-10-5.773z"/>
+                   </svg>
+               </div>
+             </div>
+             
+             <!-- Floating Truck -->
+             <div class="absolute bottom-4 right-0 transform translate-x-4 bg-yellow-400 p-2 rounded-lg shadow-xl">
+                 <svg class="w-8 h-8 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                   <path d="M20 8h-3V4H3v14h1v2h2v-2h10v2h2v-2h2.2l1.8-6v-4zM5 16H4V5h14v11H5zm14-4h-2v-2h2v2zm0-3h-2V7h2v2z"/>
+                 </svg>
+             </div>
+           </div>
+        </div>
       </div>
     </div>
   `;
@@ -141,40 +146,44 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
       <div class="flex min-h-screen">
 
         <!-- Left: Promo Banner (Desktop only) -->
-        <div class="hidden lg:flex lg:w-[40%] xl:w-[45%] auth-gradient-bg">
+        <div class="hidden lg:flex lg:w-[45%] xl:w-[50%] bg-[#FF6600]">
           ${renderPromoBanner()}
         </div>
 
         <!-- Right: Form Content Area -->
-        <div class="flex-1 lg:w-[60%] xl:w-[55%] relative">
+        <div class="flex-1 lg:w-[55%] xl:w-[50%] relative flex items-center justify-center bg-white dark:bg-gray-900">
 
           <!-- Mobile: Full-height orange background (positioned behind content) -->
-          <div class="lg:hidden absolute inset-0 auth-gradient-bg"></div>
+          <div class="lg:hidden absolute inset-0 bg-[#FF6600]"></div>
 
           <!-- Mobile: Spacer + Promo Header -->
-          <div class="lg:hidden relative z-10">
+          <div class="lg:hidden relative z-10 w-full">
             <!-- Spacer for fixed header -->
             <div class="h-14"></div>
             <!-- Mobile promo content (condensed) -->
             <div class="px-6 pt-6 pb-8 text-white text-center">
-              <h2 class="text-xl font-bold mb-1">Küresel ticareti basitleştiriyoruz</h2>
-              <p class="text-sm opacity-90">Dünya genelinde güvenilir tedarikçilerle bağlantı kurun</p>
+              <h2 class="text-xl font-bold mb-1">Global B2B sourcing</h2>
+              <p class="text-sm opacity-90">Order protection and great savings</p>
+            </div>
+            
+             <!-- Content Area: Mobile Card -->
+            <div class="
+              relative z-10
+              bg-white dark:bg-gray-900
+              mx-4 mb-8
+              px-6 py-8
+              rounded-xl
+              shadow-lg
+            ">
+              <div class="w-full max-w-md mx-auto">
+                ${content}
+              </div>
             </div>
           </div>
 
-          <!-- Content Area: Single instance for both mobile and desktop -->
-          <div class="
-            relative z-10
-            bg-white dark:bg-gray-900
-            px-6 py-8
-            lg:px-8 xl:px-16 lg:py-12
-            lg:flex lg:min-h-screen lg:flex-col lg:justify-center
-            rounded-t-3xl lg:rounded-none
-            min-h-[calc(100vh-200px)] lg:min-h-0
-          ">
-            <div class="w-full max-w-md mx-auto">
-              ${content}
-            </div>
+          <!-- Desktop Content Area -->
+          <div class="hidden lg:block w-full max-w-md px-8">
+             ${content}
           </div>
 
         </div>
