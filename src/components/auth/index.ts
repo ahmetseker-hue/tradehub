@@ -11,3 +11,11 @@ export {
   type LoginProvider,
   type SocialLoginButtonsOptions
 } from './SocialLoginButtons';
+
+// Auth Layout
+export {
+  AuthLayout,
+  initAuthLayout,
+  getBaseUrl,
+  type AuthLayoutOptions
+} from './AuthLayout';
