@@ -3,4 +3,11 @@
  * Re-exports all authentication components for easier importing
  */
 
-// Auth components will be exported here as they are created
+// Social Login Buttons
+export {
+  SocialLoginButtons,
+  initSocialLoginButtons,
+  getSocialLoginButtons,
+  type LoginProvider,
+  type SocialLoginButtonsOptions
+} from './SocialLoginButtons';
