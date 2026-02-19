@@ -145,28 +145,33 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
           ${renderPromoBanner()}
         </div>
 
-        <!-- Right: Form Content -->
-        <div class="flex-1 flex flex-col lg:w-[60%] xl:w-[55%]">
+        <!-- Right: Form Content Area -->
+        <div class="flex-1 lg:w-[60%] xl:w-[55%] relative">
 
-          <!-- Mobile: Orange background with white card overlay -->
-          <div class="lg:hidden flex-1 auth-gradient-bg">
+          <!-- Mobile: Full-height orange background (positioned behind content) -->
+          <div class="lg:hidden absolute inset-0 auth-gradient-bg"></div>
+
+          <!-- Mobile: Spacer + Promo Header -->
+          <div class="lg:hidden relative z-10">
             <!-- Spacer for fixed header -->
             <div class="h-14"></div>
-
             <!-- Mobile promo content (condensed) -->
-            <div class="px-6 pt-6 pb-4 text-white text-center">
+            <div class="px-6 pt-6 pb-8 text-white text-center">
               <h2 class="text-xl font-bold mb-1">Küresel ticareti basitleştiriyoruz</h2>
               <p class="text-sm opacity-90">Dünya genelinde güvenilir tedarikçilerle bağlantı kurun</p>
             </div>
-
-            <!-- White card overlay -->
-            <div class="auth-mobile-card bg-white dark:bg-gray-900 rounded-t-3xl min-h-[60vh] px-6 py-8">
-              ${content}
-            </div>
           </div>
 
-          <!-- Desktop: Clean white/dark form area -->
-          <div class="hidden lg:flex flex-1 flex-col justify-center px-8 xl:px-16 py-12 bg-white dark:bg-gray-900">
+          <!-- Content Area: Single instance for both mobile and desktop -->
+          <div class="
+            relative z-10
+            bg-white dark:bg-gray-900
+            px-6 py-8
+            lg:px-8 xl:px-16 lg:py-12
+            lg:flex lg:min-h-screen lg:flex-col lg:justify-center
+            rounded-t-3xl lg:rounded-none
+            min-h-[calc(100vh-200px)] lg:min-h-0
+          ">
             <div class="w-full max-w-md mx-auto">
               ${content}
             </div>
