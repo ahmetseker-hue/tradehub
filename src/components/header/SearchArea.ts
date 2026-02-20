@@ -43,11 +43,10 @@ function renderSearchTabs(): string {
               role="tab"
               aria-controls="search-panel-${tab.id}"
               aria-selected="${tab.isActive ? 'true' : 'false'}"
-              class="search-tab-btn th-search-tab inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${
-                tab.isActive
-                  ? 'th-search-tab--active dark:text-primary-400 dark:border-primary-400'
-                  : 'border-transparent dark:text-gray-400 dark:hover:text-gray-300'
-              }"
+              class="search-tab-btn th-search-tab inline-flex items-center gap-1.5 px-5 py-2.5 text-lg font-semibold border-b-[3px] transition-colors ${tab.isActive
+      ? 'th-search-tab--active dark:text-primary-400 dark:border-primary-400'
+      : 'border-transparent dark:text-gray-400 dark:hover:text-gray-300'
+    }"
             >
               ${tab.id === 'ai-mode' ? `${renderAIIcon()}<span>${tab.label}</span><span class="text-red-500 text-xs -mt-2 -ml-0.5">*</span>` : `<span>${tab.label}</span>`}
             </button>
@@ -208,9 +207,6 @@ export function SearchArea(): string {
       <div class="container-boxed">
         <!-- Desktop Search Tabs (above search bar) -->
         ${renderSearchTabs()}
-
-        <!-- Desktop Search Bar -->
-        ${renderDesktopSearchBar()}
       </div>
     </section>
 

@@ -65,7 +65,8 @@ function renderLogo(): string {
  */
 function renderCompactStickySearch(): string {
   return `
-    <div id="topbar-compact-search-shell" class="hidden lg:flex relative min-w-0 flex-1 self-center h-[46px] lg:mx-4">
+    <div id="topbar-compact-search-shell" class="hidden lg:flex flex-col justify-center relative min-w-0 flex-1 h-[60px] lg:mx-4">
+      
       <form
         id="topbar-compact-search"
         action="/search"
@@ -75,7 +76,7 @@ function renderCompactStickySearch(): string {
         aria-hidden="true"
         aria-expanded="false"
         aria-controls="topbar-compact-dropdown"
-        class="absolute left-0 right-0 top-0 z-[var(--z-popover)] w-full rounded-full border border-gray-300 bg-white shadow-sm transition-all duration-200 dark:border-gray-600 dark:bg-gray-800"
+        class="absolute left-0 right-0 top-[8px] z-[var(--z-popover)] w-full rounded-full border border-gray-300 bg-white shadow-sm transition-all duration-200 dark:border-gray-600 dark:bg-gray-800"
       >
         <div id="topbar-compact-primary-row" class="flex items-center gap-2 px-3 py-1.5">
           <div class="relative min-w-0 flex-1">
@@ -905,9 +906,8 @@ export function initMobileDrawer(): void {
 export function MobileSearchTabs(): string {
   return `
     <div class="lg:hidden flex items-center gap-6 px-3 border-b border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
-      <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full" data-search-tab="products">Products</button>
-      <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="manufacturers">Manufacturers</button>
-      <button type="button" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="worldwide">Worldwide</button>
+      <a href="/" class="topbar-search-tab relative py-2 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full" data-search-tab="products">Products</a>
+      <a href="/manufacturers.html" class="topbar-search-tab relative py-2 text-[13px] font-normal text-gray-400 dark:text-gray-500 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="manufacturers">Manufacturers</a>
     </div>
   `;
 }
@@ -1016,6 +1016,11 @@ export function TopBar(): string {
           </div>
         </div>
 
+        <!-- Row 2: Search Tabs (Desktop Only) -->
+        <div class="hidden lg:flex items-center gap-6 pb-2 -mt-1">
+          <a href="/" class="topbar-search-tab relative py-1 text-[13px] font-semibold text-gray-900 dark:text-white whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-gray-900 after:dark:bg-white after:rounded-full" data-search-tab="products">Products</a>
+          <a href="/manufacturers.html" class="topbar-search-tab relative py-1 text-[13px] font-normal text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 whitespace-nowrap after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[3px] after:bg-transparent after:rounded-full" data-search-tab="manufacturers">Manufacturers</a>
+        </div>
       </div>
 
       ${renderMobileDrawer()}

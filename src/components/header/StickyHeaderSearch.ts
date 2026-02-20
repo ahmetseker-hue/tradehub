@@ -49,7 +49,7 @@ export function initStickyHeaderSearch(): void {
   compactSearch.setAttribute('aria-hidden', 'false');
 
   const syncDropdownOffset = (): void => {
-    const dropdownTop = compactSearch.offsetHeight + 8;
+    const dropdownTop = compactSearch.offsetTop + compactSearch.offsetHeight + 8;
     compactDropdown.style.top = `${dropdownTop}px`;
   };
 
