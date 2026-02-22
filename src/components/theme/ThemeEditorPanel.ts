@@ -880,6 +880,7 @@ function highlightPageSection(sectionId: string | null): void {
     'section-gradient': '#header, header', // Gradient is part of header
     'section-mega': '#mega-menu, .mega-menu',
     'section-hero': '#hero, .hero-section',
+    'section-productgrid': '[data-theme-section="productgrid"], [aria-label="Recommended Products"]',
     'section-footer': '#footer, footer',
   };
 
