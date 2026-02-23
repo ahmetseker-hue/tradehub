@@ -645,7 +645,7 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ''): string
       aria-label="Product filters"
     >
       <div
-        class="sticky top-[120px] p-4 rounded-lg border"
+        class="sticky top-[120px] p-4 rounded-md border"
         style="background: var(--filter-bg, #ffffff); border-color: var(--filter-border-color, #e5e7eb);"
       >
         <!-- Header -->

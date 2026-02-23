@@ -32,7 +32,7 @@ function renderCategoryPopup(): string {
 
     <!-- Category Popup Panel -->
     <div id="cat-popup-panel" class="fixed inset-0 z-[var(--z-modal)] flex items-end lg:items-start justify-center lg:pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
-      <div id="cat-popup-sheet" class="rounded-t-2xl lg:rounded-lg shadow-2xl border w-full lg:max-w-5xl max-h-[85vh] lg:max-h-[80vh] flex flex-col overflow-hidden transition-transform duration-200 will-change-transform" style="background-color:var(--catpopup-bg);border-color:var(--catpopup-border)">
+      <div id="cat-popup-sheet" class="rounded-t-md lg:rounded-md shadow-2xl border w-full lg:max-w-5xl max-h-[85vh] lg:max-h-[80vh] flex flex-col overflow-hidden transition-transform duration-200 will-change-transform" style="background-color:var(--catpopup-bg);border-color:var(--catpopup-border)">
 
         <!-- Drag handle (mobile) -->
         <div id="cat-popup-drag-handle" class="lg:hidden flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing flex-shrink-0">

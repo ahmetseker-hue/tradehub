@@ -16,7 +16,7 @@ function renderCategoriesTrigger(): string {
   return `
     <button
       id="mega-menu-trigger"
-      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-2 px-3 py-2.5 rounded-lg dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-gray-800/60 transition-all"
+      class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-2 px-3 py-2.5 rounded-md dark:text-primary-400 dark:hover:text-primary-300 dark:hover:bg-gray-800/60 transition-all"
       style="color:var(--subheader-active-color)"
       type="button"
       aria-expanded="false"
@@ -37,14 +37,14 @@ function renderNavigationLinks(): string {
   return `
     <div class="hidden lg:flex items-center gap-1">
       <button
-        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-3 py-2.5 rounded-md dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="featured"
       >
         <span>Featured Selections</span>
       </button>
       <button
-        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative flex items-center gap-1.5 px-3 py-2.5 rounded-md dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="protections"
       >
@@ -61,21 +61,21 @@ function renderUtilityLinks(): string {
   return `
     <div class="hidden lg:flex items-center gap-1">
       <button
-        class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-md dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="buyer-central"
       >
         Buyer Central
       </button>
       <button
-        class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-md dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="help-center"
       >
         Help Center
       </button>
       <button
-        class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+        class="mega-trigger subheader-link th-subheader-link relative px-3 py-2.5 rounded-md dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         type="button"
         data-mega-target="app-extension"
       >
@@ -84,7 +84,7 @@ function renderUtilityLinks(): string {
       ${utilityLinks.map(link => `
         <a
           href="${link.href}"
-          class="th-subheader-link px-3 py-2.5 rounded-lg dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
+          class="th-subheader-link px-3 py-2.5 rounded-md dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800/60 transition-all"
         >
           ${link.label}
         </a>

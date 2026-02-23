@@ -163,7 +163,7 @@ const topRankingVisuals: Record<TopRankingImageKind, TopRankingVisual> = {
 function renderRankingPlaceholder(kind: TopRankingImageKind): string {
   const visual = topRankingVisuals[kind];
   return `
-    <div class="relative h-full w-full overflow-hidden rounded-lg" style="background: ${visual.background};" aria-hidden="true">
+    <div class="relative h-full w-full overflow-hidden rounded-md" style="background: ${visual.background};" aria-hidden="true">
       <div class="absolute -right-5 -top-5 h-14 w-14 rounded-full opacity-50" style="background: ${visual.accent};"></div>
       <div class="absolute -left-4 bottom-1 h-12 w-12 rounded-full opacity-40" style="background: ${visual.accent};"></div>
       <div class="absolute inset-0 flex items-center justify-center">
@@ -185,13 +185,13 @@ function renderRankingCard(card: TopRankingCard): string {
   return `
     <a
       href="${card.href}"
-      class="group/rank relative flex-shrink-0 flex flex-col w-[188px] h-[262px] rounded-xl border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
+      class="group/rank relative flex-shrink-0 flex flex-col w-[188px] h-[262px] rounded-md border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-300"
       style="background: var(--topranking-card-bg, #ffffff); border-color: var(--topranking-card-border, #e5e7eb); padding: 12px 12px 16px;"
       aria-label="${card.name}"
     >
       <!-- Image area with badge -->
       <div class="relative w-full flex-1">
-        <div class="h-full w-full overflow-hidden rounded-lg">
+        <div class="h-full w-full overflow-hidden rounded-md">
           ${renderRankingPlaceholder(card.imageKind)}
         </div>
         <!-- TOP badge — overlaps bottom edge of image -->
@@ -230,7 +230,7 @@ export function TopRanking(): string {
   return `
     <section class="py-4 lg:py-6" aria-label="Top Ranking" style="margin-top: 28px;">
       <div class="container-boxed">
-        <div class="relative overflow-hidden rounded-2xl" style="background-color: var(--topranking-bg, #F5F5F5);">
+        <div class="relative overflow-hidden rounded-md" style="background-color: var(--topranking-bg, #F5F5F5);">
           <div style="padding: 24px 20px 20px;">
             <!-- Section header -->
             <div class="mb-4 flex items-end justify-between gap-4">

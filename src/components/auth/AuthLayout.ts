@@ -114,7 +114,7 @@ function renderPromoBanner(): string {
              </div>
              
              <!-- Floating Truck -->
-             <div class="absolute bottom-4 right-0 transform translate-x-4 bg-yellow-400 p-2 rounded-lg shadow-xl">
+             <div class="absolute bottom-4 right-0 transform translate-x-4 bg-yellow-400 p-2 rounded-md shadow-xl">
                  <svg class="w-8 h-8 text-gray-800" fill="currentColor" viewBox="0 0 24 24">
                    <path d="M20 8h-3V4H3v14h1v2h2v-2h10v2h2v-2h2.2l1.8-6v-4zM5 16H4V5h14v11H5zm14-4h-2v-2h2v2zm0-3h-2V7h2v2z"/>
                  </svg>
@@ -168,7 +168,7 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
             </div>
 
             <!-- Single content area (mobile: white card, desktop: transparent) -->
-            <div class="bg-white dark:bg-gray-900 mx-4 mb-8 px-6 py-8 rounded-xl shadow-lg lg:bg-transparent lg:dark:bg-transparent lg:mx-0 lg:mb-0 lg:px-8 lg:py-0 lg:rounded-none lg:shadow-none">
+            <div class="bg-white dark:bg-gray-900 mx-4 mb-8 px-6 py-8 rounded-md shadow-lg lg:bg-transparent lg:dark:bg-transparent lg:mx-0 lg:mb-0 lg:px-8 lg:py-0 lg:rounded-none lg:shadow-none">
               <div class="w-full max-w-md mx-auto">
                 ${content}
               </div>

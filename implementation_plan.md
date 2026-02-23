@@ -3711,4 +3711,171 @@ Key risks:
 - `bindHelpfulButtons(scope)` takes a parent element parameter for targeted re-binding
 - Test modal stacking: Store tab -> Tumunu Goster -> modal opens -> click helpful -> login modal opens on top
 
+---
+
+---
+
+## 16. Tedarikçiler Sayfası — "Source by Category" Hover Flyout Menü
+
+**Tarih:** 2026-02-23
+**Durum:** Planlandı
+**Hazırlayan:** TPM Agent
+
+---
+
+### 16.1 Genel Bakış
+
+Tedarikçiler sayfasındaki "Source by category" sidebar bileşeni, Alibaba tarzı hover-activated flyout menüye dönüştürülecek. Kullanıcı sol taraftaki bir kategorinin üzerine geldiğinde, sağ tarafta alt kategoriler ve/veya öne çıkan ürünler görüntülenecek.
+
+**Hedef Davranış:**
+- Sol panel: Ana kategoriler listesi (statik, her zaman görünür)
+- Sağ panel (flyout): Hover edilen kategoriye ait alt kategoriler ve öne çıkan içerik
+- Hover gecikmesi: ~150ms (kasıtsız hoverları önlemek için)
+- Flyout kapanması: Sol panelin dışına çıkıldığında
+
+---
+
+### 16.2 Görev Bağımlılık Grafiği
+
+```
+Task #5 [LOGIC]  →  Task #6 [FRONTEND]  →  Task #7 [LOGIC]  →  Task #8 [QA]
+(Veri yapısı)       (HTML/CSS yapısı)      (Hover event)       (Final review)
+```
+
+---
+
+### 16.3 Task Tanımları
+
+#### Task #5 — [LOGIC] Türkçe Kategori Veri Yapısı
+
+**Sorumlu:** Logic Engineer
+**Bağımlılık:** Yok (başlangıç noktası)
+
+**Kabul Kriterleri:**
+- TypeScript `interface` tanımları: `Category`, `SubCategory`, `FeaturedItem`
+- En az 8 ana kategori, her birinde 4–8 alt kategori
+- Veriler `src/data/categories.ts` dosyasında export edilecek
+- Tüm kategori isimleri Türkçe olacak
+- Her kategoride isteğe bağlı `featuredItems[]` alanı (öne çıkan ürün/tedarikçi)
+- `icon` alanı: SVG string veya icon class adı
+
+**Örnek Veri Yapısı:**
+```typescript
+interface SubCategory {
+  id: string;
+  name: string; // Türkçe
+  href: string;
+}
+
+interface Category {
+  id: string;
+  name: string; // Türkçe
+  icon?: string;
+  subCategories: SubCategory[];
+  featuredItems?: FeaturedItem[];
+}
+```
+
+---
+
+#### Task #6 — [FRONTEND] Flyout HTML/CSS Yapısı
+
+**Sorumlu:** Frontend Engineer
+**Bağımlılık:** Task #5 tamamlanmış olmalı
+
+**Kabul Kriterleri:**
+- Mevcut sidebar bileşeni yerinde korunacak, flyout overlay olarak eklenerek genişletilecek
+- İki panelli layout: Sol = kategori listesi, Sağ = flyout içeriği
+- Flyout paneli `position: absolute` veya `fixed`, z-index uygun şekilde ayarlanmış
+- Sol panel öğeleri: ikon + kategori adı + sağ ok (→)
+- Sağ flyout paneli: alt kategori grid (2–3 sütun), isteğe bağlı "Featured" bölümü
+- Hover durumu için aktif kategori öğesinde `is-active` sınıfı
+- CSS değişkenleri `--flyout-*` prefix ile `src/style.css`'e eklenecek
+- Tailwind utility class'ları + özel CSS karışımı kullanılacak
+- Flyout varsayılan olarak gizli (`opacity-0`, `pointer-events-none`), hover'da görünür
+
+**CSS Değişkenleri:**
+```
+--flyout-bg: #ffffff
+--flyout-border: #e5e5e5
+--flyout-shadow: 0 8px 24px rgba(0,0,0,0.12)
+--flyout-item-hover-bg: #fafafa
+--flyout-item-color: #374151
+--flyout-item-hover-color: #cc9900
+--flyout-heading-color: #111827
+--flyout-featured-bg: #fffbeb
+```
+
+**Bileşen Dosyası:** `src/components/suppliers/CategoryFlyout.ts` (yeni dosya)
+
+---
+
+#### Task #7 — [LOGIC] Hover Event Logic
+
+**Sorumlu:** Logic Engineer
+**Bağımlılık:** Task #5 ve Task #6 tamamlanmış olmalı
+
+**Kabul Kriterleri:**
+- `initCategoryFlyout()` fonksiyonu export edilecek
+- Her kategori öğesine `mouseenter` / `mouseleave` event listener eklenecek
+- 150ms gecikme (debounce) uygulanacak — kasıtsız hover geçişlerini önlemek için
+- Aktif kategori değiştiğinde flyout içeriği güncellenecek (kategori verisi `categories.ts`'ten çekilecek)
+- Flyout içeriği dinamik olarak render edilecek (innerHTML veya DOM manipulation)
+- Fare flyout paneline geçtiğinde menü açık kalacak (fare panelden çıkınca kapanacak)
+- Erişilebilirlik: keyboard navigation için `focusin`/`focusout` desteği (isteğe bağlı, bonus)
+
+**Event Akışı:**
+```
+mouseenter(kategori) → 150ms gecikme → flyout içeriğini güncelle → flyout'u göster
+mouseleave(sol panel) → flyout'u gizle (flyout panel üzerindeyse iptal et)
+mouseenter(flyout) → gizleme işlemini iptal et
+mouseleave(flyout) → flyout'u gizle
+```
+
+---
+
+#### Task #8 — [QA] Final Review
+
+**Sorumlu:** QA Engineer
+**Bağımlılık:** Task #5, #6, #7 tamamlanmış olmalı
+
+**Kabul Kriterleri:**
+- Tüm ana kategorilerde hover flyout açılıyor ve doğru alt kategoriler gösteriliyor
+- Hızlı hover geçişlerinde (debounce) istenmeyen flickering yok
+- Flyout panel üzerinde fare tutunca menü kapanmıyor
+- Sol panelin tamamen dışına çıkıldığında flyout kapanıyor
+- Aktif kategori öğesi görsel olarak vurgulanıyor (is-active sınıfı)
+- CSS değişkenleri doğru uygulanıyor, renk teması tutarlı
+- Mobil/tablet breakpoint'lerde geri dönüş davranışı var (flyout devre dışı, accordion veya static liste)
+- TypeScript derleme hatası yok (`npm run build` temiz geçiyor)
+- Mevcut tedarikçiler sayfası bileşenleri bozulmamış
+
+---
+
+### 16.4 Dosya Değişiklikleri
+
+| Dosya | İşlem | Sorumlu | Açıklama |
+|-------|--------|---------|----------|
+| `src/data/categories.ts` | Oluşturulacak | LOGIC | Türkçe kategori veri yapısı ve mock data |
+| `src/components/suppliers/CategoryFlyout.ts` | Oluşturulacak | FRONTEND | Flyout HTML render + CSS değişkenleri |
+| `src/components/suppliers/index.ts` | Güncellenecek | FRONTEND | Barrel export ekleme |
+| `src/style.css` | Güncellenecek | FRONTEND | `--flyout-*` CSS değişkenleri (~30 satır) |
+| `src/suppliers.ts` veya ilgili sayfa TS | Güncellenecek | LOGIC | `initCategoryFlyout()` import + çağrı |
+
+---
+
+### 16.5 Risk Değerlendirmesi
+
+**Risk: Düşük-Orta.**
+
+Temel riskler:
+1. **Hover gecikmesi yönetimi** — Çok kısa gecikme: flickering; çok uzun: yavaş his. 150ms optimum başlangıç noktası.
+2. **Flyout-panel fare çıkışı koordinasyonu** — `mouseleave` olayının yanlış tetiklenmesi flyout'u erken kapatabilir. Her iki panel için ayrı listener yönetimi gerekli.
+3. **Mobil uyumluluk** — Hover, mobilde çalışmaz. Mobil için alternatif (accordion veya sayfa yönlendirmesi) planlanmalı.
+
+**Azaltma:**
+- Timer ID değişkeni ile gecikme yönetimi (`let hoverTimer: ReturnType<typeof setTimeout>`)
+- Her iki panel için `mouseenter`/`mouseleave` dinleyicisi, timer iptal mekanizmasıyla
+- CSS `@media (hover: none)` ile mobil geri dönüş stili
+
 **Rollback:** Restore `ProductReviews.ts` from Phase C state, delete `ReviewsModal.ts` and `LoginModal.ts`, remove Phase E CSS block

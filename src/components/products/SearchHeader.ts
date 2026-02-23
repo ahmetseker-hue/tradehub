@@ -47,7 +47,7 @@ function formatNumber(num: number): string {
  */
 function renderFreeShippingBanner(): string {
   return `
-    <div class="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+    <div class="flex items-center gap-2 px-3 py-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
       <svg class="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.029-.504 1.029-1.125a3.75 3.75 0 0 0-3.75-3.75H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
       </svg>
@@ -70,7 +70,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
         id="search-header-sort-btn"
         type="button"
         data-dropdown-toggle="search-header-sort-dropdown"
-        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
         aria-haspopup="listbox"
         aria-expanded="false"
       >
@@ -84,7 +84,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
       <!-- Sorting Dropdown -->
       <div
         id="search-header-sort-dropdown"
-        class="hidden absolute right-0 z-10 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-700"
+        class="hidden absolute right-0 z-10 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-700"
         role="listbox"
         aria-labelledby="search-header-sort-btn"
       >
@@ -120,7 +120,7 @@ function renderSortingDropdown(options: SortOption[], selectedValue: string): st
  */
 function renderViewModeToggle(currentMode: ViewMode = 'grid'): string {
   return `
-    <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden dark:border-gray-600">
+    <div class="flex items-center border border-gray-300 rounded-md overflow-hidden dark:border-gray-600">
       <button
         type="button"
         data-view-mode="grid"
@@ -161,7 +161,7 @@ function renderMobileFilterToggle(): string {
       id="mobile-filter-toggle"
       data-drawer-target="filter-sidebar-drawer"
       data-drawer-toggle="filter-sidebar-drawer"
-      class="lg:hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
+      class="lg:hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-700 transition-colors"
       aria-label="Open filters"
     >
       <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

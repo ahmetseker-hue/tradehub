@@ -236,7 +236,6 @@ function renderProductCard(card: ProductCard, index: number): string {
 
   return `
     <a
-      class="hFR19 recommend-aplus-auto-log gUOgO B5Gxa"
       href="${card.href}"
       target="_blank"
       role="listitem"
@@ -246,46 +245,72 @@ function renderProductCard(card: ProductCard, index: number): string {
       scenename="just_for_you"
       aria-label="${safeName}"
     >
-      <div class="uE82p">
-        <div class="rcEIR gT6Yt">
-          <img
-            class="kRa33"
-            src="${safeImage}"
-            alt="${safeName}"
-            loading="lazy"
-            decoding="async"
-            referrerpolicy="no-referrer"
-            onerror="this.onerror=null;this.src='${fallbackByKind[card.imageKind]}'"
-          />
-        </div>
-        <div class="searchx-find-similar__wrapper ya497">
-          <div class="searchx-find-similar searchx-find-similar__icon theme-float" role="button" aria-label="Find similar items" tabindex="0">
-            <img class="searchx-find-similar-icon searchx-find-similar__img" src="${FIND_SIMILAR_ICON_SRC}" alt="Find similar icon" aria-hidden="true" loading="lazy" />
-          </div>
+      <!-- Image area -->
+      <div class="relative aspect-square w-full flex-shrink-0">
+        ${renderProductPlaceholder(card.imageKind)}
+
+        <!-- Camera / image-search icon overlay (top-left) -->
+        <div
+          class="absolute top-2 left-2 z-10 flex h-6 w-6 items-center justify-center rounded-full opacity-60 transition-opacity group-hover/product:opacity-100"
+          style="background: rgba(0,0,0,0.4); color: #ffffff;"
+          aria-hidden="true"
+        >
+          ${cameraSearchIcon()}
         </div>
       </div>
-      <div class="sZpNS">
-        <div class="th-hfr19-stack">
-          <div class="u1SHv Cye1T">
-            <div class="iyDLA" style="--lines: 3;">
-              <span title="${safeName}">${safeName}</span>
-            </div>
+
+      <!-- Content area -->
+      <div class="flex flex-1 flex-col" style="padding: var(--product-card-padding, 12px);">
+        <!-- Product title (2 lines max) -->
+        <h3
+          class="leading-[1.35] line-clamp-2"
+          style="color: var(--product-title-color, #111827); font-size: var(--product-title-size, 13px); font-weight: var(--product-title-weight, 500); height: 2.7em;"
+          title="${card.name}"
+        >${card.name}</h3>
+
+        <!-- Promo badge row (fixed height -- reserves space even without badge) -->
+        <div class="mt-1.5" style="height: 16px;">
+          ${card.promo ? `
+          <div
+            class="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 font-semibold leading-none"
+            style="background: var(--product-badge-bg, #FFF3E0); color: var(--product-badge-text, #e65100); font-size: var(--product-badge-size, 10px); border-radius: var(--product-badge-radius, 2px);"
+          >
+            ${lightningIcon()}
+            <span>${card.promo}</span>
           </div>
-          <div class="th-hfr19-stack-compact">
-            ${card.promoText ? `<div class="th-hfr19-promo">\u2193 ${escapeHtml(card.promoText)}</div>` : ''}
-            <div class="XBlq6 e9DGa">
-              <div class="R3Kcz eg6xk">${safePrice}</div>
-            </div>
-            <div class="iyDLA yUble" style="--lines: 1;">
-              <div class="hVMAV z5oZw"><bdi>${safeMoq}</bdi></div>
-              <span class="mHuc8" title="${safeStats}">${safeStats}</span>
-            </div>
-            <div class="YpiVg">
-              ${card.verified ? `<img class="pUkGn" src="${VERIFIED_BADGE_SRC}" alt="gold supplier" referrerpolicy="strict-origin-when-cross-origin" />` : ''}
-              ${years ? `<span class="wELvB">${years}</span>` : ''}
-              ${safeCountry ? `<span class="wELvB">${safeCountry}</span>` : ''}
-            </div>
+          ` : ''}
+        </div>
+
+        <!-- Price -->
+        <p
+          class="mt-2 leading-none"
+          style="color: var(--product-price-color, #111827); font-size: var(--product-price-size, 16px); font-weight: var(--product-price-weight, 700);"
+        >${card.price}</p>
+
+        <!-- MOQ + stats -->
+        <p
+          class="mt-1.5 leading-none"
+          style="color: var(--product-moq-color, #6b7280); font-size: var(--product-moq-size, 11px);"
+        >MOQ: ${card.moq} &nbsp; ${card.stats}</p>
+
+        <!-- Verified / supplier row (pinned to bottom, fixed height) -->
+        <div class="mt-auto pt-2" style="height: 18px;">
+          ${card.verified ? `
+          <div
+            class="inline-flex w-fit items-center gap-1 font-medium leading-none"
+            style="color: var(--product-verified-color, #cc9900); font-size: var(--product-verified-size, 11px);"
+          >
+            ${verifiedIcon()}
+            <span>Verified</span>
+            ${card.supplierYears ? `<span class="opacity-60">&middot;</span><span>${card.supplierYears} yrs</span>` : ''}
+            ${card.supplierCountry ? `<span class="opacity-60">&middot;</span><span>${card.supplierCountry}</span>` : ''}
           </div>
+          ` : card.supplierYears ? `
+          <p
+            class="leading-none"
+            style="color: var(--product-supplier-color, #9ca3af); font-size: var(--product-supplier-size, 10px);"
+          >${card.supplierYears} yrs${card.supplierCountry ? ` &middot; ${card.supplierCountry}` : ''}</p>
+          ` : ''}
         </div>
       </div>
     </a>
@@ -293,7 +318,7 @@ function renderProductCard(card: ProductCard, index: number): string {
 }
 
 /** No-op — ProductGrid uses CSS grid, no JS initialization needed. */
-export function initProductGrid(): void {}
+export function initProductGrid(): void { }
 
 export function ProductGrid(): string {
   return `

@@ -32,7 +32,7 @@ export function SupplierCard(): string {
     <div class="th-card flex flex-col gap-4" style="background: var(--pd-supplier-card-bg, #ffffff);">
       <!-- Company Name -->
       <div class="flex items-start gap-2">
-        <div class="h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background: var(--pd-price-tier-active-bg, #fef9e7);">
+        <div class="h-10 w-10 rounded-md flex items-center justify-center flex-shrink-0" style="background: var(--pd-price-tier-active-bg, #fef9e7);">
           <svg class="h-5 w-5" style="color: var(--pd-supplier-verified-color, #cc9900);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
           </svg>

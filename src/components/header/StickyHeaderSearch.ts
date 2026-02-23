@@ -62,7 +62,7 @@ export function initStickyHeaderSearch(): void {
     compactDropdown.setAttribute('aria-hidden', 'false');
 
     compactSearch.classList.remove('rounded-full');
-    compactSearch.classList.add('rounded-3xl', 'shadow-md', 'pt-0.5');
+    compactSearch.classList.add('rounded-md', 'shadow-md', 'pt-0.5');
     compactInput.classList.add('text-base', 'py-2.5');
     compactInput.classList.add('pr-12');
     compactSubmit.classList.remove('px-4', 'py-1.5', 'text-sm');
@@ -100,7 +100,7 @@ export function initStickyHeaderSearch(): void {
     compactInput.setAttribute('aria-expanded', 'false');
     compactDropdown.setAttribute('aria-hidden', 'true');
 
-    compactSearch.classList.remove('rounded-3xl', 'shadow-md', 'pt-0.5');
+    compactSearch.classList.remove('rounded-md', 'shadow-md', 'pt-0.5');
     compactSearch.classList.add('rounded-full');
     compactInput.classList.remove('text-base', 'py-2.5');
     compactInput.classList.remove('pr-12');

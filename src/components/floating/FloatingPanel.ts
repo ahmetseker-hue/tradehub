@@ -29,7 +29,7 @@ function renderChatButton(): string {
         ${messageCount}
       </span>
     </button>
-    <div id="tooltip-chat" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    <div id="tooltip-chat" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-md shadow-sm opacity-0 tooltip dark:bg-gray-700">
       Chat Support
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
@@ -55,7 +55,7 @@ function renderLensButton(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
       </svg>
     </button>
-    <div id="tooltip-lens" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    <div id="tooltip-lens" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-md shadow-sm opacity-0 tooltip dark:bg-gray-700">
       Search by Image
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
@@ -80,7 +80,7 @@ function renderScrollToTopButton(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
       </svg>
     </button>
-    <div id="tooltip-scroll-top" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    <div id="tooltip-scroll-top" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-md shadow-sm opacity-0 tooltip dark:bg-gray-700">
       Back to Top
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
@@ -197,7 +197,7 @@ function openChatDrawer(): void {
       <button
         id="chat-drawer-close-btn"
         type="button"
-        class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
+        class="flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
         aria-label="Close chat"
       >
         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -280,7 +280,7 @@ function openLensModal(): void {
   // Create modal
   const modal = document.createElement('div');
   modal.id = 'lens-modal';
-  modal.className = 'relative z-[var(--z-toast)] w-full max-w-md mx-4 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl transition-all duration-300 scale-95 opacity-0';
+  modal.className = 'relative z-[var(--z-toast)] w-full max-w-md mx-4 bg-white dark:bg-gray-800 rounded-md shadow-2xl transition-all duration-300 scale-95 opacity-0';
   modal.setAttribute('role', 'dialog');
   modal.setAttribute('aria-modal', 'true');
   modal.setAttribute('aria-label', 'Search by Image');
@@ -292,7 +292,7 @@ function openLensModal(): void {
       <button
         id="lens-modal-close-btn"
         type="button"
-        class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
+        class="flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
         aria-label="Close modal"
       >
         <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -304,7 +304,7 @@ function openLensModal(): void {
     <div class="p-6">
       <div
         id="lens-drop-zone"
-        class="flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-colors"
+        class="flex flex-col items-center justify-center gap-3 p-8 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-md cursor-pointer hover:border-primary-400 hover:bg-primary-50/50 dark:hover:border-primary-500 dark:hover:bg-primary-900/10 transition-colors"
         role="button"
         tabindex="0"
         aria-label="Click to upload an image or drag and drop"

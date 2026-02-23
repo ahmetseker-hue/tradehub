@@ -19,7 +19,7 @@ export function ThemeEditorPanel(): string {
     <button
       type="button"
       id="theme-editor-trigger"
-      class="fixed top-1/2 right-0 -translate-y-1/2 z-[var(--z-sidebar)] flex items-center justify-center w-10 h-24 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-l-lg shadow-lg border border-r-0 border-gray-200 dark:border-gray-600 transition-all duration-200 hover:w-12 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
+      class="fixed top-1/2 right-0 -translate-y-1/2 z-[var(--z-sidebar)] flex items-center justify-center w-10 h-24 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-l-md shadow-lg border border-r-0 border-gray-200 dark:border-gray-600 transition-all duration-200 hover:w-12 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
       aria-label="Open theme editor"
       data-tooltip-target="tooltip-theme-editor"
       data-tooltip-placement="left"
@@ -29,7 +29,7 @@ export function ThemeEditorPanel(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
       </svg>
     </button>
-    <div id="tooltip-theme-editor" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+    <div id="tooltip-theme-editor" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-md shadow-sm opacity-0 tooltip dark:bg-gray-700">
       Customize Theme
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
@@ -75,7 +75,7 @@ function renderThemeSection(id: string, title: string, collapsed: boolean, token
   const contentVisibility = collapsed ? 'hidden' : '';
 
   return `
-    <div class="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-900 overflow-hidden">
+    <div class="border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 overflow-hidden">
       <button
         type="button"
         class="theme-accordion-btn w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
@@ -161,7 +161,7 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
           aria-valuemax="${token.max}"
           aria-valuenow="${value}"
           aria-valuetext="${displayValue}"
-          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500 dark:bg-gray-700"
+          class="w-full h-2 bg-gray-200 rounded-md appearance-none cursor-pointer accent-primary-500 dark:bg-gray-700"
         />
       </div>
     `;
@@ -177,7 +177,7 @@ function renderTokenControl(sectionId: string, index: number, token: TokenContro
           data-var="${token.var}"
           aria-label="${label} font selector"
           aria-describedby="${controlId}-preview"
-          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-400 focus:outline-none cursor-pointer transition-colors"
+          class="w-full text-sm border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:border-primary-500 focus:ring-2 focus:ring-primary-400 focus:outline-none cursor-pointer transition-colors"
         >
           ${options}
         </select>
@@ -243,7 +243,7 @@ function openThemeEditorDrawer(): void {
         <button
           id="theme-editor-minimize-btn"
           type="button"
-          class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
+          class="flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
           aria-label="Minimize theme editor"
           title="Minimize"
         >
@@ -255,7 +255,7 @@ function openThemeEditorDrawer(): void {
         <button
           id="theme-editor-close-btn"
           type="button"
-          class="flex items-center justify-center w-9 h-9 rounded-lg text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
+          class="flex items-center justify-center w-9 h-9 rounded-md text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
           aria-label="Close theme editor"
           title="Close"
         >
@@ -278,7 +278,7 @@ function openThemeEditorDrawer(): void {
         <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3" id="theme-presets-label">Theme Presets</h3>
         <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="theme-presets-label">
           ${themePresets.map((preset, i) => `
-            <button type="button" class="theme-preset-btn px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 active:scale-95 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary-400" data-preset-index="${i}" aria-label="Apply ${preset.name} theme preset" title="${preset.description}">
+            <button type="button" class="theme-preset-btn px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 active:scale-95 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-primary-400" data-preset-index="${i}" aria-label="Apply ${preset.name} theme preset" title="${preset.description}">
               <span class="mr-1">${preset.icon}</span>${preset.name}
             </button>
           `).join('')}
@@ -314,7 +314,7 @@ function openThemeEditorDrawer(): void {
         <button
           type="button"
           id="theme-reset-all-btn"
-          class="px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-red-400"
+          class="px-4 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-red-400"
           title="Reset all theme customizations to default"
         >
           <span class="flex items-center justify-center gap-2">
@@ -327,7 +327,7 @@ function openThemeEditorDrawer(): void {
         <button
           type="button"
           id="theme-save-css-btn"
-          class="flex-1 px-4 py-2.5 text-sm font-medium text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 shadow-sm"
+          class="flex-1 px-4 py-2.5 text-sm font-medium text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400 shadow-sm"
           style="background: linear-gradient(135deg, #f5a623, #e8740c)"
           title="Save changes permanently to style.css (dev server only)"
         >
@@ -341,7 +341,7 @@ function openThemeEditorDrawer(): void {
         <button
           type="button"
           id="theme-export-btn"
-          class="px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
+          class="px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-primary-400"
           title="Download theme as CSS file"
         >
           <span class="flex items-center justify-center gap-2">

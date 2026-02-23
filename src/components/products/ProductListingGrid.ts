@@ -377,7 +377,7 @@ function renderProductListingCard(card: ProductListingCard): string {
         <!-- Action button -->
         <div class="mt-2 flex gap-2">
           <button type="button"
-                  class="flex-1 py-2 text-[12px] font-medium rounded-lg text-white bg-orange-500 hover:bg-orange-600 transition-colors"
+                  class="flex-1 py-2 text-[12px] font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 transition-colors"
                   data-add-to-cart="${card.id}">
             Sepete Ekle
           </button>
@@ -414,7 +414,7 @@ function renderNoResults(): string {
       </p>
       <button
         type="button"
-        class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-lg transition-colors"
+        class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 rounded-md transition-colors"
         data-filter-action="clear-all"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

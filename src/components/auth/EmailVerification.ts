@@ -122,7 +122,7 @@ function renderOTPInputs(): string {
         id="otp-input-${i}"
         data-otp-index="${i}"
         class="otp-input w-12 h-14 sm:w-14 sm:h-16 text-center text-xl sm:text-2xl font-bold
-               rounded-xl border-2 border-gray-200 dark:border-gray-600
+               rounded-md border-2 border-gray-200 dark:border-gray-600
                bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                focus:border-orange-500 dark:focus:border-orange-400 focus:ring-2 focus:ring-orange-500/20
                transition-all duration-200 outline-none

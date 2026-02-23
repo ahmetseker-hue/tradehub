@@ -196,7 +196,7 @@ function renderPlaceholderVisual(kind: RecommendationImageKind): string {
   const visual = recommendationVisuals[kind];
 
   return `
-    <div class="relative h-full w-full overflow-hidden rounded-xl" style="background: ${visual.background};" aria-hidden="true">
+    <div class="relative h-full w-full overflow-hidden rounded-md" style="background: ${visual.background};" aria-hidden="true">
       <div class="absolute -right-8 -top-8 h-20 w-20 rounded-full opacity-60" style="background: ${visual.accent};"></div>
       <div class="absolute -left-5 bottom-0 h-16 w-16 rounded-full opacity-55" style="background: ${visual.accent};"></div>
       <div class="absolute inset-0 flex items-center justify-center">

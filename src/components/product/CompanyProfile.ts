@@ -98,7 +98,7 @@ export function CompanyProfile(): string {
         <h3 class="pd-section-heading">Sertifikalar</h3>
         <div class="flex flex-wrap gap-3">
           ${s.certifications.map(cert => `
-            <div class="flex items-center gap-2 px-4 py-3 rounded-lg" style="border: 1px solid var(--pd-spec-border, #e5e5e5);">
+            <div class="flex items-center gap-2 px-4 py-3 rounded-md" style="border: 1px solid var(--pd-spec-border, #e5e5e5);">
               <svg class="h-5 w-5" style="color: var(--pd-trade-assurance-text, #15803d);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
               </svg>

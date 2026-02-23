@@ -96,7 +96,7 @@ function renderRelatedSlide(card: RelatedProduct): string {
     <div class="swiper-slide">
       <a
         href="${card.href}"
-        class="group/related flex flex-col h-full border rounded-lg overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+        class="group/related flex flex-col h-full border rounded-md overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
         style="background: var(--card-bg, #ffffff); border-color: var(--card-border-color, #e5e5e5);"
         aria-label="${card.name}"
       >

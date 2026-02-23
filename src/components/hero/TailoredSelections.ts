@@ -216,7 +216,7 @@ function renderCollectionSlide(collection: TailoredCollection): string {
     <div class="swiper-slide tailored-slide">
       <a
         href="${collection.href}"
-        class="group/col flex flex-col h-full rounded-xl overflow-hidden"
+        class="group/col flex flex-col h-full rounded-md overflow-hidden"
         style="background: var(--tailored-card-bg, #ffffff); padding: 16px;"
         aria-label="${collection.title}"
       >
@@ -293,7 +293,7 @@ export function TailoredSelections(): string {
   return `
     <section class="py-4 lg:py-6" aria-label="Tailored Selections" style="margin-top: 28px;">
       <div class="container-boxed">
-        <div class="rounded-2xl" style="background-color: var(--tailored-bg, #F5F5F5); padding: 20px 16px;">
+        <div class="rounded-md" style="background-color: var(--tailored-bg, #F5F5F5); padding: 20px 16px;">
           <!-- Section header -->
           <div class="mb-4 flex items-end justify-between gap-4">
             <div>

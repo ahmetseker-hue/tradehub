@@ -474,7 +474,7 @@ function renderHelpCenterView(): string {
       <div class="flex flex-col md:flex-row gap-6 md:gap-8">
         <!-- Left: Two cards -->
         <div class="flex gap-6 flex-1">
-          <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-lg p-8 transition-all group" style="border-color:var(--mega-border-color)">
+          <a href="/help/buyers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-md p-8 transition-all group" style="border-color:var(--mega-border-color)">
             <span class="flex items-center justify-center w-14 h-14 rounded-full transition-colors" style="background-color:var(--mega-icon-bg)">
               <svg class="w-7 h-7 transition-colors" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"/>
@@ -482,7 +482,7 @@ function renderHelpCenterView(): string {
             </span>
             <span class="text-sm font-semibold transition-colors" style="color:var(--mega-heading-color)">For buyers</span>
           </a>
-          <a href="/help/suppliers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-lg p-8 transition-all group" style="border-color:var(--mega-border-color)">
+          <a href="/help/suppliers" class="flex-1 flex flex-col items-center justify-center gap-4 border border-dashed rounded-md p-8 transition-all group" style="border-color:var(--mega-border-color)">
             <span class="flex items-center justify-center w-14 h-14 rounded-full transition-colors" style="background-color:var(--mega-icon-bg)">
               <svg class="w-7 h-7 transition-colors" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016c.896 0 1.7-.393 2.25-1.015a3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72M6.75 18h3.75a.75.75 0 0 0 .75-.75V13.5a.75.75 0 0 0-.75-.75H6.75a.75.75 0 0 0-.75.75v3.75c0 .414.336.75.75.75Z"/>
@@ -531,14 +531,14 @@ function renderAppExtensionView(): string {
           <div class="flex items-center gap-5">
             <!-- App badges -->
             <div class="flex flex-col gap-2.5">
-              <a href="/app/ios" class="inline-flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-800 transition-colors">
+              <a href="/app/ios" class="inline-flex items-center gap-2 bg-black text-white rounded-md px-4 py-2 hover:bg-gray-800 transition-colors">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11Z"/></svg>
                 <div class="flex flex-col">
                   <span class="text-[10px] leading-none opacity-80">Download on the</span>
                   <span class="text-sm font-semibold leading-tight">App Store</span>
                 </div>
               </a>
-              <a href="/app/android" class="inline-flex items-center gap-2 bg-black text-white rounded-lg px-4 py-2 hover:bg-gray-800 transition-colors">
+              <a href="/app/android" class="inline-flex items-center gap-2 bg-black text-white rounded-md px-4 py-2 hover:bg-gray-800 transition-colors">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="m3.18 23.96.02.02c.04-.06.06-.12.09-.19l4.58-9.81a.3.3 0 0 0-.13-.39L.56 9.42a.3.3 0 0 0-.41.13L.02 9.8A11.94 11.94 0 0 0 0 12.09c0 4.5 2.04 7.6 3.18 11.87Z"/><path d="m8.44 12.96-.37.79-4.58 9.81c-.02.05-.04.11-.07.16l.02.02c3.71-2.2 13.08-7.74 22.54-13.25a.1.1 0 0 0 .02-.17l-4.09-3.55a.3.3 0 0 0-.33-.04l-13.14 6.23Z"/><path d="M8.07 11.03 21.21 4.8a.3.3 0 0 0 .05-.51L17.54 1.3a.3.3 0 0 0-.27-.05L3.4.01A.3.3 0 0 0 3.12.2l-.1.2a.3.3 0 0 0 .05.31l4.66 4.69.12.13.21.24 4.59 4.87a.3.3 0 0 1-.58.39Z"/></svg>
                 <div class="flex flex-col">
                   <span class="text-[10px] leading-none opacity-80">GET IT ON</span>
@@ -547,7 +547,7 @@ function renderAppExtensionView(): string {
               </a>
             </div>
             <!-- QR Code placeholder -->
-            <div class="w-24 h-24 rounded-lg border flex items-center justify-center" style="background-color:var(--mega-icon-bg);border-color:var(--mega-border-color)">
+            <div class="w-24 h-24 rounded-md border flex items-center justify-center" style="background-color:var(--mega-icon-bg);border-color:var(--mega-border-color)">
               <svg class="w-10 h-10" style="color:var(--mega-icon-color)" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z"/>

@@ -127,7 +127,7 @@ function renderCompactStickySearch(): string {
       <div
         id="topbar-compact-dropdown"
         aria-hidden="true"
-        class="hidden absolute left-0 right-0 z-[var(--z-modal)] rounded-3xl border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
+        class="hidden absolute left-0 right-0 z-[var(--z-modal)] rounded-md border border-gray-200 bg-white px-5 py-4 shadow-xl dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="flex items-center justify-between gap-4">
           <h3 class="text-lg font-bold text-gray-900 dark:text-white">Recommended for you</h3>
@@ -163,9 +163,9 @@ function renderCompactStickySearch(): string {
         </div>
 
         <div class="mt-3 grid grid-cols-1 gap-2 lg:grid-cols-3">
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Watch for Men" class="inline-flex items-center gap-1.5 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Watch for Men</span></button>
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Surron Light Bee X" class="inline-flex items-center gap-1.5 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Surron Light Bee X</span></button>
-          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Human Hair Wigs" class="inline-flex items-center gap-1.5 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Human Hair Wigs</span></button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Watch for Men" class="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Watch for Men</span></button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Surron Light Bee X" class="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Surron Light Bee X</span></button>
+          <button type="button" tabindex="-1" data-compact-expanded-interactive="true" data-search-value="Human Hair Wigs" class="inline-flex items-center gap-1.5 rounded-md border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"><span class="text-primary-500">&#10022;</span><span>Human Hair Wigs</span></button>
         </div>
       </div>
     </div>
@@ -191,7 +191,7 @@ function renderCountrySelector(): string {
 
     <!-- Deliver To Popover -->
     <div data-popover id="popover-deliver-to" role="tooltip"
-      class="absolute z-50 invisible inline-block w-80 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 invisible inline-block w-80 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
         <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1">Specify your location</h3>
@@ -211,7 +211,7 @@ function renderCountrySelector(): string {
 
         <!-- Country Select -->
         <div class="mb-3">
-          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${countryOptions.map(country => `
               <option value="${country.code}">${country.flag} ${country.name}</option>
             `).join('')}
@@ -223,7 +223,7 @@ function renderCountrySelector(): string {
           <input
             type="text"
             placeholder="Enter ZIP or postal code"
-            class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+            class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
           />
         </div>
 
@@ -257,7 +257,7 @@ function renderLanguageCurrencySelector(): string {
 
     <!-- Language & Currency Popover -->
     <div data-popover id="popover-language-currency" role="tooltip"
-      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
         <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1">Set language and currency</h3>
@@ -266,7 +266,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Language Select -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Language</label>
-          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${languageOptions.map(lang => `
               <option value="${lang.code}">${lang.name}</option>
             `).join('')}
@@ -276,7 +276,7 @@ function renderLanguageCurrencySelector(): string {
         <!-- Currency Select -->
         <div class="mb-5">
           <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2">Currency</label>
-          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+          <select class="th-input w-full px-3 py-2.5 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
             ${currencyOptions.map(currency => `
               <option value="${currency.code}">${currency.code} - ${currency.name}</option>
             `).join('')}
@@ -313,7 +313,7 @@ function renderMessagesButton(): string {
 
     <!-- Messages Popover -->
     <div data-popover id="popover-messages" role="tooltip"
-      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
         <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Messages</h3>
@@ -385,7 +385,7 @@ function renderOrdersButton(): string {
 
     <!-- Orders Popover -->
     <div data-popover id="popover-orders" role="tooltip"
-      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5">
         <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Orders</h3>
@@ -473,7 +473,7 @@ function renderCartButton(itemCount: number = 0): string {
 
     <!-- Cart Popover -->
     <div data-popover id="popover-cart" role="tooltip"
-      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-xl shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
+      class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
       <div class="p-5" id="header-cart-body">
         <h3 class="text-base font-bold text-gray-900 dark:text-white mb-3">Alışveriş Sepeti</h3>
@@ -520,7 +520,7 @@ function renderAuthButtons(): string {
     <div class="flex items-center gap-1 sm:gap-3">
       <a
         href="/login"
-        class="th-header-icon hidden sm:inline-flex px-3 py-2 text-sm font-medium rounded-lg hover:bg-gray-50 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
+        class="th-header-icon hidden sm:inline-flex px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 dark:text-gray-300 dark:hover:text-primary-400 dark:hover:bg-gray-800 transition-colors"
       >
         Sign In
       </a>
@@ -565,7 +565,7 @@ function renderMobileDrawer(): string {
               type="button"
               data-drawer-hide="mobile-menu-drawer"
               aria-controls="mobile-menu-drawer"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
             >
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
               <span class="sr-only">Close menu</span>
@@ -573,7 +573,7 @@ function renderMobileDrawer(): string {
           </div>
 
           <!-- Profile Section -->
-          <div class="mx-4 mt-2 rounded-lg bg-gray-50 dark:bg-gray-700 px-4 py-3 flex items-center gap-3">
+          <div class="mx-4 mt-2 rounded-md bg-gray-50 dark:bg-gray-700 px-4 py-3 flex items-center gap-3">
             <div class="w-10 h-10 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
               <svg class="w-5 h-5 text-gray-400 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -602,14 +602,14 @@ function renderMobileDrawer(): string {
               </svg>
             </button>
             <div id="drawer-account-panel" class="hidden pb-2 space-y-1">
-              <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+              <a href="/buyer/messages" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span>Messages</span>
                 <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--color-error-500);color:#fff">1</span>
               </a>
-              <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+              <a href="/buyer/orders" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span>Orders</span>
               </a>
-              <a href="/buyer/cart" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+              <a href="/buyer/cart" class="flex items-center gap-3 px-3 py-2.5 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
                 <span>Shopping Cart</span>
                 <span class="th-badge ml-auto flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-bold" style="background:var(--btn-bg);color:var(--btn-text)">3</span>
               </a>
@@ -623,7 +623,7 @@ function renderMobileDrawer(): string {
             <button
               id="drawer-open-categories"
               type="button"
-              class="flex items-center gap-3 w-full px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-left transition-colors"
+              class="flex items-center gap-3 w-full px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 text-left transition-colors"
             >
               <div class="flex-1 min-w-0">
                 <div class="flex items-center gap-2">
@@ -636,26 +636,26 @@ function renderMobileDrawer(): string {
             </button>
 
             <!-- Campaigns -->
-            <a href="/campaigns" class="block px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <a href="/campaigns" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               <span class="text-sm font-bold text-gray-900 dark:text-white">Campaigns</span>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Deals, discounts, campaigns</p>
             </a>
 
             <!-- Brands -->
-            <a href="/brands" class="block px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <a href="/brands" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               <span class="text-sm font-bold text-gray-900 dark:text-white">Brands</span>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Official registered brands on iSTOC</p>
             </a>
 
             <!-- Sellers -->
-            <a href="/sellers" class="block px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <a href="/sellers" class="block px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               <span class="text-sm font-bold text-gray-900 dark:text-white">Sellers</span>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Browse sellers on iSTOC marketplace</p>
             </a>
 
             <!-- iSTOC B2B Marketplace -->
-            <a href="/b2b" class="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-              <div class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+            <a href="/b2b" class="flex items-center gap-3 px-3 py-3 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <div class="w-10 h-10 rounded-md bg-gray-100 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
                 <span class="text-sm font-bold text-gray-700 dark:text-gray-200">iS</span>
               </div>
               <div class="flex-1 min-w-0">
@@ -689,7 +689,7 @@ function renderMobileDrawer(): string {
           <!-- Deliver to -->
           <div class="mx-4 mt-4 mb-6">
             <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Deliver to</label>
-            <select class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
+            <select class="w-full px-3 py-2 text-sm bg-white border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white appearance-none cursor-pointer">
               ${countryOptions.map(country => `
                 <option value="${country.code}">${country.flag} ${country.name}</option>
               `).join('')}
@@ -711,7 +711,7 @@ function renderMobileDrawer(): string {
               type="button"
               data-drawer-hide="mobile-menu-drawer"
               aria-controls="mobile-menu-drawer"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
             >
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
               <span class="sr-only">Close menu</span>
@@ -753,7 +753,7 @@ function renderMobileDrawer(): string {
               type="button"
               data-drawer-hide="mobile-menu-drawer"
               aria-controls="mobile-menu-drawer"
-              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm w-8 h-8 inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white"
             >
               <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/></svg>
               <span class="sr-only">Close menu</span>
@@ -942,7 +942,7 @@ export function TopBar(): string {
                 <input
                   type="text"
                   name="mobile-search"
-                  class="w-full h-10 px-3 text-sm text-gray-900 bg-white border-2 border-primary-400 border-r-0 rounded-l-xl focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-primary-600 dark:placeholder-gray-400 dark:text-white"
+                  class="w-full h-10 px-3 text-sm text-gray-900 bg-white border-2 border-primary-400 border-r-0 rounded-l-md focus:ring-1 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-primary-600 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Search products..."
                   autocomplete="off"
                   aria-label="Search products"
@@ -955,7 +955,7 @@ export function TopBar(): string {
                 </a>
                 <button
                   type="submit"
-                  class="flex items-center justify-center h-10 px-4 text-white rounded-r-xl transition-colors"
+                  class="flex items-center justify-center h-10 px-4 text-white rounded-r-md transition-colors"
                   style="background: linear-gradient(135deg, var(--search-btn-gradient-start) 0%, var(--search-btn-gradient-end) 100%);"
                   aria-label="Search"
                 >
@@ -1004,7 +1004,7 @@ export function TopBar(): string {
             <button
               data-drawer-target="mobile-menu-drawer"
               data-drawer-toggle="mobile-menu-drawer"
-              class="th-header-icon inline-flex items-center p-2 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+              class="th-header-icon inline-flex items-center p-2 rounded-md lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
               type="button"
               aria-controls="mobile-menu-drawer"
               aria-label="Open main menu"
@@ -1067,7 +1067,7 @@ export function initHeaderCart(): void {
           for (const item of group.items) {
             html += `
               <div class="flex items-center gap-3 py-1.5 border-b border-gray-100 dark:border-gray-700 last:border-0">
-                <div class="w-10 h-10 rounded-lg flex-shrink-0" style="background:${item.colorValue || '#e5e7eb'}"></div>
+                <div class="w-10 h-10 rounded-md flex-shrink-0" style="background:${item.colorValue || '#e5e7eb'}"></div>
                 <div class="flex-1 min-w-0">
                   <p class="text-[11px] text-gray-500 dark:text-gray-400 truncate">${item.label}</p>
                   <div class="flex items-center justify-between mt-0.5">
@@ -1092,8 +1092,8 @@ export function initHeaderCart(): void {
         if (items) {
           for (const ci of items) {
             const thumbHtml = ci.colorThumb
-              ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-lg object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">`
-              : `<div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:${ci.colorValue || '#e5e7eb'}"></div>`;
+              ? `<img src="${ci.colorThumb}" alt="${ci.colorLabel}" class="w-12 h-12 rounded-md object-cover border border-gray-200 dark:border-gray-600 flex-shrink-0">`
+              : `<div class="w-12 h-12 rounded-md flex-shrink-0" style="background:${ci.colorValue || '#e5e7eb'}"></div>`;
 
             for (const vi of ci.variants) {
               const desc = [vi.label, ci.colorLabel].filter(Boolean).join(', ');
@@ -1113,7 +1113,7 @@ export function initHeaderCart(): void {
         } else {
           html += `
             <div class="flex items-center gap-3 py-2">
-              <div class="w-12 h-12 rounded-lg flex-shrink-0" style="background:#e5e7eb"></div>
+              <div class="w-12 h-12 rounded-md flex-shrink-0" style="background:#e5e7eb"></div>
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between mt-0.5">
                   <span class="text-sm font-semibold text-gray-900 dark:text-white">$${unitPrice.toFixed(2)}</span>

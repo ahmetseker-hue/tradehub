@@ -14,7 +14,7 @@ import { FloatingPanel, initFloatingPanel } from './components/floating'
 import { initAnimatedPlaceholder } from './utils/animatedPlaceholder'
 
 // Manufacturers specific components
-import { ManufacturersLayout, initHorizontalCategoryBar } from './components/manufacturers'
+import { ManufacturersLayout, initHorizontalCategoryBar, initCategoryFlyout, initFactorySliders } from './components/manufacturers'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -63,3 +63,5 @@ initAnimatedPlaceholder('#topbar-compact-search-input');
 
 // Initialize Manufacturers specific behaviors if any
 initHorizontalCategoryBar();
+initCategoryFlyout();
+initFactorySliders();

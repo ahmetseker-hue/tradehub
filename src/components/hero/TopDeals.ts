@@ -189,7 +189,7 @@ const topDealVisuals: Record<TopDealImageKind, TopDealVisual> = {
 function renderDealPlaceholder(kind: TopDealImageKind): string {
   const visual = topDealVisuals[kind];
   return `
-    <div class="relative w-full h-full overflow-hidden rounded-xl" style="background: ${visual.background};" aria-hidden="true">
+    <div class="relative w-full h-full overflow-hidden rounded-md" style="background: ${visual.background};" aria-hidden="true">
       <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-60" style="background: ${visual.accent};"></div>
       <div class="absolute -left-3 bottom-0 h-10 w-10 rounded-full opacity-50" style="background: ${visual.accent};"></div>
       <div class="absolute inset-0 flex items-center justify-center">
@@ -309,7 +309,7 @@ export function TopDeals(): string {
   return `
     <section class="py-4 lg:py-6" aria-label="Top Deals" style="margin-top: 28px;">
       <div class="container-boxed">
-        <div class="rounded-2xl" style="background-color: var(--topdeals-bg, #F8F8F8); padding: 20px 16px;">
+        <div class="rounded-md" style="background-color: var(--topdeals-bg, #F8F8F8); padding: 20px 16px;">
         <!-- Section header -->
         <div class="mb-4 flex items-end justify-between gap-4">
           <div>

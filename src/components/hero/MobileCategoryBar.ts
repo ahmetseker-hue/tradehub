@@ -16,7 +16,7 @@ function renderBottomSheet(): string {
 
     <!-- Bottom Sheet Panel -->
     <div id="mcb-sheet-panel" class="fixed inset-x-0 bottom-0 z-[var(--z-modal)] transition-transform duration-300 ease-out lg:hidden" style="transform: translateY(100%)">
-      <div class="bg-white dark:bg-gray-800 rounded-t-2xl max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="bg-white dark:bg-gray-800 rounded-t-md max-h-[85vh] flex flex-col shadow-2xl">
         <!-- Drag Handle + Title (swipe-to-dismiss target) -->
         <div id="mcb-sheet-drag-handle" class="flex-shrink-0">
           <div class="flex items-center justify-center pt-3 pb-2">
@@ -108,7 +108,7 @@ export function MobileCategoryBar(): string {
 function renderMobileProduct(product: { name: string; href: string }): string {
   return `
     <a href="${product.href}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[60px]">
-      <div class="w-[60px] h-[60px] rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+      <div class="w-[60px] h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
         <svg class="w-6 h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/>
         </svg>
