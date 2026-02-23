@@ -7,7 +7,7 @@
 export { FilterSidebar, initFilterSidebar, getDefaultFilterSections } from './FilterSidebar';
 
 // ProductListingGrid component - responsive product grid with image slider
-export { ProductListingGrid, initProductListingGrid, initProductSliders, renderProductListingCard, renderNoResults, rerenderProductGrid } from './ProductListingGrid';
+export { ProductListingGrid, initProductListingGrid, initProductSliders, renderProductListingCard, renderNoResults, rerenderProductGrid, setGridViewMode } from './ProductListingGrid';
 
 // ListingCartDrawer - simplified cart drawer for products listing page
 export { ListingCartDrawer, initListingCartDrawer } from './ListingCartDrawer';

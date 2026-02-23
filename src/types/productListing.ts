@@ -46,6 +46,8 @@ export interface ProductListingCard {
   supplierName?: string;
   /** Reorder rate percentage, e.g. 16 */
   reorderRate?: number;
+  /** Selling point text, e.g. "5 günde sevkiyat" */
+  sellingPoint?: string;
 }
 
 /**

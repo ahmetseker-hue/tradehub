@@ -5,114 +5,69 @@
  * Uses CSS transitions for smooth 500ms zoom animation.
  */
 
-import type { ProductListingCard, ProductImageKind, ProductVisual } from '../../types/productListing';
+import type { ProductListingCard, ProductImageKind, ViewMode } from '../../types/productListing';
 import { mockProductListingCards } from '../../data/mockProductListing';
 
 /**
- * Product visual configurations for placeholder rendering
- * Consistent with ProductGrid.ts pattern
+ * Unsplash e-commerce product images per category
+ * Each category has 4-6 curated product photos for slider variety.
  */
-const productVisuals: Record<ProductImageKind, ProductVisual> = {
-  jewelry: {
-    background: 'linear-gradient(180deg, #fef9e7 0%, #fdf0c3 100%)',
-    accent: 'rgba(230, 178, 18, 0.3)',
-    stroke: '#8a6800',
-    icon: `
-      <path d="M12 2l2.5 5.5L20 9l-4 4 1 5.5L12 16l-5 2.5 1-5.5-4-4 5.5-1.5Z" />
-      <circle cx="12" cy="10" r="2" />
-    `,
-  },
-  electronics: {
-    background: 'linear-gradient(180deg, #eef2ff 0%, #dbeafe 100%)',
-    accent: 'rgba(129, 140, 248, 0.3)',
-    stroke: '#4f5fb3',
-    icon: `
-      <rect x="3" y="4" width="18" height="12" rx="2" />
-      <path d="M7 20h10M12 16v4" />
-      <circle cx="12" cy="10" r="2" />
-    `,
-  },
-  label: {
-    background: 'linear-gradient(180deg, #f0fdf4 0%, #dcfce7 100%)',
-    accent: 'rgba(74, 222, 128, 0.3)',
-    stroke: '#2d8a5e',
-    icon: `
-      <rect x="4" y="6" width="16" height="12" rx="1" />
-      <path d="M8 10h8M8 13h5" />
-      <circle cx="17" cy="6" r="1.5" />
-    `,
-  },
-  crafts: {
-    background: 'linear-gradient(180deg, #fdf4ff 0%, #fae8ff 100%)',
-    accent: 'rgba(192, 132, 252, 0.3)',
-    stroke: '#7e22ce',
-    icon: `
-      <path d="M12 2C8.5 2 6 4.5 6 7c0 3 6 8 6 8s6-5 6-8c0-2.5-2.5-5-6-5Z" />
-      <path d="M8 18h8M9 21h6" />
-    `,
-  },
-  accessory: {
-    background: 'linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%)',
-    accent: 'rgba(251, 146, 60, 0.3)',
-    stroke: '#b45309',
-    icon: `
-      <rect x="4" y="10" width="16" height="10" rx="2" />
-      <path d="M8 10V6a4 4 0 0 1 8 0v4" />
-      <path d="M4 14h16" />
-    `,
-  },
-  clothing: {
-    background: 'linear-gradient(180deg, #fdf2f8 0%, #fce7f3 100%)',
-    accent: 'rgba(244, 114, 182, 0.3)',
-    stroke: '#a3456e',
-    icon: `
-      <path d="M8 3h8l2 6v12H6V9l2-6Z" />
-      <path d="M12 3v8M8 3 6 9M16 3l2 6" />
-    `,
-  },
-  tools: {
-    background: 'linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%)',
-    accent: 'rgba(100, 116, 139, 0.3)',
-    stroke: '#475569',
-    icon: `
-      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z" />
-    `,
-  },
-  packaging: {
-    background: 'linear-gradient(180deg, #fef3c7 0%, #fde68a 100%)',
-    accent: 'rgba(251, 191, 36, 0.3)',
-    stroke: '#92700c',
-    icon: `
-      <path d="M21 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v3" />
-      <path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z" />
-      <path d="M10 12h4" />
-    `,
-  },
+const categoryImages: Record<ProductImageKind, string[]> = {
+  jewelry: [
+    'https://images.unsplash.com/photo-1515562141589-67f0d569b6f5?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=400&h=400&fit=crop&q=80',
+  ],
+  electronics: [
+    'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1546868871-af0de0ae72be?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop&q=80',
+  ],
+  label: [
+    'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1568702846914-96b305d2ead1?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1607082350899-7e105aa886ae?w=400&h=400&fit=crop&q=80',
+  ],
+  crafts: [
+    'https://images.unsplash.com/photo-1513364776144-60967b0f800c?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1452860606245-08f97f4c8657?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1596455607563-ad6193f76b17?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1595436810223-7dbab2f3bc56?w=400&h=400&fit=crop&q=80',
+  ],
+  accessory: [
+    'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1622560480654-d96214fddae9?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1473188588951-1003bbe4a275?w=400&h=400&fit=crop&q=80',
+  ],
+  clothing: [
+    'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1434389677669-e08b4cda3f96?w=400&h=400&fit=crop&q=80',
+  ],
+  tools: [
+    'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1581783898377-1c85bf937427?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1426927308491-6380b6a9936f?w=400&h=400&fit=crop&q=80',
+  ],
+  packaging: [
+    'https://images.unsplash.com/photo-1607082349566-187342175e2f?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=400&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1576867757603-05b134ebc379?w=400&h=400&fit=crop&q=80',
+  ],
 };
-
-/**
- * Render product placeholder image with visual styling
- */
-function renderProductPlaceholder(kind: ProductImageKind): string {
-  const visual = productVisuals[kind];
-  return `
-    <div class="relative w-full h-full overflow-hidden" style="background: ${visual.background};" aria-hidden="true">
-      <div class="absolute -right-4 -top-4 h-12 w-12 rounded-full opacity-50" style="background: ${visual.accent};"></div>
-      <div class="absolute -left-3 bottom-1 h-10 w-10 rounded-full opacity-40" style="background: ${visual.accent};"></div>
-      <div class="absolute inset-0 flex items-center justify-center">
-        <svg
-          class="h-14 w-14"
-          fill="none"
-          stroke-width="1.4"
-          viewBox="0 0 24 24"
-          style="stroke: ${visual.stroke};"
-        >
-          ${visual.icon}
-        </svg>
-      </div>
-    </div>
-  `;
-}
 
 /**
  * Camera search icon for image search overlay
@@ -122,28 +77,6 @@ function cameraSearchIcon(): string {
     <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
       <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
       <circle cx="12" cy="13" r="3" />
-    </svg>
-  `;
-}
-
-/**
- * Lightning icon for promo badges
- */
-function lightningIcon(): string {
-  return `
-    <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M9 1L3 9h4v6l6-8H9V1Z" />
-    </svg>
-  `;
-}
-
-/**
- * Verified supplier icon
- */
-function verifiedIcon(): string {
-  return `
-    <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-      <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
     </svg>
   `;
 }
@@ -160,11 +93,18 @@ function renderImageSlider(card: ProductListingCard): string {
   const images = card.images && card.images.length > 0 ? card.images : [card.imageKind];
   const hasMultiple = images.length > 1;
 
-  const slidesHtml = images.map(kind => `
-    <div class="w-full h-full flex-shrink-0">
-      ${renderProductPlaceholder(kind)}
-    </div>
-  `).join('');
+  // Use card ID hash for unique image offset per product
+  const idOffset = card.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+
+  const slidesHtml = images.map((kind, i) => {
+    const urls = categoryImages[kind];
+    const url = urls[(idOffset + i) % urls.length];
+    return `
+      <div class="w-full h-full flex-shrink-0">
+        <img src="${url}" alt="${card.name}" class="w-full h-full object-cover" loading="lazy" />
+      </div>
+    `;
+  }).join('');
 
   const arrowsHtml = hasMultiple ? `
     <!-- Prev arrow -->
@@ -227,39 +167,6 @@ function renderImageSlider(card: ProductListingCard): string {
 }
 
 /**
- * Render rating dots (1-5 filled/unfilled circles based on rating)
- */
-function renderRatingDots(rating?: number): string {
-  if (!rating) return '';
-  const full = Math.round(rating);
-  return Array.from({ length: 5 }, (_, i) =>
-    `<span class="inline-block w-1.5 h-1.5 rounded-full ${i < full ? 'bg-orange-400' : 'bg-gray-300'}"></span>`
-  ).join('');
-}
-
-/**
- * Green shield icon for "certified" badge
- */
-function certifiedShieldIcon(): string {
-  return `
-    <svg class="w-3.5 h-3.5 flex-shrink-0 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M10 1a.75.75 0 0 1 .65.376l1.544 2.672 2.891.87a.75.75 0 0 1 .34 1.236L13.4 8.476l.27 3.027a.75.75 0 0 1-1.025.764L10 11.2l-2.645 1.067a.75.75 0 0 1-1.025-.764l.27-3.027L4.575 6.154a.75.75 0 0 1 .34-1.236l2.89-.87L9.35 1.376A.75.75 0 0 1 10 1Z" clip-rule="evenodd" />
-    </svg>
-  `;
-}
-
-/**
- * Checkmark icon for reorder rate
- */
-function checkIcon(): string {
-  return `
-    <svg class="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-      <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 0 1 .143 1.052l-8 10.5a.75.75 0 0 1-1.127.075l-4.5-4.5a.75.75 0 0 1 1.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 0 1 1.05-.143Z" clip-rule="evenodd" />
-    </svg>
-  `;
-}
-
-/**
  * Country flag emoji lookup
  */
 function countryFlag(code?: string): string {
@@ -275,116 +182,118 @@ function countryFlag(code?: string): string {
 }
 
 /**
- * Render a single product card (Alibaba-style layout)
+ * Checkmark icon for selling point badge
+ */
+function checkIcon(): string {
+  return `
+    <svg class="searchx-selling-point-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <polyline points="20 6 9 17 4 12"/>
+    </svg>
+  `;
+}
+
+/**
+ * Star icon for supplier rating
+ */
+function starIcon(): string {
+  return `<svg style="width:12px;height:12px;flex-shrink:0;" viewBox="0 0 24 24" fill="#f59e0b" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>`;
+}
+
+/**
+ * Render a single product card (fy26 snapshot-matched design)
  */
 function renderProductListingCard(card: ProductListingCard): string {
-  // Promo row
-  let promoHtml = '<div class="mt-1" style="height: 16px;"></div>';
-  if (card.promo) {
-    promoHtml = `
-      <div class="mt-1 flex items-center gap-1" style="height: 16px;">
-        <span class="text-orange-500">${lightningIcon()}</span>
-        <span class="text-[11px] font-medium text-orange-600">${card.promo}</span>
-      </div>`;
-  } else if (card.reorderRate) {
-    promoHtml = `
-      <div class="mt-1 flex items-center gap-1" style="height: 16px;">
-        <span class="text-green-600">${checkIcon()}</span>
-        <span class="text-[11px] font-medium text-green-700">Reorder rate ${card.reorderRate}%</span>
-      </div>`;
-  }
+  // Selling point badge
+  const sellingPointText = card.sellingPoint || card.promo || '';
+  const sellingPointHtml = sellingPointText
+    ? `<div class="searchx-selling-point-content">
+        ${checkIcon()}
+        <span>${sellingPointText}</span>
+      </div>`
+    : '';
 
-  // Price row
-  const originalPriceHtml = card.originalPrice
-    ? `<span class="text-[12px] text-gray-400 line-through">${card.originalPrice}</span>` : '';
-  const discountHtml = card.discount
-    ? `<span class="text-[12px] font-semibold text-orange-500">${card.discount}</span>` : '';
+  // MOQ
+  const moqHtml = card.moq
+    ? `<div class="searchx-moq">Minimum siparis: ${card.moq}</div>`
+    : '';
 
-  // Verified + rating row
-  const verifiedHtml = card.verified ? `
-    <span class="inline-flex items-center gap-0.5 font-medium" style="color: #cc9900;">
-      ${verifiedIcon()}
-      <span>Verified</span>
-    </span>
-    <span class="inline-flex items-center gap-px">${renderRatingDots(card.rating)}</span>
-    <span class="text-gray-400">&middot;</span>
-  ` : '';
+  // Sold
+  const soldHtml = card.stats
+    ? `<div class="searchx-sold-order">${card.stats}</div>`
+    : '';
 
-  const yearsHtml = card.supplierYears
-    ? `<span class="text-gray-500">${card.supplierYears} yrs</span>` : '';
+  // Supplier name
+  const supplierNameHtml = card.supplierName
+    ? `<a class="searchx-product-e-company">${card.supplierName}</a>`
+    : '';
 
-  const countryHtml = card.supplierCountry
-    ? `<span>${countryFlag(card.supplierCountry)}</span><span class="text-gray-500">${card.supplierCountry}</span>` : '';
+  // Supplier info: year, country, rating
+  const yearCountryParts: string[] = [];
+  if (card.supplierYears) yearCountryParts.push(`<span>${card.supplierYears} yil</span>`);
+  if (card.supplierCountry) yearCountryParts.push(`${countryFlag(card.supplierCountry)} <span>${card.supplierCountry}</span>`);
 
-  const ratingTextHtml = card.rating
-    ? `<span class="text-gray-500">${card.rating}/5.0</span>${card.reviewCount ? `<span class="text-gray-400">(${card.reviewCount.toLocaleString()})</span>` : ''}` : '';
+  const yearCountryHtml = yearCountryParts.length > 0
+    ? `<a class="searchx-product-e-supplier__year">${yearCountryParts.join(' ')}</a>`
+    : '';
+
+  const ratingHtml = card.rating
+    ? `<span class="searchx-product-e-review"><span>${card.rating}</span>/5.0${card.reviewCount ? ` <span>(${card.reviewCount.toLocaleString()})</span>` : ''}</span>`
+    : '';
+
+  const supplierInfoParts = [yearCountryHtml, ratingHtml].filter(Boolean);
+  const supplierContentHtml = (card.supplierYears || card.supplierCountry || card.rating)
+    ? `<div class="searchx-supplier-content">
+        ${starIcon()}
+        ${supplierInfoParts.join('')}
+      </div>`
+    : '';
 
   return `
-    <a
-      href="${card.href}"
-      class="group/product relative flex h-full w-full flex-col border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md overflow-hidden"
-      style="background: var(--product-card-bg, #ffffff); border-color: var(--product-card-border, #e5e5e5); border-width: var(--product-card-border-width, 1px); border-radius: var(--product-card-radius, 12px);"
-      aria-label="${card.name}"
-    >
-      <!-- Image area with slider -->
-      ${renderImageSlider(card)}
+    <div class="fy26-product-card-wrapper">
+      <!-- Image area -->
+      <div class="searchx-img-area">
+        ${renderImageSlider(card)}
+      </div>
 
       <!-- Content area -->
-      <div class="flex flex-1 flex-col p-3">
-
-        <!-- Certified badge -->
-        ${card.verified ? `
-        <div class="flex items-center gap-1 mb-1.5">
-          ${certifiedShieldIcon()}
-          <span class="text-[11px] font-medium text-green-700">certified</span>
-        </div>
-        ` : '<div class="mb-1.5" style="height: 18px;"></div>'}
-
-        <!-- Title -->
-        <h3 class="text-[13px] font-medium leading-snug line-clamp-2 text-gray-900"
-            style="height: 2.6em;"
-            title="${card.name}"
-        >${card.name}</h3>
-
-        <!-- Promo / Reorder rate row -->
-        ${promoHtml}
-
-        <!-- Price row -->
-        <div class="flex items-baseline gap-1.5 flex-wrap mt-1.5">
-          <span class="text-[18px] font-bold text-gray-900">${card.price}</span>
-          ${originalPriceHtml}
-          ${discountHtml}
+      <div class="fy26-product-card-content">
+        <!-- Title area -->
+        <div class="searchx-title-area">
+          <h2 class="searchx-product-e-title">
+            <a href="${card.href}" target="_blank"><span>${card.name}</span></a>
+          </h2>
+          ${sellingPointHtml}
         </div>
 
-        <!-- MOQ + sold -->
-        <p class="text-[11px] text-gray-500 mt-1">
-          Min. order: ${card.moq} &nbsp;&nbsp; ${card.stats}
-        </p>
-
-        <!-- Supplier name -->
-        ${card.supplierName ? `
-        <p class="text-[11px] text-gray-500 mt-1 truncate">${card.supplierName}</p>
-        ` : ''}
-
-        <!-- Verified + rating row (pinned to bottom) -->
-        <div class="mt-auto pt-2 flex items-center gap-1 flex-wrap" style="font-size: 11px;">
-          ${verifiedHtml}
-          ${yearsHtml}
-          ${countryHtml}
-          ${ratingTextHtml}
+        <!-- Price area -->
+        <div class="searchx-price-area">
+          <div class="searchx-product-price-price-main">${card.price}</div>
+          <div class="price-area-center">
+            ${moqHtml}
+            ${soldHtml}
+          </div>
         </div>
 
-        <!-- Action button -->
-        <div class="mt-2 flex gap-2">
-          <button type="button"
-                  class="flex-1 py-2 text-[12px] font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600 transition-colors"
-                  data-add-to-cart="${card.id}">
-            Sepete Ekle
-          </button>
+        <!-- Supplier area -->
+        <div class="searchx-product-area">
+          ${supplierNameHtml}
+          ${supplierContentHtml}
         </div>
-
       </div>
-    </a>
+
+      <!-- Action buttons -->
+      <div class="action-area-layout">
+        <button type="button" class="searchx-product-e-abutton"
+                data-add-to-cart="${card.id}"
+                onclick="event.preventDefault(); event.stopPropagation();">
+          Sepete ekle
+        </button>
+        <button type="button" class="searchx-product-e-abutton"
+                onclick="event.preventDefault(); event.stopPropagation();">
+          Hemen sohbet et
+        </button>
+      </div>
+    </div>
   `;
 }
 
@@ -597,3 +506,12 @@ export function rerenderProductGrid(products: ProductListingCard[]): void {
  * Export helper to render grid with custom products
  */
 export { renderProductListingCard, renderNoResults };
+
+/**
+ * Toggle grid between 'grid' and 'list' view modes via CSS class.
+ */
+export function setGridViewMode(mode: ViewMode): void {
+  const grid = document.querySelector<HTMLElement>('.product-grid');
+  if (!grid) return;
+  grid.classList.toggle('product-grid--list', mode === 'list');
+}

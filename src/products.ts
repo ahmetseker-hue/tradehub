@@ -32,6 +32,7 @@ import {
   initFilterEngine,
   updateFilterChips,
   initFilterChips,
+  setGridViewMode,
 } from './components/products'
 
 import { mockProductListingCards } from './data/mockProductListing'
@@ -178,6 +179,11 @@ initFilterSidebar();
 initProductListingGrid();
 initProductSliders();
 initSearchHeader();
+
+// Listen for view-mode-change events from SearchHeader toggle buttons
+document.addEventListener('view-mode-change', (e: Event) => {
+  setGridViewMode((e as CustomEvent).detail.mode);
+});
 
 // Initialize cart drawer for listing page
 initListingCartDrawer(mockProductListingCards);
