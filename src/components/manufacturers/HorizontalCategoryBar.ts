@@ -167,7 +167,7 @@ export function initHorizontalCategoryBar(): void {
   if (!btn || !menu || !tabUl) return;
 
   function closeMain() {
-    menu.classList.add('hidden');
+    if (menu) menu.classList.add('hidden');
     if (icon) icon.style.transform = 'rotate(0deg)';
   }
 

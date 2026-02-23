@@ -1,6 +1,6 @@
 import { ManufacturersHero } from './ManufacturersHero'
 import { HorizontalCategoryBar } from './HorizontalCategoryBar'
-import { ManufacturerList, initFactorySliders } from './ManufacturerList'
+import { ManufacturerList } from './ManufacturerList'
 
 export function ManufacturersLayout(): string {
   return `

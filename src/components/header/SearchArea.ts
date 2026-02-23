@@ -207,6 +207,9 @@ export function SearchArea(): string {
       <div class="container-boxed">
         <!-- Desktop Search Tabs (above search bar) -->
         ${renderSearchTabs()}
+
+        <!-- Desktop Search Bar -->
+        ${renderDesktopSearchBar()}
       </div>
     </section>
 
