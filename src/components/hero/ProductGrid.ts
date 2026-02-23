@@ -197,42 +197,50 @@ const fallbackByKind: Record<ProductImageKind, string> = {
   accessory: 'https://images.unsplash.com/photo-1577803645773-f96470509666?auto=format&fit=crop&w=1200&h=1200&q=80',
 };
 
-const FIND_SIMILAR_ICON_SRC = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/><circle cx="12" cy="13" r="3"/></svg>',
-)}`;
+function cameraSearchIcon(): string {
+  return `
+    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M3 9a2 2 0 0 1 2-2h2l1-2h8l1 2h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" />
+      <circle cx="12" cy="13" r="3" />
+    </svg>
+  `;
+}
 
-const VERIFIED_BADGE_SRC = `data:image/svg+xml;utf8,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="52" height="14" viewBox="0 0 52 14" fill="none"><path d="M7 12 3.5 8.5l1.1-1.1L7 9.8l4.9-4.9L13 6 7 12Z" fill="#0B65C2"/><text x="15" y="10.5" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#0B65C2">Verified</text></svg>',
-)}`;
+function lightningIcon(): string {
+  return `
+    <svg class="h-3 w-3 flex-shrink-0" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M9 1L3 9h4v6l6-8H9V1Z" />
+    </svg>
+  `;
+}
 
-function escapeHtml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+function verifiedIcon(): string {
+  return `
+    <svg class="h-3.5 w-3.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clip-rule="evenodd" />
+    </svg>
+  `;
 }
 
 function imageSource(card: ProductCard): string {
   return card.imageSrc ?? fallbackByKind[card.imageKind];
 }
 
-function formatYears(years?: number): string {
-  if (typeof years !== 'number') {
-    return '';
-  }
-  return `${years} yr${years === 1 ? '' : 's'}`;
+function renderProductPlaceholder(card: ProductCard): string {
+  const src = imageSource(card);
+  const alt = card.name.replace(/"/g, '&quot;');
+  return `
+    <img
+      src="${src}"
+      alt="${alt}"
+      loading="lazy"
+      class="h-full w-full object-cover"
+    />
+  `;
 }
 
 function renderProductCard(card: ProductCard, index: number): string {
-  const safeName = escapeHtml(card.name);
-  const safePrice = escapeHtml(card.price);
-  const safeMoq = escapeHtml(card.moq);
-  const safeStats = escapeHtml(card.stats);
-  const safeCountry = escapeHtml(card.supplierCountry ?? '');
-  const years = escapeHtml(formatYears(card.supplierYears));
-  const safeImage = escapeHtml(imageSource(card));
+  const safeName = card.name.replace(/"/g, '&quot;');
 
   return `
     <a
@@ -247,7 +255,7 @@ function renderProductCard(card: ProductCard, index: number): string {
     >
       <!-- Image area -->
       <div class="relative aspect-square w-full flex-shrink-0">
-        ${renderProductPlaceholder(card.imageKind)}
+        ${renderProductPlaceholder(card)}
 
         <!-- Camera / image-search icon overlay (top-left) -->
         <div
@@ -270,13 +278,13 @@ function renderProductCard(card: ProductCard, index: number): string {
 
         <!-- Promo badge row (fixed height -- reserves space even without badge) -->
         <div class="mt-1.5" style="height: 16px;">
-          ${card.promo ? `
+          ${card.promoText ? `
           <div
             class="inline-flex w-fit items-center gap-1 px-1.5 py-0.5 font-semibold leading-none"
             style="background: var(--product-badge-bg, #FFF3E0); color: var(--product-badge-text, #e65100); font-size: var(--product-badge-size, 10px); border-radius: var(--product-badge-radius, 2px);"
           >
             ${lightningIcon()}
-            <span>${card.promo}</span>
+            <span>${card.promoText}</span>
           </div>
           ` : ''}
         </div>
