@@ -1786,8 +1786,11 @@
         font-weight: var(--product-moq-weight, 400);
     }
 
-    .hFR19 .hVMAV.z5oZw::before {
-        content: 'MOQ: ';
+    .hFR19 .YGd3t.vE7bg {
+        color: var(--product-discount-color, rgb(247, 66, 30));
+        font-size: var(--product-discount-size, 14px);
+        font-weight: var(--product-discount-weight, 600);
+        line-height: 18px;
     }
 
     .hFR19 .mHuc8 {
